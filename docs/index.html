@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emil "Machine" — Agentic Dev & Skillhub</title>
+  <meta name="description" content="Staff-level data science meets agentic coding. Claude Code skills and plugins for teams that ship.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">EmilMachine</a>
+  <ul class="nav-links">
+    <li><a href="#about" data-i18n="nav_about">About</a></li>
+    <li><a href="skills.html" data-i18n="nav_docs">Docs</a></li>
+    <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
+    <li>
+      <button id="lang-toggle" class="btn-lang" aria-label="Switch to Danish">🇩🇰</button>
+    </li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Claude Code · Skillhub</div>
+    <h1 data-i18n="hero_title">
+      &gt;_ Emil &ldquo;<span class="machine-wrap">Machine
+        <svg viewBox="0 0 200 8" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M2 6 Q25 2 50 6 Q75 10 100 6 Q125 2 150 6 Q175 10 198 6" stroke="#4a9eff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </span>&rdquo;
+    </h1>
+    <p class="hero-sub" data-i18n="hero_sub">Staff-level agentic coding.<br>Built for teams that learn while shipping.</p>
+    <div class="install-tabs">
+      <div class="tab-buttons">
+        <button class="tab-btn active" data-tab="claude">Claude Code</button>
+        <button class="tab-btn" data-tab="codex">Codex</button>
+        <button class="tab-btn" data-tab="opencode">OpenCode</button>
+      </div>
+      <div class="tab-panel active" data-panel="claude">
+        <div class="install-block">
+          <span class="prompt">$</span>
+          <code>/plugin marketplace add https://github.com/EmilMachine/skillhub</code>
+        </div>
+        <div class="install-block">
+          <span class="prompt">$</span>
+          <code>/plugin install dev-essentials@skillhub</code>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="codex">
+        <div class="install-block">
+          <span class="prompt">$</span>
+          <code>$plugin-marketplace add https://github.com/EmilMachine/skillhub</code>
+        </div>
+        <div class="install-block">
+          <span class="prompt">$</span>
+          <code>$plugin install dev-essentials</code>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="opencode">
+        <div class="install-block">
+          <span class="prompt">$</span>
+          <code>git clone https://github.com/EmilMachine/skillhub ~/.local/share/skillhub</code>
+        </div>
+        <div class="install-block">
+          <span class="prompt">$</span>
+          <code>for skill in ~/.local/share/skillhub/.opencode/skills/*; do ln -s "$skill" ~/.config/opencode/skills/; done</code>
+        </div>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <a href="skills.html" class="btn-primary" data-i18n="hero_cta">Install skillhub</a>
+      <a href="https://github.com/EmilMachine/skillhub/blob/main/README.md" class="btn-secondary" target="_blank" rel="noopener">View on GitHub →</a>
+      <a href="mailto:sl.askmachine+agenticdev@gmail.com" class="btn-primary" data-i18n="contact_cta">Send a message</a>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about">
+  <div class="container">
+    <div class="section-label">Background</div>
+    <h2 data-i18n="about_heading">About</h2>
+    <div class="section-divider"></div>
+    <div class="about-grid">
+      <div>
+        <p class="about-body" data-i18n="about_body">I build Agentic developer tools that help engineering team move faster while becoming smarter. Build not just for machines but humans - spend the time where it matters.</p>
+      </div>
+      <div>
+        <ul class="cred-list">
+          <li data-i18n="about_cred1">ex-Spotify Staff Data Scientist</li>
+          <li data-i18n="about_cred2">Ph.D. Applied Physics, DTU</li>
+          <li data-i18n="about_cred3">HYPERIGHT NORDIC 100 in Data Analytics &amp; AI, 2023</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-inner">
+      <div class="section-label">Let's talk</div>
+      <h2 data-i18n="contact_heading">Get in touch</h2>
+      <div class="section-divider" style="margin: 0 auto 2rem;"></div>
+      <p class="contact-sub" data-i18n="contact_sub">Interested in workshops, consulting, or just want to talk agentic dev?</p>
+      <a href="mailto:sl.askmachine+agenticdev@gmail.com" class="btn-primary" data-i18n="contact_cta">Send a message</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2026 Emil "Machine" · <a href="https://github.com/EmilMachine/skillhub" style="color:inherit;">GitHub</a></p>
+</footer>
+
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/nav.js"></script>
+
+</body>
+</html>

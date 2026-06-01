@@ -1,0 +1,81 @@
+const strings = {
+  en: {
+    nav_docs: 'Docs',
+    nav_skills: 'Skills',
+    nav_about: 'About',
+    nav_contact: 'Contact',
+    docs_title: 'Skill Reference',
+    docs_sub: 'All plugins and skills — with why, how, and what.',
+    label_why: 'Why',
+    label_how: 'How to use',
+    label_what: 'What it does',
+    hero_title: '>_ Emil "Machine"',
+    hero_sub: 'Staff-level agentic coding.\nBuilt for teams that learn while shipping.',
+    hero_cta: 'Skillhub docs',
+    skills_heading: 'Launch Skills',
+    about_heading: 'About',
+    about_cred1: 'ex-Spotify Staff Data Scientist',
+    about_cred2: 'Ph.D. Applied Physics, DTU',
+    about_cred3: 'HYPERIGHT NORDIC 100 in Data Analytics & AI, 2023',
+    about_body: 'I build Agentic developer tools that help engineering team move faster while becoming smarter. Build not just for machines but humans - spend the time where it matters.',
+    contact_heading: 'Get in touch',
+    contact_sub: 'Interested in workshops, consulting, or just want to talk agentic dev?',
+    contact_cta: 'Send a message',
+  },
+  da: {
+    nav_docs: 'Docs',
+    nav_skills: 'Skills',
+    nav_about: 'Om',
+    nav_contact: 'Kontakt',
+    docs_title: 'Skill Reference',
+    docs_sub: 'Alle plugins og skills — med hvorfor, hvordan og hvad.',
+    label_why: 'Hvorfor',
+    label_how: 'Sådan bruger du det',
+    label_what: 'Hvad det gør',
+    hero_title: '>_ Emil "Machine"',
+    hero_sub: 'Staff-niveau agentic coding.\nBygget til teams der lærer mens de leverer.',
+    hero_cta: 'Installer skillhub',
+    skills_heading: 'Launch Skills',
+    about_heading: 'Om mig',
+    about_cred1: 'Tidligere Staff Data Scientist hos Spotify',
+    about_cred2: 'Ph.d. i anvendt fysik, DTU',
+    about_cred3: 'HYPERIGHT NORDIC 100 inden for Data Analytics & AI, 2023',
+    about_body: 'Jeg bygger agentiske udviklerværktøjer der hjælper teams med at bevæge sig hurtigere mens de bliver klogere. Bygget ikke bare til maskiner men til mennesker — brug tiden der hvor det betyder noget.',
+    contact_heading: 'Kontakt mig',
+    contact_sub: 'Interesseret i workshops, rådgivning, eller vil du bare tale agentic dev?',
+    contact_cta: 'Send en besked',
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || 'en';
+
+function applyLang(lang) {
+  currentLang = lang;
+  const map = strings[lang] || strings.en;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (map[key] === undefined) return;
+    if (map[key].includes('\n')) {
+      el.innerHTML = map[key].replace(/\n/g, '<br>');
+    } else {
+      el.textContent = map[key];
+    }
+  });
+  const btn = document.getElementById('lang-toggle');
+  if (btn) {
+    btn.textContent = lang === 'en' ? '🇩🇰' : '🇬🇧';
+    btn.setAttribute('aria-label', lang === 'en' ? 'Skift til dansk' : 'Switch to English');
+  }
+  if (typeof renderSkills === 'function') renderSkills(lang);
+  if (typeof renderSkillDocs === 'function') renderSkillDocs(lang);
+}
+
+function toggleLang() {
+  const next = currentLang === 'en' ? 'da' : 'en';
+  localStorage.setItem('lang', next);
+  applyLang(next);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  applyLang(currentLang);
+});
