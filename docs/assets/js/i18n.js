@@ -52,6 +52,10 @@ let currentLang = localStorage.getItem('lang') || 'en';
 function applyLang(lang) {
   currentLang = lang;
   const map = strings[lang] || strings.en;
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc && map.hero_sub) {
+    metaDesc.setAttribute('content', map.hero_sub.replace(/\n/g, ' '));
+  }
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
     if (map[key] === undefined) return;
