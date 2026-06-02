@@ -1,3 +1,30 @@
+const INSTALL_SKILLHUB = {
+  claude:   '/plugin marketplace add https://github.com/EmilMachine/skillhub',
+  codex:    '$plugin-marketplace add https://github.com/EmilMachine/skillhub',
+  opencode: 'git clone https://github.com/EmilMachine/skillhub ~/.local/share/skillhub',
+};
+
+const PLUGINS = [
+  {
+    id: 'dev-essentials',
+    version: '1.4.0',
+    install: {
+      claude:   '/plugin install dev-essentials@skillhub',
+      codex:    '$plugin install dev-essentials',
+      opencode: 'for skill in ~/.local/share/skillhub/.opencode/skills/dev-essentials/*; do ln -s "$skill" ~/.config/opencode/skills/; done',
+    },
+  },
+  {
+    id: 'md3step',
+    version: '1.1.0',
+    install: {
+      claude:   '/plugin install md3step@skillhub',
+      codex:    '$plugin install md3step',
+      opencode: 'for skill in ~/.local/share/skillhub/.opencode/skills/md3step/*; do ln -s "$skill" ~/.config/opencode/skills/; done',
+    },
+  },
+];
+
 const SKILLS_DATA = [
   // ── dev-essentials ──────────────────────────────────────────────
   {

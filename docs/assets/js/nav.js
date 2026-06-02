@@ -1,14 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
   const nav = document.querySelector('nav');
 
-  // Install tabs
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tab = btn.dataset.tab;
-      btn.closest('.install-tabs').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.closest('.install-tabs').querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      btn.closest('.install-tabs').querySelector(`[data-panel="${tab}"]`).classList.add('active');
+  // Install tabs — event delegation, syncs all .install-tabs groups on the page
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('.install-tabs').forEach(group => {
+      group.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      group.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      const matchBtn = group.querySelector(`[data-tab="${tab}"]`);
+      const matchPanel = group.querySelector(`[data-panel="${tab}"]`);
+      if (matchBtn) matchBtn.classList.add('active');
+      if (matchPanel) matchPanel.classList.add('active');
     });
   });
 

@@ -11,4 +11,4 @@
 ## Constraints
 - Don't add npm/build tooling — stack is plain HTML + CSS + vanilla JS
 - Don't edit `docs/index.html` for text changes — use `i18n.js` string map instead
-- Don't break script load order: `i18n.js` → `skills.js` → `nav.js`
+- Don't break script load order — index.html: `i18n.js` → `skills.js` → `nav.js`; skills.html: `i18n.js` → `skills-data.js` → `skills-docs.js` → `nav.js`

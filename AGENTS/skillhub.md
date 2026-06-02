@@ -21,7 +21,23 @@ skillhub (registry)
     └── mdupdate         (/mdupdate)
 ```
 
-Install via: `/plugin marketplace add https://github.com/EmilMachine/skillhub`
+Install — step 1 (add registry, once):
+
+| Agent | Command |
+|---|---|
+| Claude Code | `/plugin marketplace add https://github.com/EmilMachine/skillhub` |
+| Codex | `$plugin-marketplace add https://github.com/EmilMachine/skillhub` |
+| OpenCode | `git clone https://github.com/EmilMachine/skillhub ~/.local/share/skillhub` |
+
+Step 2 (install a plugin, e.g. `dev-essentials`):
+
+| Agent | Command |
+|---|---|
+| Claude Code | `/plugin install dev-essentials@skillhub` |
+| Codex | `$plugin install dev-essentials` |
+| OpenCode | `for skill in ~/.local/share/skillhub/.opencode/skills/dev-essentials/*; do ln -s "$skill" ~/.config/opencode/skills/; done` |
+
+These are defined in `INSTALL_SKILLHUB` and `PLUGINS` in `skills-data.js` — edit there to update what the site displays.
 
 ## Adding a New Skill Doc Entry
 
@@ -89,7 +105,9 @@ Direct links to a skill: `skills.html#gitstats`. The page opens the matching `<d
 
 | Purpose | File |
 |---|---|
-| Skill data (all 13 skills) | `docs/assets/js/skills-data.js` |
+| Skill data (all 13 skills) | `docs/assets/js/skills-data.js` → `SKILLS_DATA` |
+| Plugin install commands | `docs/assets/js/skills-data.js` → `PLUGINS` |
+| Marketplace add commands | `docs/assets/js/skills-data.js` → `INSTALL_SKILLHUB` |
 | Render + routing logic | `docs/assets/js/skills-docs.js` |
 | Doc page HTML shell | `docs/skills.html` |
 | i18n strings (label_why etc.) | `docs/assets/js/i18n.js` |
