@@ -1,0 +1,84 @@
+<p><strong>TL;DR</strong> — Run <code>/setup</code> to bootstrap.
+Structure: <code>AGENTS.md</code> (index) +
+<code>AGENTS/{topic}.md</code> + <code>CLAUDE.md</code> → all pointing
+to <code>AGENTS.md</code>. Add <code>myprompts/</code> and
+<code>myreports/</code> each with <code>.gitignore *</code> for local
+scratch work.</p>
+<hr />
+<h1 id="my-opinionated-claude-code-setup">My Opinionated Claude Code
+Setup</h1>
+<p>I want a setup that is A) Agent framework agnostics B) flexible to
+accomodate most proejcts.</p>
+<h2 id="outline">Outline</h2>
+<ol type="A">
+<li>Agent Agnostics</li>
+</ol>
+<ul>
+<li>AGENTS.md - main entry point to agents
+<ul>
+<li>refence other files instead of having the full context itsef mainly
+located in an AGENTS folder</li>
+<li>Note AGENTS.md is read on EVERY agent startup, so I want it short,
+as an index where to find more knowledge.</li>
+</ul></li>
+<li>AGENETS/{topic}.md
+<ul>
+<li>each .md file hold relevant context for a topic, so any given agent
+can read only the relevant parts.</li>
+</ul></li>
+<li>Code agent reference points
+<ul>
+<li>points to AGENTS.md (main index / entry point)</li>
+<li>e.g. CLAUDE.md, opencode.json points to AGENTS.md (could maybe be
+symlinks but actual files are more robust.)</li>
+</ul></li>
+</ul>
+<ol start="2" type="A">
+<li>flexible setups.</li>
+</ol>
+<ul>
+<li><p>folders:</p>
+<ul>
+<li>myprompts</li>
+<li>myreports</li>
+</ul></li>
+<li><p>Each have a .gitignore * file</p></li>
+<li><p>The prompts are mainly for input / iteration in prompts
+input.</p></li>
+<li><p>myreports are for largely single turn analysis .md files like
+codereview, cleanup suggestions</p></li>
+<li><p>the “my..” + .gitignore * is easily extenable to whatever folder
+you need.</p>
+<ul>
+<li>It indicates it is messy mid-way artifacts useful for local
+work.</li>
+<li>Important things should be distilled and end up as clean artifacts
+in code, AGENTS/ folder, README.md, changelogs etc.</li>
+</ul></li>
+</ul>
+<h3
+id="codereview-branch-review-a-branch"><code>/codereview &lt;branch&gt;</code>
+— Review a branch</h3>
+<p>Fetches the diff between a branch and main, then writes a terse
+major/minor/nit review to <code>myreports/</code>. Good before opening a
+PR, or to highlight were to look in a review. Will try to pull from
+remote first and fallback to local compare.</p>
+<h3 id="cleanup-path-find-dead-code"><code>/cleanup [path]</code> — Find
+dead code</h3>
+<p>Scans a path for dead code, unused tests, redundant logic, and
+outdated docs. Writes a report to <code>myreports/</code>. Defaults to
+the current directory.</p>
+<p>Note it does not do the cleanup. It writes the report suggesting the
+cleanup.</p>
+<h3 id="secure-path-security-audit"><code>/secure [path]</code> —
+Security audit</h3>
+<p>Runs OWASP Top 10 checks, secrets scanning, and dependency CVE
+checks. Writes a severity-ranked report to <code>myreports/</code>.</p>
+<p>Note this is a bit of quick stopgap for hobby projects. I would
+recommend real projects put these checks more structured as part of
+CICD.</p>
+<h3 id="setup-path-bootstrap-agent-config"><code>/setup [path]</code> —
+Bootstrap agent config</h3>
+<p>Creates <code>AGENTS.md</code>, <code>CLAUDE.md</code>, AGENTS folder
+and private prompt dirs in a project. Idempotent — safe to run on an
+existing project.</p>

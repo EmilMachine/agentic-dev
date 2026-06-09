@@ -8,6 +8,9 @@
 - **Skill cards**: add entries to `SKILLS` array in `docs/assets/js/skills.js` — no HTML edits needed
 - **Design tokens**: all CSS variables defined in `docs/assets/css/main.css` `:root`
 
+- **Blog posts**: add entry to `POSTS` array in `docs/assets/js/blog-data.js`; see `myblogposts/README.md` for author workflow
+- **Script load order for `blog.html`**: `i18n.js` → `blog-data.js` → `blog.js` → `nav.js`
+
 ## Constraints
 - Don't add npm/build tooling — stack is plain HTML + CSS + vanilla JS
 - Don't edit `docs/index.html` for text changes — use `i18n.js` string map instead

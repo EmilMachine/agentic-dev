@@ -1,0 +1,94 @@
+<p><strong>TL;DR</strong> — Install:
+<code>/plugin install md3step</code>. Write <code>0_context.md</code> →
+<code>/mdresearch 0_context.md</code> → edit <code>1_research.md</code>
+→ <code>/mdplan 1_research.md</code> → edit <code>2_plan.md</code> →
+<code>/mdimplement 2_plan.md</code> → review
+<code>3_changelog.md</code>. Use <code>/mdupdate &lt;file&gt;</code>
+after inline edits. Skip for small tasks.</p>
+<hr />
+<h1 id="the-md3step-loop-research-plan-implement">The md3step Loop:
+Research, Plan, Implement</h1>
+<p>This is the power-user pattern. Instead of one-shotting a complex
+task, you break it into three bounded steps — each producing a file the
+next step builds on. You stay in control at every transition.</p>
+<p>Install via skillhub:</p>
+<pre><code>/plugin marketplace add https://github.com/EmilMachine/skillhub
+/plugin install md3step</code></pre>
+<h2 id="why-md-prefix">Why <code>md</code> prefix?</h2>
+<p>The skills are named <code>/mdresearch</code>, <code>/mdplan</code>,
+<code>/mdimplement</code>, <code>/mdupdate</code> — not
+<code>/research</code>, <code>/plan</code>, etc. That’s intentional.
+Words like <code>plan</code>, <code>research</code>, and
+<code>implement</code> are close to reserved or system-level keywords in
+various agents and tools now and in the future. The <code>md</code>
+prefix avoids silent collisions, and reference working with md
+files.</p>
+<h3 id="why-.md-files">WHy .md files?</h3>
+<ol type="1">
+<li>Main advantage is you can EDIT stuff. A lot of other flows it is
+hard to remove, change or add stuff in research of plans you want
+changed.</li>
+<li>Persist steps. When the 1_research.md file is done, you can close
+your computer, and come back next week and work on it. with a live
+session it is more difficult.</li>
+<li>Atomic steps. You can clear context between steps, and we can trust
+larger implementation pieces, because is clean detailed input -
+ambiguity have been clarfied.</li>
+</ol>
+<p>Note there is some overhead. I normally use this for mid-large steps.
+Minor additions, debugging og tuning I do outside this framework.</p>
+<h2 id="the-workflow">The workflow</h2>
+<p>The process runs over four numbered files in a folder you choose:</p>
+<pre><code>0_context.md       ← you write this
+1_research.md      ← /mdresearch produces this
+2_plan.md          ← /mdplan produces this
+3_changelog.md     ← /mdimplement produces this</code></pre>
+<h3 id="step-0-write-context">Step 0: Write context</h3>
+<p>Create <code>myprompts/my-feature/0_context.md</code> and describe
+what you want to do, and relevant context needed to get it done. This is
+your input to the flow.</p>
+<h3 id="step-1-research">Step 1: Research</h3>
+<pre><code>/mdresearch tasks/my-feature/0_context.md</code></pre>
+<p>The agent reads the codebase and writes <code>1_research.md</code> in
+the same folder — current state, gaps, relevant <code>file:line</code>
+references. Open questions are surfaced at the top of the file. Read it,
+answer the questions inline, and run
+<code>/mdupdate &lt;path&gt;/1_research.md</code> to fold them into the
+main body before moving on. Ask for clafication or use
+<code>/procon3</code> if you’re unsure how to answer something.</p>
+<h3 id="step-2-plan">Step 2: Plan</h3>
+<pre><code>/mdplan tasks/my-feature/1_research.md</code></pre>
+<p>Produces <code>2_plan.md</code>: numbered, atomic, testable steps.
+Each step has Actions, Files, and Verify sections. Open questions from
+research are carried forward; the agent tries to answer them from
+context before listing anything unresolved.</p>
+<p><strong>This is the step to edit.</strong> Add constraints, cut
+scope, reorder steps, answer open questions inline. The agent didn’t
+decide the plan — you did, with its help.
+<code>/mdupdate &lt;path&gt;/1_research.md</code></p>
+<h3 id="step-0.5-optional-update-based-on-answers">Step 0.5 (optional):
+update based on answers</h3>
+<p>If you added inline answers or edits to <code>1_resarch.md</code>
+<code>2_plan.md</code>:</p>
+<pre><code>/mdupdate tasks/my-feature/2_plan.md</code></pre>
+<p>This integrates your edits back into the plan structure and clears
+resolved questions. Skip this if you made no edits. It can often work
+just with the answer and without the mdupdate step, but miss new
+questions arising from the answers, and might leave wrong info in the
+body of .md file.</p>
+<p>You can also hack this by writing your own question + answer and
+running /mdupdate, if you see there is something systematic wrong and
+you want it fixed everywhere.</p>
+<h3 id="step-3-implement">Step 3: Implement</h3>
+<pre><code>/mdimplement tasks/my-feature/2_plan.md</code></pre>
+<p>Executes each step sequentially, verifies after each, and writes
+<code>3_changelog.md</code> with status per step, files changed
+(<code>path:line</code>), test results, and a Gotchas section if
+anything went sideways. No automatic git commits — review the diff
+yourself.</p>
+<h2 id="when-not-to-use-this">When not to use this</h2>
+<p>md3step is overhead for small tasks. Fixing a bug, renaming a
+function, adding a field to a type — do those in one shot. Use the
+process for anything that touches more than a couple of files, is
+complex or involves architectural choices.</p>
+<h2 id="source-of-inspiration">Source of inspiration</h2>

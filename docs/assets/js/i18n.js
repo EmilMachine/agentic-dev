@@ -21,6 +21,17 @@ const strings = {
     contact_heading: 'Get in touch',
     contact_sub: 'Interested in workshops, consulting, or just want to talk agentic dev?',
     contact_cta: 'Send a message',
+    nav_blog: 'Blog',
+    blog_title: 'Blog',
+    blog_sub: 'Hands-on guides, concepts, and takes on agentic dev.',
+    blog_type_all: 'All',
+    blog_type_hands_on: 'Hands-on',
+    blog_type_concepts: 'Concepts',
+    blog_type_believes: 'Believes',
+    blog_label_created: 'Published',
+    blog_label_updated: 'Updated',
+    blog_back: '← All posts',
+    blog_no_translation: 'Not yet available in Danish — showing English.',
   },
   da: {
     nav_docs: 'Docs',
@@ -44,6 +55,17 @@ const strings = {
     contact_heading: 'Kontakt mig',
     contact_sub: 'Interesseret i workshops, rådgivning, eller vil du bare tale agentic dev?',
     contact_cta: 'Send en besked',
+    nav_blog: 'Blog',
+    blog_title: 'Blog',
+    blog_sub: 'Praktiske guides, koncepter og holdninger om agentic dev.',
+    blog_type_all: 'Alle',
+    blog_type_hands_on: 'Hands-on',
+    blog_type_concepts: 'Koncepter',
+    blog_type_believes: 'Holdninger',
+    blog_label_created: 'Udgivet',
+    blog_label_updated: 'Opdateret',
+    blog_back: '← Alle indlæg',
+    blog_no_translation: 'Ikke tilgængelig på dansk endnu — viser engelsk.',
   }
 };
 
@@ -72,6 +94,7 @@ function applyLang(lang) {
   }
   if (typeof renderSkills === 'function') renderSkills(lang);
   if (typeof renderSkillDocs === 'function') renderSkillDocs(lang);
+  if (typeof renderBlog === 'function') renderBlog(lang);
 }
 
 function toggleLang() {

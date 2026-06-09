@@ -1,0 +1,50 @@
+<p><strong>TL;DR</strong> — Reference files with <code>@filename</code>.
+Pass prompts as files: <code>follow @filename</code> or without entring
+the cli <code>claude &lt; tasks/task.md</code>. Write output to files:
+<code>analyze @src/ and write report to myreports/out.md</code>. Enable
+and disable auto-edit with shift+tab.</p>
+<hr />
+<h1 id="first-real-workflow-with-claude-code">0→1: First Real Workflow
+with Claude Code</h1>
+<p>Most people use Claude Code the way they use ChatGPT: type a
+question, read the answer. That works, but it misses the point. This
+post is about the three patterns that actually change how you work.</p>
+<p>Assumes you have Claude Code installed. If not, start with <a
+href="#">Post 0</a>.</p>
+<h2 id="pattern-1-reference-files-directly">Pattern 1: Reference files
+directly</h2>
+<p>Instead of copying code into the chat, point at it:</p>
+<pre><code>add error handling to @src/api/fetch.ts</code></pre>
+<p>The <code>@filename</code> syntax pulls the file into context. Claude
+reads it, edits it, and writes the result back. You don’t paste, you
+don’t copy out.</p>
+<p>(note claude can also figure it out if you omit the @)</p>
+<h2 id="pattern-2-prompt-as-a-file">Pattern 2: Prompt as a file</h2>
+<p>For anything more than one sentence, write your prompt in a
+<code>.md</code> file and pass it:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> <span class="op">&lt;</span> tasks/add-auth.md</span></code></pre></div>
+<p>Or reference it inline:
+<code>see @tasks/add-auth.md and implement it</code>.</p>
+<p>This makes prompts version-controllable, repeatable, and sharable. A
+file you can commit is better than a chat message you’ll lose.</p>
+<h2 id="pattern-3-output-as-a-file">Pattern 3: Output as a file</h2>
+<p>Ask Claude to write its output somewhere specific:</p>
+<pre><code>analyze the performance bottlenecks in @src/ and write a report to myreports/perf-notes.md</code></pre>
+<p>Now the output is in your repo, not buried in a chat window.</p>
+<h2 id="putting-it-together">Putting it together</h2>
+<p>A real session looks like this: (assume you have the folders
+<code>myprompts/task1</code>) 1. Write a task description in
+<code>myprompts/task1/0_context.md</code> 2. Run <code>claude</code> and
+reference it:
+<code>implement @myprompts/task1/0_context.md write a changelog to myprompts/task1/1_changelog.md</code>
+3. Review the diff, commit what you want</p>
+<p>If not allowed it will ask you for each indiviual edit. You can
+enable auto-edit (by allow changes for this session) or shift+tab. It
+will show up as “⏵⏵ accept edits on”. (shit+tab twice more to
+disable).</p>
+<p>You still have good dev practices to fall back on with git version
+controls and <code>git diff</code>, but is rarely needed in my
+experience.</p>
+<p>Note I would normally have a folder /myprompts/ that contain a
+.gitignore * file, so the messy notes not commited, and rather update
+real doc artifacts like README.md as needed.</p>
