@@ -1,6 +1,6 @@
 const strings = {
   en: {
-    nav_docs: 'Docs',
+    nav_docs: 'Skills',
     nav_skills: 'Skills',
     nav_about: 'About',
     nav_contact: 'Contact',
@@ -32,9 +32,11 @@ const strings = {
     blog_label_updated: 'Updated',
     blog_back: '← All posts',
     blog_no_translation: 'Not yet available in Danish — showing English.',
+    blog_select_prompt: 'Select a post from the sidebar.',
+    blog_not_found: 'Post not found.',
   },
   da: {
-    nav_docs: 'Docs',
+    nav_docs: 'Skills',
     nav_skills: 'Skills',
     nav_about: 'Om',
     nav_contact: 'Kontakt',
@@ -66,6 +68,8 @@ const strings = {
     blog_label_updated: 'Opdateret',
     blog_back: '← Alle indlæg',
     blog_no_translation: 'Ikke tilgængelig på dansk endnu — viser engelsk.',
+    blog_select_prompt: 'Vælg et indlæg fra sidebaren.',
+    blog_not_found: 'Indlæg ikke fundet.',
   }
 };
 
@@ -94,7 +98,7 @@ function applyLang(lang) {
   }
   if (typeof renderSkills === 'function') renderSkills(lang);
   if (typeof renderSkillDocs === 'function') renderSkillDocs(lang);
-  if (typeof renderBlog === 'function') renderBlog(lang);
+  if (typeof renderBlog === 'function' && typeof POSTS !== 'undefined' && POSTS.length > 0) renderBlog(lang);
 }
 
 function toggleLang() {

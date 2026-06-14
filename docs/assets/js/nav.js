@@ -1,3 +1,46 @@
+function autoDetectPage() {
+  const path = window.location.pathname;
+  if (path.includes('/blog/') || /\/blog(\.html)?$/.test(path)) return 'blog';
+  if (/\/skills(\.html)?$/.test(path)) return 'skills';
+  return 'index';
+}
+
+function buildNav(activePage) {
+  const isIndex = activePage === 'index';
+  const logoHref = isIndex ? '#' : 'index.html';
+  const aboutHref = isIndex ? '#about' : 'index.html#about';
+  const contactHref = isIndex ? '#contact' : 'index.html#contact';
+  const cls = page => activePage === page ? ' class="nav-active"' : '';
+  return `<nav>
+  <a class="nav-logo" href="${logoHref}">EmilMachine</a>
+  <ul class="nav-links">
+    <li><a href="blog.html"${cls('blog')} data-i18n="nav_blog">Blog</a></li>
+    <li><a href="skills.html"${cls('skills')} data-i18n="nav_docs">Skills</a></li>
+    <li><a href="${aboutHref}" data-i18n="nav_about">About</a></li>
+    <li><a href="${contactHref}" data-i18n="nav_contact">Contact</a></li>
+    <li>
+      <button id="lang-toggle" class="btn-lang" aria-label="Switch to Danish">🇩🇰</button>
+    </li>
+  </ul>
+</nav>`;
+}
+
+function buildFooter() {
+  return `<footer>
+  <p>&copy; 2026 Emil "Machine" · <a href="https://github.com/EmilMachine/skillhub" style="color:inherit;">GitHub</a></p>
+</footer>`;
+}
+
+function buildWatermark() {
+  return `<img class="vit-watermark" src="assets/vitruvian.jpg" alt="" aria-hidden="true">`;
+}
+
+(function () {
+  const page = autoDetectPage();
+  document.body.insertAdjacentHTML('afterbegin', buildWatermark() + buildNav(page));
+  document.body.insertAdjacentHTML('beforeend', buildFooter());
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
   const nav = document.querySelector('nav');
 

@@ -1,5 +1,10 @@
 # Agent Instructions
 
+## Reference Files
+- webpage context (CSS tokens, nav, templates, script order, typography): `AGENTS/webpage.md`
+- skillhub/docs page (skill data, plugin install, anchor routing): `AGENTS/skillhub.md`
+- misc patterns (install tab syncing, plugin heading anchors): `AGENTS/misc.md`
+
 ## Commands
 - **Run**: `open docs/index.html`
 

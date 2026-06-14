@@ -1,14 +1,14 @@
 <!--
 slug: 1_files_as_input_and_output
 type: hands_on
-title_en: Agents - use of files
-title_da: Agenter - brug af filer
+title_en: 1. Agents - use of files
+title_da: 1. Agenter - brug af filer
 created: 2026-06-01
-last_updated: 2026-06-11
+last_updated: 2026-06-14
 langs: en
 --><p><strong>TL;DR</strong> — Reference files with <code>@filename</code>. Pass prompts as files: <code>follow @filename</code> or without entring the cli <code>claude &lt; tasks/task.md</code>. Write output to files: <code>analyze @src/ and write report to myreports/out.md</code>. Enable and disable auto-edit with shift+tab.</p>
 <hr>
-<h1>0→1: First Real Workflow with Claude Code</h1>
+<h1>Files as input and output</h1>
 <p>Most people use Claude Code the way they use ChatGPT: type a question, read the answer. That works, but it misses the point. This post is about the three patterns that actually change how you work.</p>
 <p>Assumes you have Claude Code installed. If not, start with <a href="#">Post 0</a>.</p>
 <h2>Pattern 1: Reference files directly</h2>
@@ -19,9 +19,7 @@ langs: en
 <p>(note claude can also figure it out if you omit the @)</p>
 <h2>Pattern 2: Prompt as a file</h2>
 <p>For anything more than one sentence, write your prompt in a <code>.md</code> file and pass it:</p>
-<pre><code class="language-sh">claude &lt; tasks/add-auth.md
-</code></pre>
-<p>Or reference it inline: <code>see @tasks/add-auth.md and implement it</code>.</p>
+<p><code>see @tasks/add-auth.md and implement it</code>.</p>
 <p>This makes prompts version-controllable, repeatable, and sharable. A file you can commit is better than a chat message you&#39;ll lose.</p>
 <h2>Pattern 3: Output as a file</h2>
 <p>Ask Claude to write its output somewhere specific:</p>
@@ -38,7 +36,7 @@ langs: en
 </ol>
 <p>If not allowed it will ask you for each indiviual edit. 
 You can enable auto-edit (by allow changes for this session) or shift+tab. 
-It will show up as &quot;⏵⏵ accept edits on&quot;. (shit+tab twice more to disable).</p>
+It will show up as &quot;⏵⏵ accept edits on&quot;. (shit+tab more to disable).</p>
 <p>You still have good dev practices to fall back on with git version controls and <code>git diff</code>, but is rarely needed in my experience.</p>
-<p>Note I would normally have a folder /myprompts/ that contain a .gitignore * file, so the messy notes not commited, and rather update real doc artifacts like README.md as needed.</p>
+<p>Note I would normally have a folder /myprompts/ that contain a .gitignore * file, so the messy notes are not commited, and rather update real doc artifacts like README.md as needed.</p>
 

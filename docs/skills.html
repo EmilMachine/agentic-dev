@@ -5,34 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skill Reference — Emil "Machine"</title>
   <meta name="description" content="All skillhub plugins and skills — why, how, and what for every command.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
 
-<nav>
-  <a class="nav-logo" href="index.html">EmilMachine</a>
-  <ul class="nav-links">
-    <li><a href="index.html" data-i18n="nav_about">About</a></li>
-    <li><a href="skills.html" data-i18n="nav_docs" style="color:var(--accent)">Docs</a></li>
-    <li><a href="blog.html" data-i18n="nav_blog">Blog</a></li>
-    <li><a href="index.html#contact" data-i18n="nav_contact">Contact</a></li>
-    <li>
-      <button id="lang-toggle" class="btn-lang" aria-label="Switch to Danish">🇩🇰</button>
-    </li>
-  </ul>
-</nav>
 
 <div class="docs-page-header">
   <div class="hero-tag">skillhub · dev-essentials · md3step</div>
-  <h1 data-i18n="docs_title">Skill Reference</h1>
-  <p data-i18n="docs_sub">All plugins and skills — with why, how, and what.</p>
-  <div class="docs-header-actions">
-    <a href="https://github.com/EmilMachine/skillhub/blob/main/README.md" class="btn-secondary" target="_blank" rel="noopener">View on GitHub →</a>
-    <div id="docs-header-install"></div>
+  <div class="docs-header-row">
+    <h1 data-i18n="docs_title">Skill Reference</h1>
+    <div class="docs-header-actions">
+      <div id="docs-header-install"></div>
+      <a href="https://github.com/EmilMachine/skillhub/blob/main/README.md" class="btn-secondary" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
   </div>
+  <p data-i18n="docs_sub">All plugins and skills — with why, how, and what.</p>
 </div>
 
 <div class="docs-layout">
@@ -47,11 +34,10 @@
       <!-- populated by skills-docs.js -->
     </div>
   </main>
+  <div class="docs-toc">
+    <div id="docs-toc-inner"></div>
+  </div>
 </div>
-
-<footer>
-  <p>&copy; 2026 Emil "Machine" · <a href="https://github.com/EmilMachine/skillhub" style="color:inherit;">GitHub</a></p>
-</footer>
 
 <script src="assets/js/i18n.js"></script>
 <script src="assets/js/skills-data.js"></script>

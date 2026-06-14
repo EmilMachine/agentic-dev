@@ -1,3 +1,31 @@
+let _skillsTocObserver = null;
+
+function _renderSkillsTOC(tocEl, contentEl) {
+  if (!tocEl || !contentEl) return;
+  const headings = Array.from(contentEl.querySelectorAll('.plugin-heading'));
+  if (headings.length === 0) { tocEl.innerHTML = ''; return; }
+
+  const items = headings.map(h => {
+    const id = h.id || '';
+    const text = h.textContent.trim();
+    return `<li><a href="#${id}">${text}</a></li>`;
+  }).join('');
+
+  tocEl.innerHTML = `<div class="docs-toc-title">Plugins</div><ul>${items}</ul>`;
+
+  if (_skillsTocObserver) _skillsTocObserver.disconnect();
+  _skillsTocObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocEl.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+        const active = tocEl.querySelector(`a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-64px 0px -70% 0px', threshold: 0 });
+  headings.forEach(h => _skillsTocObserver.observe(h));
+}
+
 function installTabsHTML(cmds) {
   const agents = [
     { key: 'claude',   label: 'Claude Code' },
@@ -98,6 +126,9 @@ function renderSkillDocs(lang) {
   }).join('');
 
   content.innerHTML = pluginSections;
+
+  const toc = document.getElementById('docs-toc-inner');
+  _renderSkillsTOC(toc, content);
 
   // Wire sidebar links
   sidebar.querySelectorAll('[data-skill-link]').forEach(a => {
