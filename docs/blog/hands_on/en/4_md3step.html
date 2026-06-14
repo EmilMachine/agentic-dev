@@ -4,7 +4,7 @@ type: hands_on
 title_en: 4. md3step - research, plan, implement
 title_da: 4. md3step - undersøg, planlæg, implementer
 created: 2026-06-01
-last_updated: 2026-06-14
+last_updated: 2026-06-15
 langs: en
 --><p><strong>TL;DR</strong> — Install: <code>/plugin install md3step</code>. Write <code>0_context.md</code> → <code>/mdresearch 0_context.md</code> → edit <code>1_research.md</code> → <code>/mdplan 1_research.md</code> → edit <code>2_plan.md</code> → <code>/mdimplement 2_plan.md</code> → review <code>3_changelog.md</code>. Use <code>/mdupdate &lt;file&gt;</code> after inline edits. Skip for small tasks.</p>
 <hr>
@@ -13,11 +13,11 @@ langs: en
 <p>This is the power-user pattern. Instead of one-shotting a complex task, you break it into three bounded steps — each producing a file the next step builds on. Two key benefits. </p>
 <ul>
 <li><ol>
-<li>It allow you esaily review, edits and refine plans.</li>
+<li>It allows you to easily review, edit and refine plans.</li>
 </ol>
 </li>
 <li><ol start="2">
-<li>You can surface uknowns, and missing specification in your input.</li>
+<li>You can surface unknowns, and missing specification in your input.</li>
 </ol>
 </li>
 </ul>
@@ -27,13 +27,13 @@ langs: en
 </code></pre>
 <h2>Why <code>md</code> prefix?</h2>
 <p>The skills are named <code>/mdresearch</code>, <code>/mdplan</code>, <code>/mdimplement</code>, <code>/mdupdate</code> — not <code>/research</code>, <code>/plan</code>, etc. That&#39;s intentional. Words like <code>plan</code>, <code>research</code>, and <code>implement</code> are close to reserved or system-level keywords in various agents and tools now and in the future. The <code>md</code> prefix avoids silent collisions, and reference working with md files. </p>
-<h3>WHy .md files?</h3>
+<h3>Why .md files?</h3>
 <ol>
-<li>Main advantage is you can EDIT stuff. A lot of other flows it is hard to remove, change or add stuff in research of plans you want changed. </li>
+<li>Main advantage is you can EDIT stuff. A lot of other flows it is hard to remove, change or add stuff in research or plans you want changed. </li>
 <li>Persist steps. When the 1_research.md file is done, you can close your computer, and come back next week and work on it. with a live session it is more difficult.</li>
-<li>Atomic steps. You can clear context between steps, and we can trust larger implementation pieces, because is clean detailed input - ambiguity have been clarfied.</li>
+<li>Atomic steps. You can clear context between steps, and we can trust larger implementation pieces, because it is clean detailed input - ambiguity has been clarified.</li>
 </ol>
-<p>Note there is some overhead. I normally use this for mid-large steps. Minor additions, debugging og tuning I do outside this framework.</p>
+<p>Note there is some overhead. I normally use this for mid-large steps. Minor additions, debugging or tuning I do outside this framework.</p>
 <h2>The workflow</h2>
 <p>The process runs over four numbered files in a folder you choose:</p>
 <pre><code>0_context.md       ← you write this
@@ -47,7 +47,7 @@ langs: en
 <pre><code>/mdresearch tasks/my-feature/0_context.md
 </code></pre>
 <p>The agent reads the codebase and writes <code>1_research.md</code> in the same folder — current state, gaps, relevant <code>file:line</code> references. Open questions are surfaced at the top of the file. Read it, answer the questions inline, and run <code>/mdupdate &lt;path&gt;/1_research.md</code> to fold them into the main body before moving on. 
-Ask for clafication or use <code>/procon3</code> if you&#39;re unsure how to answer something.</p>
+Ask for clarification or use <code>/procon3</code> if you&#39;re unsure how to answer something.</p>
 <h3>Step 2: Plan</h3>
 <pre><code>/mdplan tasks/my-feature/1_research.md
 </code></pre>
@@ -55,7 +55,7 @@ Ask for clafication or use <code>/procon3</code> if you&#39;re unsure how to ans
 <p><strong>This is the step to edit.</strong> Add constraints, cut scope, reorder steps, answer open questions inline. The agent didn&#39;t decide the plan — you did, with its help.
 <code>/mdupdate &lt;path&gt;/1_research.md</code></p>
 <h3>Step 0.5 (optional): update based on answers</h3>
-<p>If you added inline answers or edits to <code>1_resarch.md</code> <code>2_plan.md</code>:</p>
+<p>If you added inline answers or edits to <code>1_research.md</code> <code>2_plan.md</code>:</p>
 <pre><code>/mdupdate tasks/my-feature/2_plan.md
 </code></pre>
 <p>This integrates your edits back into the plan structure and clears resolved questions. Skip this if you made no edits. It can often work just with the answer and without the mdupdate step, but miss new questions arising from the answers, and might leave wrong info in the body of .md file. </p>
@@ -67,4 +67,7 @@ Ask for clafication or use <code>/procon3</code> if you&#39;re unsure how to ans
 <h2>When not to use this</h2>
 <p>md3step is overhead for small tasks. Fixing a bug, renaming a function, adding a field to a type — do those in one shot. Use the process for anything that touches more than a couple of files, is complex or involves architectural choices.</p>
 <h2>Source of inspiration</h2>
+<ul>
+<li><a href="https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/18608dedb759256d86b1c0101de82ecef8a556ab/ace-fca.md">human layer: advanced-context-engineering-for-coding-agents</a></li>
+</ul>
 

@@ -1,0 +1,78 @@
+<!--
+slug: B_short_prompts
+type: belief
+title_en: B. A Prompt Should Be As Short As Possible (But Not Shorter)
+created: 2026-06-14
+last_updated: 2026-06-15
+langs: en
+--><p><strong>TL;DR</strong> — Longer prompts feel safer but usually aren&#39;t. Be brief and precise = terse. Shorter text is also easier to review and maintain = terse output. LLM compute scales quadratically = you save 100x by reducing length by ten. Terse = green.</p>
+<hr>
+<h1>B. A Prompt Should Be As Short As Possible (But Not Shorter)</h1>
+<p>You might have heard the alleged Einstein quote <em>&quot;Everything should be made as simple as possible, but not simpler.&quot;</em> 
+He did not write prompts for LLMs but very elegant papers - that changed how we all think about space and time. 
+Let us be real, we have a far simpler job - giving a good input to an input-output machine. </p>
+<p>We have growing context windows, and I hear a lot of people praising that like it will solve everything. I strongly believe we should still do our best to keep context minimal. </p>
+<h2>Terse?</h2>
+<p>So why is it important to be precise and brief?</p>
+<p>Never to go off on tangents. A tangent, for those who didn&#39;t study mathematics — and many people didn&#39;t, which is a shame really, education systems vary so wildly, my own school had an excellent math teacher, retired now, make viking jewelry I think — comes from the Latin tangere, meaning &quot;to touch.&quot; Anyway: stay on topic. </p>
+<p>To not repeat yourself. Repetition undermines clarity. To repeat: repetition undermines clarity. I want to come back to this because it is too important to say only once — do not repeat yourself. This bears repeating. Do NOT repeat yourself. I&#39;ll say it one final time, for those who missed it the first, second, third, fourth, and fifth time: do not repeat yourself.</p>
+<p>Why is it vital, critical, essential, and arguably paramount important to eliminate unnecessary, redundant, superfluous, and excess words, terms, vocabulary, phrases, and/or linguistic constructions in cases, situations, instances, and/or contexts where a reduced, smaller, shorter, and/or lesser quantity of words, terms, vocabulary, phrases, and/or linguistic constructions would be sufficient, adequate, enough, and/or satisfactory to convey, express, communicate, and/or transmit the intended meaning, message, point, and/or idea?</p>
+<p>You see what I did there?</p>
+<p>It is important to be precise and brief because, not doing so is wasteful and often counterproductive. More input does not give better output. Quality over quantity.</p>
+<p>It is even worse for AI input and output machines. </p>
+<p>Why? A key invention in AI (LLMs) is something called attention - basically each word affects each other - so N x N scaling - if my input prompt is 10x the length it is both 100x more memory and compute. People have made some tricks to do linear memory but compute remains quadratic. </p>
+<p>To put a picture to it. You are on an old-school steam locomotive. The boiler is burning 100 times as hot as needed, because you shovelled 10x shit into the burner. </p>
+<p>So what is a brief and precise way to express that?</p>
+<ul>
+<li><a href="https://www.dictionary.com/browse/terse">Terse</a></li>
+</ul>
+<p>That is my favourite word working with AI (LLMs). I want a terse report, terse skills, reduce the text to 50% length. Make it terse.</p>
+<h2>Quality</h2>
+<p>Let us look at the quality of output based on input.
+How can the input cause fails:</p>
+<ul>
+<li>A) Info is missing</li>
+<li>B) Info is wrong</li>
+<li>C) Info is hard to find (diluted)</li>
+</ul>
+<p>Terse - is directly addressing C) - important stuff has less risk to disappear or not be used, if we removed the unimportant stuff. </p>
+<p>However shorter text also make it easier to spot A) and B) in review. </p>
+<h2>The &quot;but not shorter&quot; part</h2>
+<p>We need enough input to actually solve the task. 
+Brevity without clarity is just vague. &quot;Fix it&quot; is short. It&#39;s also useless.</p>
+<p>The minimum viable prompt has three things:</p>
+<ul>
+<li>What you want done</li>
+<li>The context needed </li>
+<li>Any constraints that would change the answer.</li>
+</ul>
+<h2>A concrete example</h2>
+<p><strong>Long version (54 words):</strong></p>
+<blockquote>
+<p>&quot;Please analyze the following code and look for any bugs or issues that might cause problems in production. Make sure to check for edge cases, error handling, and potential security issues. Please be thorough and professional in your analysis and provide clear explanations.&quot;</p>
+</blockquote>
+<p><strong>Short version (8 words):</strong></p>
+<blockquote>
+<p>&quot;Find bugs and security issues in @src/auth.ts, Write a terse report to @myreports/security_auth.md&quot;</p>
+</blockquote>
+<p>The short version produces a better result. The long version tells the model how to do its job. The model already knows how to do its job.</p>
+<h2>Practical tips.</h2>
+<ul>
+<li><code>/new</code> Clear the context often when asks are not connected.<ul>
+<li>Can even clear between context between tasks and only pass output from previous task.</li>
+</ul>
+</li>
+</ul>
+<h2>Other inspiration</h2>
+<p><strong>William Strunk Jr., <em>The Elements of Style</em> (1918):</strong> &quot;Omit needless words.&quot; Strunk wrote this for prose writers, but it applies to prompts character-by-character. Every needless word in a prompt is a needless word.</p>
+<p><strong>Information theory (Shannon, 1948):</strong> A message&#39;s value is proportional to how much it reduces uncertainty. Words that don&#39;t reduce uncertainty add noise, not signal.</p>
+<h2>Counter-arguments</h2>
+<p><strong>1. &quot;Complex tasks need complex prompts.&quot;</strong>
+Sometimes true. Multi-step tasks may genuinely need structure. But even then, the structure should be minimal — task decomposition beats one giant paragraph. The belief isn&#39;t &quot;never write long prompts&quot;, it&#39;s &quot;don&#39;t write long prompts by default&quot;.</p>
+<p><strong>2. &quot;More context helps the model produce better output.&quot;</strong>
+Up to a point. Relevant context helps. Irrelevant context — including over-specification — has been shown to degrade model performance. The model treats your constraints as authoritative, even when they conflict with what you actually want.</p>
+<p><strong>3. &quot;Short prompts leave too much room for misinterpretation.&quot;</strong>
+If the output surprises you, you can iterate. One short prompt + one correction round is usually faster and clearer than getting the first prompt right through brute-force specification. Treat the first output as a draft, not a final answer.</p>
+<p><strong>4. &quot;My team needs detailed prompts for consistency.&quot;</strong>
+Team consistency is a real concern. But the solution is documented prompt templates or shared <code>CLAUDE.md</code> context, not adding words to every individual prompt. Document the context once; reference it everywhere. (See <a href="blog.html?post=D_document_over_teach" data-post-link="D_document_over_teach">Belief D</a>.)</p>
+

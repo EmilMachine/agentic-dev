@@ -1,0 +1,73 @@
+<!--
+slug: G_right_tool
+type: belief
+title_en: G. Don't Make an LLM Do What Another Tool Does Better
+created: 2026-06-14
+last_updated: 2026-06-15
+langs: en
+--><p><strong>TL;DR</strong> — LLMs are for fuzzy judgment. Parsing a date, sorting a list, validating an email — use code. Using an AI where a function works is like hiring a consultant to do arithmetic.</p>
+<hr>
+<h1>G. Don&#39;t Make an LLM Do What Another Tool Does Better</h1>
+<p>A fault reporting pipeline: workers report defective units by speaking into a handheld device. The system needs to log the unit ID from each report.</p>
+<p>The first decision — transcribing speech to text — is exactly what a speech-to-text model is built for. Whisper, or any equivalent, handles accents and background noise. Right tool, right job.</p>
+<p>The transcript comes out: <em>&quot;Unit 48821 is showing the wrong output, needs to be pulled.&quot;</em></p>
+<p>The next step — extracting the unit ID — goes to an LLM. It&#39;s already in the pipeline. It feels natural. It works fine in testing.</p>
+<p>But this is a regex task. Unit IDs follow a known pattern: <code>\bU?\d{5}\b</code> finds it every time. Deterministic, free, instant, testable. The LLM adds latency, cost, and the occasional surprising output for a problem that has an exact answer.</p>
+<p>The engineer who reached for the LLM wasn&#39;t foolish — they were in a flow state where everything looked like an AI problem, because the step before it genuinely was one.</p>
+<h2>The hammer and the nail</h2>
+<p>Abraham Maslow — psychologist, best known for the hierarchy of needs — gave us the line: <em>&quot;If the only tool you have is a hammer, it is tempting to treat everything as if it were a nail.&quot;</em></p>
+<p>LLMs are very impressive hammers. This makes the trap worse, not better. The more powerful the tool, the easier it is to reach for it by default.</p>
+<p>The costs of over-using LLMs are concrete:</p>
+<ul>
+<li><strong>Latency</strong>: a function runs in microseconds; an LLM call takes hundreds of milliseconds to seconds</li>
+<li><strong>Cost</strong>: API calls cost money; functions don&#39;t</li>
+<li><strong>Reliability</strong>: functions are deterministic; LLMs occasionally return surprising results</li>
+<li><strong>Auditability</strong>: you can read a function&#39;s logic; you can&#39;t inspect why an LLM returned what it did</li>
+<li><strong>Testability</strong>: deterministic functions have deterministic tests; LLM outputs require sampling-based evaluation</li>
+</ul>
+<p>None of these are hypothetical. They accumulate in any system that over-relies on LLMs for tasks code handles cleanly.</p>
+<h2>The right division</h2>
+<p>LLMs are genuinely superior at tasks involving fuzzy, context-dependent judgment:</p>
+<ul>
+<li>Summarizing unstructured text</li>
+<li>Classifying sentiment or intent</li>
+<li>Writing prose, adapting tone</li>
+<li>Reasoning about ambiguous requirements</li>
+<li>Generating code from a description</li>
+</ul>
+<p>Code (or traditional tools) is genuinely superior at everything that has a deterministic answer:</p>
+<ul>
+<li>Parsing structured formats (dates, emails, JSON)</li>
+<li>Sorting, filtering, aggregating</li>
+<li>Arithmetic and logical operations</li>
+<li>Schema validation</li>
+<li>Pattern matching</li>
+</ul>
+<p>The rule of thumb: if you could write a unit test with known inputs and expected outputs, and the function would pass it 100% of the time, use code. If the right answer depends on context a function can&#39;t capture, use the LLM.</p>
+<h2>A taxonomy of misuse</h2>
+<p><strong>LLM as database query</strong>: &quot;What is the current price of X?&quot; The LLM guesses, may hallucinate, and can&#39;t know what &quot;current&quot; means. Use a lookup.</p>
+<p><strong>LLM as validator</strong>: &quot;Is this a valid phone number?&quot; Deterministic answer. Use a library.</p>
+<p><strong>LLM as classifier when a trained model exists</strong>: You need to categorize support tickets into 12 known buckets. An LLM works — but a small classifier fine-tuned on your own labeled data will be faster, cheaper, more consistent, and easier to evaluate. LLMs shine at open-ended classification where the categories shift or aren&#39;t known in advance. For stable, bounded label sets with training data available, a purpose-built model beats a general one.</p>
+<p><strong>LLM as router</strong>: &quot;Does this belong to category A or B, where both are exactly defined in code?&quot; Write an if-statement.</p>
+<p><strong>LLM as UUID generator</strong>: There is a function for this. In every language.</p>
+<h2>The exception</h2>
+<p>The fault reporting example also shows where the boundary gets genuinely complicated. A known unit ID pattern is a clean regex win — but if workers sometimes describe units by location or nickname (<em>&quot;the third press on line four&quot;</em>) rather than ID, that mapping requires judgment a regex can&#39;t provide. There an LLM earns its place, with downstream code handling the resolved ID.</p>
+<p>The combination — specialized model for audio, LLM for genuine ambiguity, code for structured extraction — is often optimal. The belief isn&#39;t &quot;never use LLMs with structured data.&quot; It&#39;s &quot;don&#39;t use LLMs for the part that has a deterministic solution.&quot;</p>
+<h2>References from other disciplines</h2>
+<p><strong>Fred Brooks, <em>The Mythical Man-Month</em> (1975):</strong> Brooks&#39; principle of using the <em>right</em> tool for each sub-task is foundational to software engineering. His broader point — that adding more of any one resource (people, in his case) doesn&#39;t fix structural problems — generalizes to tools. Using more AI doesn&#39;t fix a problem that needs a function.</p>
+<p><strong>Unix philosophy (Ken Thompson, Dennis Ritchie, 1970s):</strong> &quot;Write programs that do one thing and do it well.&quot; The Unix design philosophy of composing small, specialized tools is the original answer to this problem. An LLM is one tool in a pipeline, not a replacement for the pipeline.</p>
+<h2>In practice</h2>
+<ul>
+<li>An LLM can both help research other methods and implement them. The difference between using an LLM to make a testable, scaleable component and using an LLM instead of the components is enormous.<ul>
+<li>I have seen problems where it would cost 40k EUR to run an LLM for a full classification task, and about 1 EUR to run a smaller and simpler ML models that performed much better than the LLM</li>
+</ul>
+</li>
+</ul>
+<h2>Counter-arguments</h2>
+<p><strong>1. &quot;LLMs are getting faster and cheaper. Latency and cost concerns will disappear.&quot;</strong>
+Probably partly true over time. But deterministic functions will also get faster and cheaper — they&#39;re already nearly free. The gap may narrow; the principle doesn&#39;t change. Speed and cost aren&#39;t the only reasons to prefer code: auditability, testability, and determinism matter independently.</p>
+<p><strong>2. &quot;Using LLMs for everything keeps the architecture simpler — one component instead of many.&quot;</strong>
+Simpler to build, harder to maintain, debug, and scale. &quot;One component&quot; sounds elegant until you&#39;re trying to explain to a client why the answer to &quot;what is 2+2?&quot; occasionally returns &quot;approximately 4&quot;. Complexity hidden inside an LLM is not eliminated; it&#39;s made invisible, which is worse.</p>
+<p><strong>3. &quot;Sometimes I don&#39;t know in advance which tasks are deterministic.&quot;</strong>
+True — and the answer is: default to code when in doubt, and refactor toward LLM when you discover the task genuinely needs fuzzy reasoning. The reverse (default to LLM, discover it was overkill) is a more expensive mistake to undo.</p>
+

@@ -1,0 +1,47 @@
+<!--
+slug: D_document_over_teach
+type: belief
+title_en: D. Document Over Teach. References Over Recitations.
+created: 2026-06-14
+last_updated: 2026-06-15
+langs: en
+--><p><strong>TL;DR</strong> — Write context down once. Point to it instead of re-explaining. Every session you retype the same three paragraphs is a session you haven&#39;t written a <code>CLAUDE.md</code> yet.</p>
+<hr>
+<h1>D. Document Over Teach. References Over Recitations.</h1>
+<p>Every new agent session starts blank. No memory of last week. No knowledge of your naming conventions, deployment setup, or which module is off-limits. So people explain. Again. And again.</p>
+<p>This is wasted work. The AI doesn&#39;t need to be <em>taught</em> — it needs to be <em>pointed at</em>.</p>
+<blockquote>
+<p>&quot;The palest ink is better than the best memory.&quot;
+— Chinese proverb</p>
+</blockquote>
+<h2>Document over teach</h2>
+<p>When you&#39;re tempted to explain something in a prompt, ask whether it belongs in a file instead.</p>
+<ul>
+<li>you can keep multiple files in directory like <code>AGENTS/</code> and reference them from a central <code>.md</code> like <code>AGENTS.md</code>  so only relevant parts are read — see <a href="blog.html?post=B_short_prompts">Belief B</a> on keeping prompts short)</li>
+<li>A complex one-off task → <code>myprompts/task.md</code></li>
+</ul>
+<p>Once it&#39;s written, you stop explaining. You reference. <code>See @AGENTS.md for conventions</code> is five words. The alternative is rewriting the same context paragraph every session for the rest of the project&#39;s life.</p>
+<h2>Reference over recitation</h2>
+<p>Don&#39;t paste content into your prompt. Point at it.</p>
+<p><strong>Recitation:</strong></p>
+<pre><code>The project uses TypeScript strict mode. We follow Airbnb style. Errors 
+should be typed. We use Zod for validation. The src/ directory contains...
+</code></pre>
+<p><strong>Reference:</strong></p>
+<pre><code>follow @AGENTS.md conventions and implement @tasks/feature.md
+</code></pre>
+<p>Keep <code>AGENTS.md</code> modular, reference and separate files for conventions, gotchas, workflow. The model reads only what&#39;s relevant when you reference a file directly. Dumping everything into one block risks diluting</p>
+<h2>In practice</h2>
+<ul>
+<li><code>/learn</code> command is specifically made to take things the model discovered or you explained, and persist it as documentation for later agents.</li>
+<li>a lot of commands produce reports where you later can reference content. It can still be efficient to copy paste subsections from reports into the context. <ul>
+<li>it is the same as retyping the same instructions to an amnesiac LLM that does not pay off.</li>
+</ul>
+</li>
+<li>Also never argue with an LLM. If you know it is wrong. Just ask it to dump any useful correct context. start a new session, reference files make it easy getting the new agent up to speed.</li>
+</ul>
+<h2>Counter-arguments</h2>
+<p><strong>&quot;Documentation gets outdated faster than prompts.&quot;</strong> Only if you maintain it separately from the code. Keep <code>CLAUDE.md</code> in the repo and update it when the code changes. A stale doc is a process problem, not an argument against the approach.</p>
+<p><strong>&quot;Sometimes a quick explanation is faster.&quot;</strong> For a genuine one-off, yes. The question is: will I explain this again? Most project context has the answer &quot;yes.&quot; Document it now.</p>
+<p><strong>&quot;The model doesn&#39;t always follow referenced files faithfully.&quot;</strong> A real limitation — write clear, specific docs and verify. It&#39;s still more reliable than hoping you phrase the inline explanation correctly every time.</p>
+

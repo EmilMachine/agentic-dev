@@ -4,9 +4,9 @@ type: hands_on
 title_en: 1. Agents - use of files
 title_da: 1. Agenter - brug af filer
 created: 2026-06-01
-last_updated: 2026-06-14
+last_updated: 2026-06-15
 langs: en
---><p><strong>TL;DR</strong> — Reference files with <code>@filename</code>. Pass prompts as files: <code>follow @filename</code> or without entring the cli <code>claude &lt; tasks/task.md</code>. Write output to files: <code>analyze @src/ and write report to myreports/out.md</code>. Enable and disable auto-edit with shift+tab.</p>
+--><p><strong>TL;DR</strong> — Reference files with <code>@filename</code>. Pass prompts as files: <code>follow @filename</code> or without entering the CLI <code>claude &lt; tasks/task.md</code>. Write output to files: <code>analyze @src/ and write report to myreports/out.md</code>. Enable and disable auto-edit with shift+tab.</p>
 <hr>
 <h1>Files as input and output</h1>
 <p>Most people use Claude Code the way they use ChatGPT: type a question, read the answer. That works, but it misses the point. This post is about the three patterns that actually change how you work.</p>
@@ -34,9 +34,9 @@ langs: en
 <li>Run <code>claude</code> and reference it: <code>implement @myprompts/task1/0_context.md write a changelog to myprompts/task1/1_changelog.md</code></li>
 <li>Review the diff, commit what you want</li>
 </ol>
-<p>If not allowed it will ask you for each indiviual edit. 
+<p>If not allowed it will ask you for each individual edit. 
 You can enable auto-edit (by allow changes for this session) or shift+tab. 
-It will show up as &quot;⏵⏵ accept edits on&quot;. (shit+tab more to disable).</p>
-<p>You still have good dev practices to fall back on with git version controls and <code>git diff</code>, but is rarely needed in my experience.</p>
-<p>Note I would normally have a folder /myprompts/ that contain a .gitignore * file, so the messy notes are not commited, and rather update real doc artifacts like README.md as needed.</p>
+It will show up as &quot;⏵⏵ accept edits on&quot;. (shift+tab more to disable).</p>
+<p>You still have good dev practices to fall back on with git version controls and <code>git diff</code>, but it is rarely needed in my experience.</p>
+<p>Note I would normally have a folder /myprompts/ that contain a .gitignore * file, so the messy notes are not committed, and rather update real doc artifacts like README.md as needed.</p>
 

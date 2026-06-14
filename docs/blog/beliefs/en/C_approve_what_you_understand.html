@@ -1,0 +1,33 @@
+<!--
+slug: C_approve_what_you_understand
+type: belief
+title_en: C. Only Approve What You Can Explain
+created: 2026-06-14
+last_updated: 2026-06-15
+langs: en
+--><p><strong>TL;DR</strong> — If you can&#39;t explain the code, you don&#39;t own it. New commands and code are learning opportunities - AI and colleagues can help.</p>
+<hr>
+<h1>C. Only Approve What You Can Explain</h1>
+<p>Claude writes 80 lines of authentication middleware. It looks plausible. Tests pass. You hit accept.</p>
+<p>Three months later a colleague asks: <em>&quot;Why does this skip validation for internal routes?&quot;</em> You open the file. You have no idea. Neither does the model — it doesn&#39;t remember writing it.</p>
+<p>The failure wasn&#39;t the code. It was the approval without understanding.</p>
+<h2>The real problem is amnesia</h2>
+<p>Undocumented, ununderstood agent code is opaque to everyone who comes after — including you. No one knows what tradeoff was made, what the model assumed, or what breaks if the context changes. A colleague can&#39;t ask the model. They&#39;ll ask you.</p>
+<p><strong>Put comments in</strong> — not what the code does, but <em>why</em>. If you can&#39;t write the why, you don&#39;t understand it yet.</p>
+<p><strong>Ask the model to explain the tradeoffs</strong>, not just the code. <em>&quot;What are the downsides of this approach?&quot;</em> surfaces assumptions it made but didn&#39;t mention. Then verify unfamiliar parts yourself — docs, source, examples. Thirty seconds of verification beats thirty minutes of debugging.</p>
+<h2>The test</h2>
+<p>Before approving anything non-trivial: <em>could you walk a colleague through this in a ten-minute code review, without deferring to &quot;the AI wrote it that way&quot;?</em></p>
+<p>That sentence tells no one anything useful. If you can name the key decision and say what breaks if assumption X changes, you understand it. If you&#39;re hoping no one asks, you don&#39;t.</p>
+<h2>This is actually an excellent opportunity to learn</h2>
+<p>Models are endlessly patient teachers. There is no shame in asking basic questions. Ask the model to explain a pattern you don&#39;t recognize, walk through an algorithm step by step, or justify why it chose one library over another. It won&#39;t judge you for not knowing. It won&#39;t get annoyed if you ask the same thing three different ways until it clicks.</p>
+<p>Hard choices — a caching strategy, an auth design, an API boundary — are especially valuable to sit with. Ask the model to lay out the tradeoffs, then bring that to a colleague. <em>&quot;The model suggested X over Y because of Z — does that match how we think about it here?&quot;</em> That conversation builds shared understanding across the team in a way that solo acceptance never does.</p>
+<p>The agents handle the writing. Understanding what they wrote — and owning it — is still yours, and it&#39;s the interesting part.</p>
+<h2>In Practice</h2>
+<ul>
+<li>If the agent asks to run a command or implement code you don&#39;t understand don&#39;t just approve. Ask to explain it. Explain like I am five (ELI5), using a fable what works for you. </li>
+<li>I like multiple options with pro/cons so I made the skill shortcut /procon3 (and /pc3) skill.</li>
+</ul>
+<h2>Counter-arguments</h2>
+<p><strong>&quot;This kills the productivity gain.&quot;</strong> The gain was in writing, not thinking. You still need to understand what you&#39;re shipping — you just no longer have to write it first. Understanding a solution is faster than writing one. </p>
+<p><strong>&quot;The AI is probably more correct than my review.&quot;</strong> For logic errors, maybe. For whether the code fits <em>your</em> system — your invariants, your security model, your business rules — no. The model solved the problem it was given. Only you know if that was the right problem.</p>
+

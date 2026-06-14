@@ -1,4 +1,3 @@
-let activeBlogType = 'all';
 let currentBlogLang = 'en';
 let _tocObserver = null;
 let POSTS = [];
@@ -13,9 +12,11 @@ function _parsePostMeta(text, url) {
     if (colonIdx === -1) return;
     meta[line.slice(0, colonIdx).trim()] = line.slice(colonIdx + 1).trim();
   });
+  // Derive section from path: blog/<section>/<lang>/file.html
+  const section = url.split('/')[1] || meta.type || 'other';
   return {
     slug: meta.slug,
-    type: meta.type,
+    type: section,
     langs: meta.langs ? meta.langs.split(',').map(l => l.trim()) : ['en'],
     title: { en: meta.title_en || '', da: meta.title_da || '' },
     created: meta.created || '',
@@ -89,7 +90,7 @@ function _typeLabel(type, map) {
   return {
     hands_on: map.blog_type_hands_on || 'Hands-on',
     concepts: map.blog_type_concepts || 'Concepts',
-    believes: map.blog_type_believes || 'Believes',
+    beliefs: map.blog_type_beliefs || 'Beliefs',
   }[type] || type;
 }
 
@@ -111,31 +112,35 @@ async function renderBlog(lang) {
 function _renderSidebar(sidebar, lang, activeSlug) {
   const map = (typeof strings !== 'undefined' && strings[lang]) ? strings[lang] : {};
 
-  const filterBtns = ['all', 'hands_on', 'concepts', 'believes'].map(type => {
-    const label = type === 'all' ? (map.blog_type_all || 'All') : _typeLabel(type, map);
-    return `<button class="blog-filter-btn${activeBlogType === type ? ' active' : ''}" data-type="${type}">${label}</button>`;
-  }).join('');
-
-  const filtered = activeBlogType === 'all' ? POSTS : POSTS.filter(p => p.type === activeBlogType);
-
-  const links = filtered.map(post => {
-    const title = post.title[lang] || post.title.en;
-    const isActive = post.slug === activeSlug;
-    return `<li><a href="blog.html?post=${post.slug}" data-post-link="${post.slug}"${isActive ? ' class="active"' : ''}>${title}</a></li>`;
-  }).join('');
-
-  sidebar.innerHTML = `
-    <div class="blog-sidebar-filters">${filterBtns}</div>
-    <ul class="sidebar-skills">${links || '<li style="padding:0.5rem 1.9rem;color:var(--text-muted);font-size:0.9rem">No posts yet.</li>'}</ul>
-  `;
-
-  sidebar.querySelectorAll('.blog-filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      activeBlogType = btn.dataset.type;
-      renderBlog(currentBlogLang);
-    });
+  // Group posts by section (derived from folder path)
+  const sections = {};
+  POSTS.forEach(post => {
+    if (!sections[post.type]) sections[post.type] = [];
+    sections[post.type].push(post);
   });
 
+  if (Object.keys(sections).length === 0) {
+    sidebar.innerHTML = '<p style="padding:0.5rem 1.9rem;color:var(--text-muted);font-size:0.9rem">No posts yet.</p>';
+    return;
+  }
+
+  sidebar.innerHTML = Object.entries(sections).map(([section, posts]) => {
+    const label = _typeLabel(section, map);
+    const hasActive = posts.some(p => p.slug === activeSlug);
+    const items = posts.map(post => {
+      const title = post.title[lang] || post.title.en;
+      const isActive = post.slug === activeSlug;
+      return `<li><a href="blog.html?post=${post.slug}" data-post-link="${post.slug}"${isActive ? ' class="active"' : ''}>${title}</a></li>`;
+    }).join('');
+    return `
+      <details class="plugin-group"${hasActive || Object.keys(sections).length === 1 ? ' open' : ''}>
+        <summary>
+          ${label}
+          <span class="plugin-badge">${posts.length}</span>
+        </summary>
+        <ul class="sidebar-skills">${items}</ul>
+      </details>`;
+  }).join('');
 }
 
 async function _renderContent(content, slug, lang) {
@@ -165,7 +170,7 @@ async function _renderContent(content, slug, lang) {
   const typeLabels = {
     hands_on: map.blog_type_hands_on || 'Hands-on',
     concepts: map.blog_type_concepts || 'Concepts',
-    believes: map.blog_type_believes || 'Believes',
+    beliefs: map.blog_type_beliefs || 'Beliefs',
   };
 
   const title = post.title[lang] || post.title.en;
@@ -191,18 +196,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   const lang = (typeof currentLang !== 'undefined') ? currentLang : 'en';
   await _initPosts();
 
-  const sidebar = document.getElementById('blog-sidebar-inner');
-  if (sidebar) {
-    sidebar.addEventListener('click', e => {
-      const a = e.target.closest('[data-post-link]');
-      if (!a) return;
-      e.preventDefault();
-      const slug = a.dataset.postLink;
-      history.pushState({ slug }, '', `blog.html?post=${slug}`);
-      renderBlog(currentBlogLang);
-    });
-  }
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href]');
+    if (!a) return;
+    const href = a.getAttribute('href');
+    const slug = a.dataset.postLink ||
+      new URLSearchParams(href.includes('?') ? href.split('?')[1] : '').get('post');
+    if (!slug) return;
+    e.preventDefault();
+    history.pushState({ slug }, '', `?post=${slug}&lang=${currentBlogLang}`);
+    renderBlog(currentBlogLang);
+  });
 
   renderBlog(lang);
-  window.addEventListener('popstate', () => renderBlog(currentBlogLang));
+  window.addEventListener('popstate', () => {
+    const urlLang = new URLSearchParams(window.location.search).get('lang');
+    if (urlLang && typeof applyLang === 'function' && urlLang !== currentBlogLang) {
+      applyLang(urlLang);
+    } else {
+      renderBlog(currentBlogLang);
+    }
+  });
 });

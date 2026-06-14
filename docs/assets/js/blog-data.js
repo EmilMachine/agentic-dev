@@ -1,4 +1,12 @@
 const POST_FILES = [
+  "blog/beliefs/en/0_beliefs.html",
+  "blog/beliefs/en/A_only_human_ai_hybrid_work_matters.html",
+  "blog/beliefs/en/B_short_prompts.html",
+  "blog/beliefs/en/C_approve_what_you_understand.html",
+  "blog/beliefs/en/D_document_over_teach.html",
+  "blog/beliefs/en/E_small_steps.html",
+  "blog/beliefs/en/F_you_own_it.html",
+  "blog/beliefs/en/G_right_tool.html",
   "blog/hands_on/en/0_setup_an_agent.html",
   "blog/hands_on/en/1_files_as_input_and_output.html",
   "blog/hands_on/en/2_skills_and_dev_essentials.html",

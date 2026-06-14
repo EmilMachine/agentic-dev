@@ -27,7 +27,7 @@ const strings = {
     blog_type_all: 'All',
     blog_type_hands_on: 'Hands-on',
     blog_type_concepts: 'Concepts',
-    blog_type_believes: 'Believes',
+    blog_type_beliefs: 'Beliefs',
     blog_label_created: 'Published',
     blog_label_updated: 'Updated',
     blog_back: '← All posts',
@@ -63,7 +63,7 @@ const strings = {
     blog_type_all: 'Alle',
     blog_type_hands_on: 'Hands-on',
     blog_type_concepts: 'Koncepter',
-    blog_type_believes: 'Holdninger',
+    blog_type_beliefs: 'Holdninger',
     blog_label_created: 'Udgivet',
     blog_label_updated: 'Opdateret',
     blog_back: '← Alle indlæg',
@@ -104,9 +104,19 @@ function applyLang(lang) {
 function toggleLang() {
   const next = currentLang === 'en' ? 'da' : 'en';
   localStorage.setItem('lang', next);
+  const params = new URLSearchParams(window.location.search);
+  if (params.has('post')) {
+    params.set('lang', next);
+    history.replaceState(history.state, '', `${window.location.pathname}?${params}`);
+  }
   applyLang(next);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const urlLang = new URLSearchParams(window.location.search).get('lang');
+  if (urlLang && strings[urlLang]) {
+    currentLang = urlLang;
+    localStorage.setItem('lang', urlLang);
+  }
   applyLang(currentLang);
 });

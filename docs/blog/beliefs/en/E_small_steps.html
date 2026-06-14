@@ -1,0 +1,45 @@
+<!--
+slug: E_small_steps
+type: belief
+title_en: E. Build and Validate in Small Steps
+created: 2026-06-14
+last_updated: 2026-06-15
+langs: en
+--><p><strong>TL;DR</strong> — Big-bang delivery fails. Small steps surface surprises early, when fixing them is cheap. AI makes iteration nearly free. Prioritize testing — like a carpenter jumping on a new floor to make sure the foundations hold before moving on. Jump on your code.</p>
+<hr>
+<h1>E. Build and Validate in Small Steps</h1>
+<p>Bent Flyvbjerg&#39;s research across thousands of large projects shows roughly 92% come in over budget, over time, or both. The root cause is almost never incompetence. It&#39;s surprises discovered too late — assumptions baked in early that nobody checked until the cost of unwinding them was enormous.</p>
+<p>The solution isn&#39;t better planning. It&#39;s shorter loops with validation at each one.</p>
+<blockquote>
+<p>&quot;No plan survives first contact with the enemy.&quot;
+— Helmuth von Moltke the Elder (paraphrased)</p>
+</blockquote>
+<h2>What goes wrong in big steps</h2>
+<p>When you hand an AI a large, loosely specified task and come back an hour later, the model made assumptions you didn&#39;t catch early enough. The bigger the task, the more assumptions, the more expensive to reverse. Does your data actually look like you thought? Does the API return what the docs say? Is the architecture sound at small scale?</p>
+<p>Small steps answer these when the answer is still cheap to act on.</p>
+<h2>Jump on your code</h2>
+<p>A carpenter laying a new subfloor doesn&#39;t immediately start on the cabinets. He jumps on the floor first — literally puts weight on it, walks the edges, bounces a little. If it flexes wrong or a board shifts, he fixes it before anything is built on top of it. Putting cabinets on a bad subfloor means ripping out the cabinets to fix the floor.</p>
+<p>Tests verify logic. Jumping on the floor is different — it&#39;s manual, physical, deliberate load-testing before the next layer goes on.</p>
+<p>Do the same with code. After each small step: run it, click through it, feed it bad input, hit the edge case. Make sure it holds the weight before you build on top of it. You&#39;ll catch things tests miss — wrong UX flow, a third-party API that behaves differently than its docs, a performance cliff that only appears with real data.</p>
+<h2>AI makes small steps cheap</h2>
+<p>Before agents, small steps had a friction cost — you had to write each increment yourself. That nudged people toward larger chunks.</p>
+<p>That friction is mostly gone. Generating a 50-line implementation is as fast as generating a 500-line one. The only cost of going smaller is discipline.</p>
+<p>Scope each task to one coherent unit of behavior. Validate it — including manually. Then go to the next.</p>
+<p><strong>Too big:</strong> <em>&quot;Refactor the entire auth module to use JWTs, update the schema, and migrate existing sessions.&quot;</em></p>
+<p><strong>About right:</strong> <em>&quot;Replace session token generation in @src/auth/session.ts with a JWT. Don&#39;t touch the database yet.&quot;</em></p>
+<h2>In practice</h2>
+<ul>
+<li>the whole md3step -&gt; research -&gt; plan -&gt; implement, tries to surface underspecifications early as open questions. <ul>
+<li>Still require you to jump on your code, to check the sturdiness after implementations.</li>
+</ul>
+</li>
+</ul>
+<h2>References from other disciplines</h2>
+<p><strong>Bent Flyvbjerg, <em>How Big Things Get Done</em> (2022):</strong> Flyvbjerg&#39;s data from thousands of megaprojects shows that the projects that succeed plan modularly — breaking large efforts into repeated, validated patterns — rather than attempting end-to-end execution in one go. The principle applies at the task level, not just the project level.</p>
+<p><strong>Toyota Production System — <em>jidoka</em> and andon cord:</strong> Toyota&#39;s manufacturing philosophy includes stopping the line the moment a defect is detected, rather than continuing and fixing it downstream. Defects caught at source cost a fraction of defects discovered at delivery.</p>
+<p><strong>Kent Beck, Extreme Programming (1999):</strong> The XP practice of short release cycles and test-first development is the software formalization of the same idea. Validate constantly; don&#39;t save validation for the end.</p>
+<h2>Counter-arguments</h2>
+<p><strong>&quot;Some tasks can&#39;t be decomposed.&quot;</strong> Fewer than you think. If you genuinely can&#39;t decompose something, that&#39;s a signal the task isn&#39;t well understood yet — which is itself a reason to start smaller.</p>
+<p><strong>&quot;Small steps create overhead.&quot;</strong> Bounded overhead. Debugging a 500-line diff you didn&#39;t write, untangling conflicting assumptions, explaining to a client why the feature isn&#39;t what shipped — that overhead is unbounded.</p>
+<p><strong>&quot;I trust the AI to get large tasks right.&quot;</strong> Even correct code can be wrong for your context and undocumented invariants. Validation checks context, which only you have. Of course automated tests can help agents in the loop, but edgecases always exists. Make it feasible and easy to &quot;jump on code&quot; and find the blindspot errors as well.</p>
+

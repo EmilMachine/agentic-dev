@@ -1,26 +1,26 @@
 <!--
-slug: 3_opinionated_setup
+slug: 3_opinionated_setup.md
 type: hands_on
-title_en: 3. Opionated setup skillhub:dev-essentials
-title_da: 3. Opionated opsætning skillhub:dev-essentials
+title_en: 3. Opinionated setup skillhub:dev-essentials
+title_da: 3. Opinionated opsætning skillhub:dev-essentials
 created: 2026-06-01
-last_updated: 2026-06-14
+last_updated: 2026-06-15
 langs: en
 --><p><strong>TL;DR</strong> — Run <code>/setup</code> to bootstrap. Structure: <code>AGENTS.md</code> (index) + <code>AGENTS/{topic}.md</code> + <code>CLAUDE.md</code> → all pointing to <code>AGENTS.md</code>. Add <code>myprompts/</code> and <code>myreports/</code> each with <code>.gitignore *</code> for local scratch work.</p>
 <hr>
-<h1>3. Opionated setup</h1>
+<h1>3. Opinionated setup</h1>
 <p>I want a setup that is 
-A) Agent framework agnostics
-B) flexible to accomodate most proejcts.</p>
+A) Agent framework agnostic
+B) flexible to accommodate most projects.</p>
 <h2>Outline</h2>
 <p>A) Agent Agnostics</p>
 <ul>
 <li>AGENTS.md - main entry point to agents <ul>
-<li>refence other files instead of having the full context itsef mainly located in an AGENTS folder</li>
+<li>reference other files instead of having the full context itself mainly located in an AGENTS folder</li>
 <li>Note AGENTS.md is read on EVERY agent startup, so I want it short, as an index where to find more knowledge.</li>
 </ul>
 </li>
-<li>AGENETS/{topic}.md<ul>
+<li>AGENTS/{topic}.md<ul>
 <li>each .md file hold relevant context for a topic, so any given agent can read only the relevant parts.</li>
 </ul>
 </li>
@@ -44,7 +44,7 @@ B) flexible to accomodate most proejcts.</p>
 </li>
 <li><p>myreports are for largely single turn analysis .md files like codereview, cleanup suggestions</p>
 </li>
-<li><p>the &quot;my..&quot; + .gitignore * is easily extenable to whatever folder you need. </p>
+<li><p>the &quot;my..&quot; + .gitignore * is easily extendable to whatever folder you need. </p>
 <ul>
 <li>It indicates it is messy mid-way artifacts useful for local work. </li>
 <li>Important things should be distilled and end up as clean artifacts in code, AGENTS/ folder, README.md, changelogs etc.</li>
@@ -52,7 +52,7 @@ B) flexible to accomodate most proejcts.</p>
 </li>
 </ul>
 <h3><code>/codereview &lt;branch&gt;</code> — Review a branch</h3>
-<p>Fetches the diff between a branch and main, then writes a terse major/minor/nit review to <code>myreports/</code>. Good before opening a PR, or to highlight were to look in a review.
+<p>Fetches the diff between a branch and main, then writes a terse major/minor/nit review to <code>myreports/</code>. Good before opening a PR, or to highlight where to look in a review.
 Will try to pull from remote first and fallback to local compare.</p>
 <h3><code>/cleanup [path]</code> — Find dead code</h3>
 <p>Scans a path for dead code, unused tests, redundant logic, and outdated docs. Writes a report to <code>myreports/</code>. Defaults to the current directory.</p>

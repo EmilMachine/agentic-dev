@@ -4,14 +4,14 @@ type: hands_on
 title_en: 0. Setup Claude
 title_da: 0. Setup Claude
 created: 2026-06-01
-last_updated: 2026-06-14
+last_updated: 2026-06-15
 langs: en
 --><p><strong>TL;DR</strong> — <code>npm install -g @anthropic/claude-code</code> → <code>claude login</code> → <code>claude</code>. ESC to stop, ctrl+c twice to exit, <code>/usage</code> to check spend. <code>/clear</code> or <code>/new</code> to clear context. <a href="https://anthropic.com/pricing">Pricing</a>: use Plans for personal use, API keys for products.</p>
 <hr>
 <p>If you already have Claude Code installed and running, you can skip to <a href="#">Post 1</a>.</p>
 <h1>0. Setup an agent</h1>
 <p>A coding agent is an AI that doesn&#39;t just answer questions — it takes actions in your codebase. It reads files, writes code, runs commands, and iterates until a task is done. Think of it less like a chatbot and more like a junior intern sitting at your terminal.</p>
-<p>In practice it is LLM model (AI) + a harness (regular code) to help split tasks, take actions into the &quot;thinking&quot; power of LLMs.</p>
+<p>In practice it is an LLM model (AI) + a harness (regular code) to help split tasks, take actions into the &quot;thinking&quot; power of LLMs.</p>
 <p>This series focuses on Claude Code, Anthropic&#39;s CLI agent. Other options exist (Cursor, Copilot, Opencode, Aider), but Claude Code is what we&#39;ll use throughout.</p>
 <h2>Getting Claude Code</h2>
 <ol>
@@ -21,21 +21,21 @@ langs: en
 <li>Open a terminal in your project folder and run: <code>claude</code></li>
 </ol>
 <p>That&#39;s the entry point.</p>
-<p>It is similar to a chat, and you can write any request like &quot;write me a haiku poem about trees&quot; or &quot;make me a python function to convert celcius to farenheit&quot;</p>
+<p>It is similar to a chat, and you can write any request like &quot;write me a haiku poem about trees&quot; or &quot;make me a python function to convert Celsius to Fahrenheit&quot;</p>
 <h2>Basic controls</h2>
-<p>You control the agent. It has reading access to the repo you started it in, but ask you for all changes were it will run commands.</p>
+<p>You control the agent. It has reading access to the repo you started it in, but asks you for all changes where it will run commands.</p>
 <ul>
-<li>you can stop execution midway with ESC or ctl+c. </li>
-<li>you exit by pressing ctl+c twice. </li>
-<li>pressing esc twice allow you to rewind to an earlier point in the conversation.</li>
-<li>/ commands allow you execute commands, like <code>/usage</code> that will show you current usage.</li>
+<li>you can stop execution midway with ESC or ctrl+c. </li>
+<li>you exit by pressing ctrl+c twice. </li>
+<li>pressing esc twice allows you to rewind to an earlier point in the conversation.</li>
+<li>/ commands allow you to execute commands, like <code>/usage</code> that will show you current usage.</li>
 <li><code>/clear</code> or <code>/new</code> to reset context window.</li>
 </ul>
 <h2>Pricing</h2>
 <p>Pricing changes — check the <a href="https://anthropic.com/pricing">Anthropic pricing page</a> for current numbers. </p>
-<p>Note there is two billing methods. Plans and api-keys. Plans gets limits that resets periodically. You pay a monthly fee - even if you never use it. api-keys pays based on token usage.</p>
+<p>Note there are two billing methods. Plans and api-keys. Plans get limits that reset periodically. You pay a monthly fee - even if you never use it. api-keys pays based on token usage.</p>
 <p>See usage by running the <code>/usage</code> command or visit x page.</p>
-<p>For private or coorperate individual use I would recommend plans with predictiable spend, and only use api-keys in product or project setting.</p>
+<p>For private or corporate individual use I would recommend plans with predictable spend, and only use api-keys in product or project setting.</p>
 <h2>What you can do from here</h2>
 <p>Next post covers the core workflow: how to reference files, write prompts as files, and get output as files. That&#39;s where the productivity jump happens.</p>
 

@@ -1,0 +1,4 @@
+#!/bin/sh
+# Regenerate blog-data.js from the docs/blog/ folder structure before each commit.
+node scripts/generate-blog-data.js || exit 1
+git add docs/assets/js/blog-data.js
