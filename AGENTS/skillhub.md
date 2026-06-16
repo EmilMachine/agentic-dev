@@ -4,7 +4,7 @@
 
 ```
 skillhub (registry)
-└── dev-essentials (plugin, v1.4.0)
+└── dev-essentials (plugin, v1.7.1)
 │   ├── skillhub-update  (/skillhub-update)
 │   ├── gitstats         (/gitstats)
 │   ├── procon3          (/procon3)
@@ -13,8 +13,10 @@ skillhub (registry)
 │   ├── cleanup          (/cleanup)
 │   ├── secure           (/secure)
 │   ├── setup            (/setup)
+│   ├── learn            (/learn)
+│   ├── devcontainer     (/devcontainer)
 │   └── issue            (/issue)
-└── md3step (plugin, v1.1.0)
+└── md3step (plugin, v1.2.0)
     ├── mdresearch       (/mdresearch)
     ├── mdplan           (/mdplan)
     ├── mdimplement      (/mdimplement)
@@ -67,6 +69,14 @@ No edits to `skills.html` needed — `renderSkillDocs()` auto-generates sidebar 
 
 Update the `version` field in the relevant entry in `skills-data.js`. The version appears in the skill summary row and in the plugin heading.
 
+When bumping a plugin version, four locations must all be updated consistently:
+1. `docs/assets/js/skills-data.js` → PLUGINS array entry for the plugin
+2. `docs/assets/js/skills-data.js` → every SKILLS_DATA entry for that plugin (each has its own `version` field)
+3. `docs/assets/js/skills.js` → every SKILLS entry for that plugin
+4. `AGENTS/skillhub.md` → the plugin hierarchy line (e.g. `└── dev-essentials (plugin, v1.7.1)`)
+
+Run `python3 AGENTS/docupdate-skillhub/check_skillhub.py` as the authoritative sync check — exit code 0 means all versions and skill lists are consistent with GitHub.
+
 ## Skill Detail Anatomy (rendered HTML)
 
 ```html
@@ -105,7 +115,7 @@ Direct links to a skill: `skills.html#gitstats`. The page opens the matching `<d
 
 | Purpose | File |
 |---|---|
-| Skill data (all 13 skills) | `docs/assets/js/skills-data.js` → `SKILLS_DATA` |
+| Skill data (all 15 skills) | `docs/assets/js/skills-data.js` → `SKILLS_DATA` |
 | Plugin install commands | `docs/assets/js/skills-data.js` → `PLUGINS` |
 | Marketplace add commands | `docs/assets/js/skills-data.js` → `INSTALL_SKILLHUB` |
 | Render + routing logic | `docs/assets/js/skills-docs.js` |

@@ -1,7 +1,7 @@
 function autoDetectPage() {
   const path = window.location.pathname;
   if (path.includes('/blog/') || /\/blog(\.html)?$/.test(path)) return 'blog';
-  if (/\/skills(\.html)?$/.test(path)) return 'skills';
+  if (/\/skillhub(\.html)?$/.test(path)) return 'skills';
   return 'index';
 }
 
@@ -15,7 +15,7 @@ function buildNav(activePage) {
   <a class="nav-logo" href="${logoHref}">EmilMachine</a>
   <ul class="nav-links">
     <li><a href="blog.html?post=0_beliefs"${cls('blog')} data-i18n="nav_blog">Blog</a></li>
-    <li><a href="skills.html"${cls('skills')} data-i18n="nav_docs">Skills</a></li>
+    <li><a href="skillhub.html"${cls('skills')} data-i18n="nav_docs">Skillhub</a></li>
     <li><a href="${aboutHref}" data-i18n="nav_about">About</a></li>
     <li><a href="${contactHref}" data-i18n="nav_contact">Contact</a></li>
     <li>

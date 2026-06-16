@@ -1,10 +1,10 @@
 const strings = {
   en: {
-    nav_docs: 'Skills',
-    nav_skills: 'Skills',
+    nav_docs: 'Skillhub',
+    nav_skills: 'Skillhub',
     nav_about: 'About',
     nav_contact: 'Contact',
-    docs_title: 'Skill Reference',
+    docs_title: 'Skillhub',
     docs_sub: 'All plugins and skills — with why, how, and what.',
     label_why: 'Why',
     label_how: 'How to use',
@@ -36,11 +36,11 @@ const strings = {
     blog_not_found: 'Post not found.',
   },
   da: {
-    nav_docs: 'Skills',
-    nav_skills: 'Skills',
+    nav_docs: 'Skillhub',
+    nav_skills: 'Skillhub',
     nav_about: 'Om',
     nav_contact: 'Kontakt',
-    docs_title: 'Skill Reference',
+    docs_title: 'Skillhub',
     docs_sub: 'Alle plugins og skills — med hvorfor, hvordan og hvad.',
     label_why: 'Hvorfor',
     label_how: 'Sådan bruger du det',

@@ -7,7 +7,7 @@ const INSTALL_SKILLHUB = {
 const PLUGINS = [
   {
     id: 'dev-essentials',
-    version: '1.4.0',
+    version: '1.7.1',
     install: {
       claude:   '/plugin install dev-essentials@skillhub',
       codex:    '$plugin install dev-essentials',
@@ -16,7 +16,7 @@ const PLUGINS = [
   },
   {
     id: 'md3step',
-    version: '1.1.0',
+    version: '1.2.0',
     install: {
       claude:   '/plugin install md3step@skillhub',
       codex:    '$plugin install md3step',
@@ -31,7 +31,7 @@ const SKILLS_DATA = [
     id: 'skillhub-update',
     name: 'skillhub-update',
     plugin: 'dev-essentials',
-    version: '1.4.0',
+    version: '1.7.1',
     cmd: '/skillhub-update',
     why_en: 'Keeping skills current by hand means checking GitHub, diffing versions, and re-running install commands for every plugin. <code>/skillhub-update</code> collapses that into a single command with zero config.',
     why_da: 'At holde skills opdaterede manuelt kræver tjek af GitHub, version-sammenligning og geninstallation. <code>/skillhub-update</code> klarer det hele med én kommando.',
@@ -44,7 +44,7 @@ const SKILLS_DATA = [
     id: 'issue',
     name: 'issue',
     plugin: 'dev-essentials',
-    version: '1.4.0',
+    version: '1.7.1',
     cmd: '/issue [summary]',
     why_en: 'Filing a bug report mid-session usually means copy-pasting context, sanitizing secrets, and formatting manually. <code>/issue</code> does all that and opens the GitHub issue without leaving the agent.',
     why_da: 'At indsende en fejlrapport midt i en session kræver normalt kopiering af kontekst, fjernelse af secrets og manuel formatering. <code>/issue</code> klarer det hele og opretter GitHub-issue\'en.',
@@ -57,7 +57,7 @@ const SKILLS_DATA = [
     id: 'cleanup',
     name: 'cleanup',
     plugin: 'dev-essentials',
-    version: '1.4.0',
+    version: '1.7.1',
     cmd: '/cleanup [path]',
     why_en: 'Dead code and stale docs accumulate silently. <code>/cleanup</code> surfaces them across five categories before they rot into real maintenance debt.',
     why_da: 'Død kode og forældet dokumentation hober sig stille op. <code>/cleanup</code> finder dem på tværs af fem kategorier før de bliver til vedligeholdelsesgæld.',
@@ -70,7 +70,7 @@ const SKILLS_DATA = [
     id: 'codereview',
     name: 'codereview',
     plugin: 'dev-essentials',
-    version: '1.4.0',
+    version: '1.7.1',
     cmd: '/codereview <branch>',
     why_en: 'Switching context to review a PR breaks flow. <code>/codereview</code> gives you a structured Major/Minor/Nit review of any branch without leaving your current session.',
     why_da: 'At skifte kontekst for at reviewe en PR bryder flow. <code>/codereview</code> giver en struktureret Major/Minor/Nit-gennemgang af enhver branch uden at forlade sessionen.',
@@ -83,7 +83,7 @@ const SKILLS_DATA = [
     id: 'gitstats',
     name: 'gitstats',
     plugin: 'dev-essentials',
-    version: '1.4.0',
+    version: '1.7.1',
     cmd: '/gitstats [file | contributor | LINES|FILES|LAST]',
     why_en: 'Git log is powerful but verbose. <code>/gitstats</code> gives you ranked contributor tables and per-file breakdowns without writing shell pipelines.',
     why_da: 'Git log er kraftfuldt men tungt. <code>/gitstats</code> giver dig rangerede bidragyder-tabeller og fil-specifikke oversigter uden at skrive shell-pipelines.',
@@ -104,7 +104,7 @@ const SKILLS_DATA = [
     id: 'pc3',
     name: 'pc3',
     plugin: 'dev-essentials',
-    version: '1.4.0',
+    version: '1.7.1',
     cmd: '/pc3 <question>',
     why_en: 'Shortcut alias for <code>/procon3</code>. Fewer keystrokes, same output.',
     why_da: 'Genvejsalias for <code>/procon3</code>. Færre tastetryk, samme output.',
@@ -117,7 +117,7 @@ const SKILLS_DATA = [
     id: 'procon3',
     name: 'procon3',
     plugin: 'dev-essentials',
-    version: '1.4.0',
+    version: '1.7.1',
     cmd: '/procon3 <question>',
     why_en: 'Architecture and tooling decisions are easy to overthink or under-research. <code>/procon3</code> forces three concrete alternatives with honest trade-offs, all in one shot.',
     why_da: 'Arkitektur- og tooling-beslutninger er lette at overtænke. <code>/procon3</code> tvinger tre konkrete alternativer med ærlige afvejninger frem på én gang.',
@@ -130,7 +130,7 @@ const SKILLS_DATA = [
     id: 'secure',
     name: 'secure',
     plugin: 'dev-essentials',
-    version: '1.4.0',
+    version: '1.7.1',
     cmd: '/secure [path]',
     why_en: 'Security issues compound fast when caught late. <code>/secure</code> runs OWASP Top 10 checks, secret scanning, and dependency CVEs in one pass — before you push.',
     why_da: 'Sikkerhedsproblemer vokser sig store når de opdages sent. <code>/secure</code> kører OWASP Top 10-tjek, secret-scanning og dependency-CVE\'er i ét sweep — inden push.',
@@ -143,7 +143,7 @@ const SKILLS_DATA = [
     id: 'setup',
     name: 'setup',
     plugin: 'dev-essentials',
-    version: '1.4.0',
+    version: '1.7.1',
     cmd: '/setup [path]',
     why_en: 'Every new repo needs the same agent scaffolding: CLAUDE.md, AGENTS.md, LOCAL_AGENTS.md, myprompts/. <code>/setup</code> bootstraps all of it idempotently.',
     why_da: 'Hvert nyt repo har brug for samme agent-stillads: CLAUDE.md, AGENTS.md, LOCAL_AGENTS.md, myprompts/. <code>/setup</code> bootstrapper det hele idempotent.',
@@ -152,13 +152,49 @@ const SKILLS_DATA = [
     what_en: 'Runs <code>setup.sh</code> which creates config files and directory structure. Idempotent — existing files are never overwritten. Reports each created item.',
     what_da: 'Kører <code>setup.sh</code> som opretter konfigurationsfiler og mappestruktur. Idempotent — eksisterende filer overskrives aldrig. Rapporterer hvert oprettet element.',
   },
+  {
+    id: 'learn',
+    name: 'learn',
+    plugin: 'dev-essentials',
+    version: '1.7.1',
+    cmd: '/learn [topic | file-path]',
+    why_en: 'Insights and decisions made during a session are lost when it ends. <code>/learn</code> extracts agent-relevant learnings from conversation history, files, or freetext and writes them to <code>AGENTS/</code> so future sessions start smarter.',
+    why_da: 'Indsigter og beslutninger fra en session går tabt når den slutter. <code>/learn</code> udtrækker agent-relevante learnings fra samtalehistorik, filer eller fritekst og skriver dem til <code>AGENTS/</code> så fremtidige sessioner starter klogere.',
+    how_en: `<ul>
+      <li>No arg → <strong>history mode</strong>: reviews current conversation context</li>
+      <li>File path → <strong>file mode</strong>: extracts learnings from that file</li>
+      <li>Short directive (≤6 words, imperative) → treated as a single rule bullet</li>
+      <li>Longer phrase → <strong>freetext mode</strong>: filters conversation for related decisions</li>
+    </ul>`,
+    how_da: `<ul>
+      <li>Intet argument → <strong>historik-tilstand</strong>: gennemgår aktuel samtale</li>
+      <li>Filsti → <strong>fil-tilstand</strong>: udtrækker learnings fra filindhold</li>
+      <li>Kort direktiv (≤6 ord, imperativ) → behandles som en enkelt regelbullet</li>
+      <li>Længere frase → <strong>fritekst-tilstand</strong>: filtrerer samtale for relaterede beslutninger</li>
+    </ul>`,
+    what_en: 'Proposes terse imperative learning bullets, confirms with user (Proceed / Modify / Stop), then writes approved bullets to <code>AGENTS/*.md</code> files. Creates new topic files or appends to existing ones based on topic matching.',
+    what_da: 'Foreslår knappe imperativbullets, bekræfter med brugeren (Fortsæt / Modificer / Stop), og skriver godkendte bullets til <code>AGENTS/*.md</code>-filer. Opretter nye emne-filer eller tilføjer til eksisterende baseret på emne-match.',
+  },
+  {
+    id: 'devcontainer',
+    name: 'devcontainer',
+    plugin: 'dev-essentials',
+    version: '1.7.1',
+    cmd: '/devcontainer [-f] [path]',
+    why_en: 'Bootstrapping a consistent dev environment means copying Docker config by hand. <code>/devcontainer</code> stamps out a <code>.devcontainer</code> folder with a claude-slim Docker setup in one command.',
+    why_da: 'At bootstrappe et konsistent dev-miljø kræver manuel kopiering af Docker-konfiguration. <code>/devcontainer</code> opretter en <code>.devcontainer</code>-mappe med claude-slim Docker-opsætning med én kommando.',
+    how_en: 'Run <code>/devcontainer</code> (defaults to current directory) or <code>/devcontainer &lt;path&gt;</code> for a specific directory. Add <code>-f</code> to overwrite an existing <code>.devcontainer</code> folder.',
+    how_da: 'Kør <code>/devcontainer</code> (standard: aktuelle mappe) eller <code>/devcontainer &lt;sti&gt;</code> for en specifik mappe. Tilføj <code>-f</code> for at overskrive en eksisterende <code>.devcontainer</code>-mappe.',
+    what_en: 'Runs <code>devcontainer.sh</code> which copies template files into the target directory. Exits without changes if <code>.devcontainer</code> already exists (unless <code>-f</code> is passed). Reports each copied file on success.',
+    what_da: 'Kører <code>devcontainer.sh</code> som kopierer skabelonfiler til målmappen. Afslutter uden ændringer hvis <code>.devcontainer</code> allerede eksisterer (medmindre <code>-f</code> er angivet). Rapporterer hvert kopieret fil ved succes.',
+  },
 
   // ── md3step ─────────────────────────────────────────────────────
   {
     id: 'mdresearch',
     name: 'mdresearch',
     plugin: 'md3step',
-    version: '1.1.0',
+    version: '1.2.0',
     cmd: '/mdresearch <0_context.md>',
     why_en: 'Jumping straight to implementation without understanding the codebase leads to redundant work and wrong abstractions. <code>/mdresearch</code> forces a structured research phase first.',
     why_da: 'At hoppe direkte til implementering uden at forstå kodebasen fører til redundant arbejde. <code>/mdresearch</code> tvinger en struktureret research-fase først.',
@@ -171,7 +207,7 @@ const SKILLS_DATA = [
     id: 'mdplan',
     name: 'mdplan',
     plugin: 'md3step',
-    version: '1.1.0',
+    version: '1.2.0',
     cmd: '/mdplan <1_research.md>',
     why_en: 'Good research still needs to be broken into atomic, testable steps before touching code. <code>/mdplan</code> converts research findings into a sequenced implementation plan.',
     why_da: 'God research skal stadig brydes ned i atomare, testbare trin før koden røres. <code>/mdplan</code> konverterer research-fund til en sekventiel implementeringsplan.',
@@ -184,7 +220,7 @@ const SKILLS_DATA = [
     id: 'mdimplement',
     name: 'mdimplement',
     plugin: 'md3step',
-    version: '1.1.0',
+    version: '1.2.0',
     cmd: '/mdimplement <2_plan.md>',
     why_en: 'Executing a plan without tracking what was verified and what failed makes debugging hard. <code>/mdimplement</code> executes each step with verification and writes a change log.',
     why_da: 'At udføre en plan uden at spore hvad der er verificeret gør debugging svært. <code>/mdimplement</code> udfører hvert trin med verifikation og skriver en ændringslog.',
@@ -197,7 +233,7 @@ const SKILLS_DATA = [
     id: 'mdupdate',
     name: 'mdupdate',
     plugin: 'md3step',
-    version: '1.1.0',
+    version: '1.2.0',
     cmd: '/mdupdate <2_plan.md>',
     why_en: 'When you have answers to open questions in a plan, re-running the full research + plan cycle is wasteful. <code>/mdupdate</code> folds inline answers directly into the existing plan.',
     why_da: 'Når du har svar på åbne spørgsmål i en plan, er det spild at køre hele research + plan-cyklussen om igen. <code>/mdupdate</code> integrerer inline-svar direkte i den eksisterende plan.',

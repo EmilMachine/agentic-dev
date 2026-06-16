@@ -1,0 +1,1 @@
+../../AGENTS/docupdate-skillhub/SKILL.md

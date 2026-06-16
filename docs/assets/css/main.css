@@ -503,10 +503,16 @@ footer {
 
 .docs-header-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 2.5rem;
   flex-wrap: wrap;
   margin-bottom: 0;
+}
+
+.docs-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .docs-header-actions {

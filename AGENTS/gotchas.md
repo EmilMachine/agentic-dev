@@ -10,3 +10,4 @@
 ## Shell scripts
 
 - `sed -i ''` is macOS-only; use `sed -i.bak ... && rm *.bak` for cross-platform in-place editing (already fixed in `myblogposts/publish.sh`)
+- Never use `sed -i` with `\n` in the pattern — on this Linux container it inserts literal backslash-n characters instead of newlines; use Python read/replace/write for multiline or bulk string replacements
