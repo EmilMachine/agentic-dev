@@ -1,0 +1,45 @@
+<!--
+slug: 2_skills_and_dev_essentials
+type: hands_on
+title_en: 2. Skills and skillhub:dev-essentials
+title_da: 2. Skills og skillhub:dev-essentials
+created: 2026-06-01
+last_updated: 2026-06-16
+langs: da
+--><p><strong>TL;DR</strong> — Installér: <code>/plugin marketplace add https://github.com/EmilMachine/skillhub</code> → <code>/plugin install dev-essentials</code>. Nøgleskills: <code>/pc3</code> (vælg mellem muligheder), <code>/issue</code> åbn issues eller anmodninger med skill i skillhub. Opdatér til de nyeste skills: <code>/skillhub-update</code>.</p>
+<hr>
+<h1>2. Skills og skillhub:dev-essentials</h1>
+<p>Claude Code har et skill-system — slash-kommandoer, der udvider hvad agenten kan gøre. Dette indlæg viser hvad skills er og gennemgår tre fra <code>dev-essentials</code>-pakken, som jeg har lavet.</p>
+<h2>Hvad er en skill?</h2>
+<p>En skill er en genanvendelig prompt, pakket som en slash-kommando. Det minder om at referere til en fil med promptteksten, men er mere let tilgængeligt og delbart.
+Når du skriver <code>/procon3</code>, udfører Claude en struktureret beslutningstagningsprompt. Du får en genvej til at kalde en prompt-skabelon. Som en funktion kan den også tage argumenter efter skillen.</p>
+<p>Skills ligger i <code>.claude/skills/</code> i dit repo (eller globalt i <code>~/.claude/skills/</code>). De er bare markdown-filer — læsbare, redigerbare, versionsstyrede.</p>
+<h2>Installér dev-essentials</h2>
+<p>Inde i en Claude Code-session, tilføj skillhub-markedspladsen og installér plugin&#39;et:</p>
+<pre><code>/plugin marketplace add https://github.com/EmilMachine/skillhub
+/plugin install dev-essentials
+</code></pre>
+<p>Det er det. Skills er nu tilgængelige som slash-kommandoer i ethvert projekt.</p>
+<p>For at opdatere senere:</p>
+<pre><code>/skillhub-update
+</code></pre>
+<h2>Skills det er værd at kende</h2>
+<h3><code>/procon3</code> (eller <code>/pc3</code>) — Vælg mellem muligheder</h3>
+<p>Brug det, når du vælger mellem to eller flere tilgange og ønsker struktureret ræsonnering:</p>
+<pre><code>/pc3 should we use zod or yup for schema validation in this project?
+</code></pre>
+<p>Returnerer 3 alternativer, hver med fordele og ulemper. Det kan også bruges til fejlfinding.
+<code>/pc3</code> er et genvejsalias for <code>/procon3</code>.</p>
+<p>Kan også fungere som en mini-planlægningssession. Hvis du blot spørger hvad den bedste måde at gøre X er, kan Claude nemt foreslå en løsning og begynde at implementere den uden din godkendelse. At skitsere 3 giver et klart signal om at vente på brugerinput, og fremhæver også afvejningerne i beslutningen.</p>
+<h3><code>/skillhub-update</code> — Hold plugins opdaterede</h3>
+<p>Registrerer installerede plugins, sammenligner versioner og opdaterer alt der er forældet. Kør det periodisk eller efter at have pullet repoet.</p>
+<blockquote>
+<p>Bemærk: Skill-navne og -adfærd kan ændre sig mellem versioner. Disse afspejler den nuværende tilstand — tjek <a href="https://github.com/EmilMachine/skillhub">kilden</a> hvis noget opfører sig anderledes.</p>
+</blockquote>
+<h3><code>/issue</code> — Rapportér et problem med en Skillhub-skill.</h3>
+<p>Beskriv en fejl med en skillhub-skill og opret et github-issue baseret på tidligere interaktioner. Kan bruges som bare <code>/issue</code> eller <code>/issue &lt;din opsummering af problemet&gt;</code></p>
+<p>Bemærk at skillen bruger den tidligere kontekst til at udfylde issuet og forsøger at undgå at lække projektspecifikke detaljer eller hemmeligheder som e-mails.</p>
+<p>Den vil forsøge automatisk at oprette issuet ved hjælp af GitHub CLI</p>
+<h2>Pointen</h2>
+<p>Skills lader dig bygge et personligt værktøjssæt oven på basisagenten. Det næste indlæg dækker opsætning af et opinionated miljø — herunder hvilke skills der skal installeres og hvorfor.</p>
+

@@ -1,0 +1,41 @@
+<!--
+slug: 0_what_is_a_coding_agent
+type: hands_on
+title_en: 0. Setup Claude
+title_da: 0. Setup Claude
+created: 2026-06-01
+last_updated: 2026-06-16
+langs: da
+--><p><strong>TL;DR</strong> — <code>npm install -g @anthropic/claude-code</code> → <code>claude login</code> → <code>claude</code>. ESC for at stoppe, ctrl+c to gange for at afslutte, <code>/usage</code> for at tjekke forbrug. <code>/clear</code> eller <code>/new</code> for at rydde kontekst. <a href="https://anthropic.com/pricing">Priser</a>: brug Plans til personlig brug, API-nøgler til produkter.</p>
+<hr>
+<p>Hvis du allerede har Claude Code (eller ligende) installeret og kørende, kan du springe til <a href="#">Indlæg 1</a>.</p>
+<h1>0. Opsæt en agent</h1>
+<p>En kode agent er en AI, der ikke bare besvarer spørgsmål — den udfører handlinger i din kodebase. Den læser filer, skriver kode, kører kommandoer og itererer, indtil opgaven er løst. Tænk på det mindre som en chatbot og mere som en junior praktikant, der sidder ved din terminal.</p>
+<p>I praksis er det en LLM-model (AI) + et harness (almindelig kode), der hjælper med at opdele opgaver og udføre handlinger ved hjælp af LLM&#39;ernes &quot;tænke&quot;-evne.</p>
+<p>Denne serie fokuserer på Claude Code, Anthropics CLI-agent. Der findes andre muligheder (Cursor, Copilot, Opencode, Aider), men Claude Code er det, vi bruger gennem hele serien.</p>
+<h2>Hent Claude Code</h2>
+<ol>
+<li>Opret en konto på claude.ai — du skal have et betalt abonnement (Pro eller derover) for at bruge Claude Code meningsfuldt.</li>
+<li>Installér CLI&#39;en: <code>npm install -g @anthropic/claude-code</code></li>
+<li>Autentificér: <code>claude login</code></li>
+<li>Åbn en terminal i din projektmappe og kør: <code>claude</code></li>
+</ol>
+<p>Det er indgangspunktet.</p>
+<p>Det minder om en chat, og du kan skrive enhver anmodning som &quot;skriv mig et haiku-digt om træer&quot; eller &quot;lav mig en Python-funktion til at konvertere Celsius til Fahrenheit&quot;</p>
+<h2>Grundlæggende styring</h2>
+<p>Du styrer agenten. Den har læseadgang til det repo, du startede den i, men beder dig om godkendelse til alle ændringer, hvor den kører kommandoer.</p>
+<ul>
+<li>du kan stoppe eksekveringen midtvejs med ESC eller ctrl+c.</li>
+<li>du afslutter ved at trykke ctrl+c to gange.</li>
+<li>ved at trykke esc to gange kan du spole tilbage til et tidligere punkt i samtalen.</li>
+<li>/-kommandoer lader dig udføre kommandoer, som <code>/usage</code>, der viser dit aktuelle forbrug.</li>
+<li><code>/clear</code> eller <code>/new</code> for at nulstille kontekstvinduet.</li>
+</ul>
+<h2>Priser</h2>
+<p>Priserne ændrer sig — tjek <a href="https://anthropic.com/pricing">Anthropics prisside</a> for aktuelle tal.</p>
+<p>Bemærk, at der er to faktureringsmetoder. Plans og api-nøgler. Plans giver grænser, der nulstilles periodisk. Du betaler en månedlig pris — også selvom du aldrig bruger det. api-nøgler betaler baseret på token-forbrug.</p>
+<p>Se dit forbrug ved at køre <code>/usage</code>-kommandoen eller besøg x-siden.</p>
+<p>Til privat eller virksomhedsmæssig individuel brug vil jeg anbefale Plans med forudsigelige udgifter, og kun bruge api-nøgler i produkt- eller projektsammenhæng.</p>
+<h2>Hvad du kan gøre herfra</h2>
+<p>Næste indlæg dækker den grundlæggende arbejdsgang: hvordan man refererer til filer, skriver prompts som filer og får output som filer. Det er der, produktivitetsspringet sker.</p>
+
