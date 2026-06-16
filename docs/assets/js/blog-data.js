@@ -12,4 +12,5 @@ const POST_FILES = [
   "blog/hands_on/en/2_skills_and_dev_essentials.html",
   "blog/hands_on/en/3_opinionated_setup.html",
   "blog/hands_on/en/4_md3step.html",
+  "blog/hands_on/en/5_devcontainer.html",
 ];
