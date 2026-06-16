@@ -387,6 +387,12 @@ h2 {
   word-break: break-all;
 }
 
+.skill-cmd-args {
+  display: block;
+  color: #666;
+  margin-top: 0.15rem;
+}
+
 .skill-desc {
   font-size: 0.9rem;
   color: var(--text-muted);
@@ -623,6 +629,14 @@ footer {
   transition: color 0.15s, border-color 0.15s, background 0.15s;
   border-radius: 0 var(--radius) var(--radius) 0;
   word-break: break-all;
+}
+
+.sidebar-cmd-args {
+  display: block;
+  font-weight: 700;
+  color: #999;
+  font-size: 0.78rem;
+  margin-top: 0.1rem;
 }
 
 .sidebar-skills a:hover {

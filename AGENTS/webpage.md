@@ -41,7 +41,6 @@ Convention: `section_key` — snake_case, section prefix matches HTML section id
 |---|---|
 | Change section layout/structure | `docs/index.html` |
 | Change text content | `docs/assets/js/i18n.js` (both `en` and `da`) |
-| Change landing-page skill cards | `docs/assets/js/skills.js` (`SKILLS` array) |
 | Change skill docs (why/how/what) | `docs/assets/js/skills-data.js` (`SKILLS_DATA` array) |
 | Change plugin install commands | `docs/assets/js/skills-data.js` (`PLUGINS` array) |
 | Change skillhub marketplace commands | `docs/assets/js/skills-data.js` (`INSTALL_SKILLHUB`) |

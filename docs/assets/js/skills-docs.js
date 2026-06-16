@@ -71,11 +71,18 @@ function renderSkillDocs(lang) {
         <span class="plugin-badge">${skills.length}</span>
       </summary>
       <ul class="sidebar-skills">
-        ${skills.map(s => `
+        ${skills.map(s => {
+          const spaceIdx = s.cmd.indexOf(' ');
+          const baseCmd = spaceIdx === -1 ? s.cmd : s.cmd.slice(0, spaceIdx);
+          const args = spaceIdx === -1 ? '' : s.cmd.slice(spaceIdx + 1);
+          const cmdHtml = args
+            ? `${baseCmd}<span class="sidebar-cmd-args">${args}</span>`
+            : baseCmd;
+          return `
           <li>
-            <a href="#${s.id}" data-skill-link="${s.id}">${s.cmd}</a>
-          </li>
-        `).join('')}
+            <a href="#${s.id}" data-skill-link="${s.id}">${cmdHtml}</a>
+          </li>`;
+        }).join('')}
       </ul>
     </details>
   `).join('');
