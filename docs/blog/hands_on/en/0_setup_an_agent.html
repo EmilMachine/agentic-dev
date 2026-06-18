@@ -4,20 +4,20 @@ type: hands_on
 title_en: 0. Setup Claude
 title_da: 0. Setup Claude
 created: 2026-06-01
-last_updated: 2026-06-15
+last_updated: 2026-06-18
 langs: en, da
 --><p><strong>TL;DR</strong> — <code>npm install -g @anthropic/claude-code</code> → <code>claude login</code> → <code>claude</code>. ESC to stop, ctrl+c twice to exit, <code>/usage</code> to check spend. <code>/clear</code> or <code>/new</code> to clear context. <a href="https://anthropic.com/pricing">Pricing</a>: use Plans for personal use, API keys for products.</p>
 <hr>
-<p>If you already have Claude Code installed and running, you can skip to <a href="#">Post 1</a>.</p>
+<p>If you already have Claude Code (or similar) installed and running, you can skip to <a href="#">Post 1</a>.</p>
 <h1>0. Setup an agent</h1>
 <p>A coding agent is an AI that doesn&#39;t just answer questions — it takes actions in your codebase. It reads files, writes code, runs commands, and iterates until a task is done. Think of it less like a chatbot and more like a junior intern sitting at your terminal.</p>
 <p>In practice it is an LLM model (AI) + a harness (regular code) to help split tasks, take actions into the &quot;thinking&quot; power of LLMs.</p>
 <p>This series focuses on Claude Code, Anthropic&#39;s CLI agent. Other options exist (Cursor, Copilot, Opencode, Aider), but Claude Code is what we&#39;ll use throughout.</p>
 <h2>Getting Claude Code</h2>
+<p>Not familiar with the CLI? Download the <a href="https://claude.com/download">Claude Code desktop app</a> — it&#39;s the easiest way to get started.</p>
 <ol>
-<li>Sign up at claude.ai — you need a paid plan (Pro or above) to use Claude Code meaningfully.</li>
-<li>Install the CLI: <code>npm install -g @anthropic/claude-code</code></li>
-<li>Authenticate: <code>claude login</code></li>
+<li>Sign up at <a href="https://claude.ai">claude.ai</a> — you need a paid plan (Pro or above) to use Claude Code meaningfully.</li>
+<li>Install the CLI: <code>npm install -g @anthropic-ai/claude-code</code></li>
 <li>Open a terminal in your project folder and run: <code>claude</code></li>
 </ol>
 <p>That&#39;s the entry point.</p>
