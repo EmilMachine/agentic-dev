@@ -205,6 +205,13 @@ h1 {
   word-break: break-all;
 }
 
+.code-comment {
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding-bottom: 0.25rem;
+}
+
 .hero-actions {
   display: flex;
   gap: 1rem;
@@ -655,6 +662,13 @@ footer {
 .docs-content {
   padding: 1.5rem 0;
   min-width: 0;
+}
+
+.docs-content-note {
+  margin: 0 0 1.5rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
 /* Skill entry (inner collapsible) */

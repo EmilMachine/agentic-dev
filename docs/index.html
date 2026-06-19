@@ -39,13 +39,15 @@
         </div>
       </div>
       <div class="tab-panel" data-panel="codex">
+        <div class="code-comment"># outside codex cli</div>
         <div class="install-block">
           <span class="prompt">$</span>
-          <code>$plugin-marketplace add https://github.com/EmilMachine/skillhub</code>
+          <code>codex plugin marketplace add EmilMachine/skillhub --ref main --sparse .agents/plugins</code>
         </div>
+        <div class="code-comment"># outside codex cli</div>
         <div class="install-block">
           <span class="prompt">$</span>
-          <code>$plugin install dev-essentials</code>
+          <code>codex plugin add dev-essentials --marketplace skillhub</code>
         </div>
       </div>
       <div class="tab-panel" data-panel="opencode">

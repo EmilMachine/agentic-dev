@@ -1,6 +1,6 @@
 const INSTALL_SKILLHUB = {
   claude:   '/plugin marketplace add https://github.com/EmilMachine/skillhub',
-  codex:    '$plugin-marketplace add https://github.com/EmilMachine/skillhub',
+  codex:    { note: '# outside codex cli', cmd: 'codex plugin marketplace add EmilMachine/skillhub --ref main --sparse .agents/plugins' },
   opencode: 'git clone https://github.com/EmilMachine/skillhub ~/.local/share/skillhub',
 };
 
@@ -10,7 +10,7 @@ const PLUGINS = [
     version: '1.7.1',
     install: {
       claude:   '/plugin install dev-essentials@skillhub',
-      codex:    '$plugin install dev-essentials',
+      codex:    { note: '# outside codex cli', cmd: 'codex plugin add dev-essentials --marketplace skillhub' },
       opencode: 'for skill in ~/.local/share/skillhub/.opencode/skills/dev-essentials/*; do ln -s "$skill" ~/.config/opencode/skills/; done',
     },
   },
@@ -19,7 +19,7 @@ const PLUGINS = [
     version: '1.2.0',
     install: {
       claude:   '/plugin install md3step@skillhub',
-      codex:    '$plugin install md3step',
+      codex:    { note: '# outside codex cli', cmd: 'codex plugin add md3step --marketplace skillhub' },
       opencode: 'for skill in ~/.local/share/skillhub/.opencode/skills/md3step/*; do ln -s "$skill" ~/.config/opencode/skills/; done',
     },
   },
@@ -48,8 +48,8 @@ const SKILLS_DATA = [
     cmd: '/issue [summary]',
     why_en: 'Filing a bug report mid-session usually means copy-pasting context, sanitizing secrets, and formatting manually. <code>/issue</code> does all that and opens the GitHub issue without leaving the agent.',
     why_da: 'At indsende en fejlrapport midt i en session kræver normalt kopiering af kontekst, fjernelse af secrets og manuel formatering. <code>/issue</code> klarer det hele og opretter GitHub-issue\'en.',
-    how_en: 'Run <code>/issue</code> (auto-extracts context) or <code>/issue &lt;summary&gt;</code> to add your own description. Requires <code>gh</code> CLI authenticated to the repo.',
-    how_da: 'Kør <code>/issue</code> (kontekst udtrækkes automatisk) eller <code>/issue &lt;sammenfatning&gt;</code> for at tilføje din egen beskrivelse. Kræver <code>gh</code> CLI autentificeret mod repo\'et.',
+    how_en: 'Run <code>/issue</code> (auto-extracts context) or <code>/issue &lt;summary&gt;</code> to add your own description. Requires <code>gh</code> CLI authenticated to the repo. If <code>gh</code> is unavailable, falls back to a pre-filled <a href="https://github.com/EmilMachine/skillhub/issues/new" target="_blank" rel="noopener">GitHub link</a>.',
+    how_da: 'Kør <code>/issue</code> (kontekst udtrækkes automatisk) eller <code>/issue &lt;sammenfatning&gt;</code> for at tilføje din egen beskrivelse. Kræver <code>gh</code> CLI autentificeret mod repo\'et. Hvis <code>gh</code> ikke er tilgængeligt, falder den tilbage til et udfyldt <a href="https://github.com/EmilMachine/skillhub/issues/new" target="_blank" rel="noopener">GitHub-link</a>.',
     what_en: 'Extracts error context from conversation, redacts tokens/emails/paths automatically, constructs a structured issue body (plugin, skill, situation, complication, error_type, steps_to_reproduce), then creates the GitHub issue via <code>gh</code> CLI.',
     what_da: 'Udtrækker fejlkontekst fra samtalen, redigerer tokens/emails/stier automatisk, konstruerer en struktureret issue-tekst og opretter GitHub-issue\'en via <code>gh</code> CLI.',
   },

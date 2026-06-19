@@ -37,11 +37,16 @@ function installTabsHTML(cmds) {
       <div class="tab-buttons">
         ${agents.map((a, i) => `<button class="tab-btn${i === 0 ? ' active' : ''}" data-tab="${a.key}">${a.label}</button>`).join('')}
       </div>
-      ${agents.map((a, i) => `
+      ${agents.map((a, i) => {
+        const val = cmds[a.key];
+        const note = (val && typeof val === 'object') ? val.note : null;
+        const cmd  = (val && typeof val === 'object') ? val.cmd  : val;
+        return `
         <div class="tab-panel${i === 0 ? ' active' : ''}" data-panel="${a.key}">
-          <div class="install-block"><span class="prompt">$</span><code>${cmds[a.key]}</code></div>
-        </div>
-      `).join('')}
+          ${note ? `<div class="code-comment">${note}</div>` : ''}
+          <div class="install-block"><span class="prompt">$</span><code>${cmd}</code></div>
+        </div>`;
+      }).join('')}
     </div>`;
 }
 

@@ -7,6 +7,11 @@
 - Use `a[href]` + parse `?post=` from the href as the interception pattern in blog.js — more robust than relying solely on `data-post-link` attributes surviving innerHTML injection
 - Cross-post links in blog fragments must use relative `blog.html?post=<slug>` (no leading `/`) — absolute paths like `/blog.html?post=X` break if the server root is not `docs/`
 
+## Codex CLI
+
+- Codex exit is Ctrl+D (not Ctrl+C twice as in Claude Code); ESC interrupts the active task
+- Install Codex with `npm install -g @openai/codex` — the unscoped `codex` npm package is an unrelated 2012 project
+
 ## Shell scripts
 
 - `sed -i ''` is macOS-only; use `sed -i.bak ... && rm *.bak` for cross-platform in-place editing (already fixed in `myblogposts/publish.sh`)

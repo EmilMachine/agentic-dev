@@ -34,6 +34,7 @@ const strings = {
     blog_no_translation: 'Not yet available in Danish — showing English.',
     blog_select_prompt: 'Select a post from the sidebar.',
     blog_not_found: 'Post not found.',
+    codex_invoke_note: 'Codex uses "$" instead of "/" ($skill-name instead of /skill-name)',
   },
   da: {
     nav_docs: 'Skillhub',
@@ -70,6 +71,7 @@ const strings = {
     blog_no_translation: 'Ikke tilgængelig på dansk endnu — viser engelsk.',
     blog_select_prompt: 'Vælg et indlæg fra sidebaren.',
     blog_not_found: 'Indlæg ikke fundet.',
+    codex_invoke_note: 'Codex bruger "$" i stedet for "/" ($skill-name fremfor /skill-name)',
   }
 };
 

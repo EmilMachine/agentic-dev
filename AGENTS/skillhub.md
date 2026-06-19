@@ -28,7 +28,7 @@ Install — step 1 (add registry, once):
 | Agent | Command |
 |---|---|
 | Claude Code | `/plugin marketplace add https://github.com/EmilMachine/skillhub` |
-| Codex | `$plugin-marketplace add https://github.com/EmilMachine/skillhub` |
+| Codex | `codex plugin marketplace add EmilMachine/skillhub --ref main --sparse .agents/plugins` (run outside CLI) |
 | OpenCode | `git clone https://github.com/EmilMachine/skillhub ~/.local/share/skillhub` |
 
 Step 2 (install a plugin, e.g. `dev-essentials`):
@@ -36,8 +36,13 @@ Step 2 (install a plugin, e.g. `dev-essentials`):
 | Agent | Command |
 |---|---|
 | Claude Code | `/plugin install dev-essentials@skillhub` |
-| Codex | `$plugin install dev-essentials` |
+| Codex | `codex plugin add dev-essentials --marketplace skillhub` (run outside CLI) |
 | OpenCode | `for skill in ~/.local/share/skillhub/.opencode/skills/dev-essentials/*; do ln -s "$skill" ~/.config/opencode/skills/; done` |
+
+Codex notes:
+- Codex invokes skills with `$skill-name` not `/skill-name`
+- Both `codex plugin marketplace add` and `codex plugin add` must be run outside the Codex CLI (in a regular shell)
+- `$skillhub-update` does NOT work inside Codex (checks for `CLAUDECODE` env var which is absent)
 
 These are defined in `INSTALL_SKILLHUB` and `PLUGINS` in `skills-data.js` — edit there to update what the site displays.
 
