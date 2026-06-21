@@ -4,38 +4,69 @@ type: hands_on
 title_en: 0. Setup Claude
 title_da: 0. Setup Claude
 created: 2026-06-01
-last_updated: 2026-06-18
+last_updated: 2026-06-21
 langs: da
---><p><strong>TL;DR</strong> — <code>npm install -g @anthropic/claude-code</code> → <code>claude login</code> → <code>claude</code>. ESC for at stoppe, ctrl+c to gange for at afslutte, <code>/usage</code> for at tjekke forbrug. <code>/clear</code> eller <code>/new</code> for at rydde kontekst. <a href="https://anthropic.com/pricing">Priser</a>: brug Plans til personlig brug, API-nøgler til produkter.</p>
+--><p><strong>TL;DR</strong> - <code>npm install -g @anthropic/claude-code</code> -&gt; <code>claude login</code> -&gt; <code>claude</code>. ESC stopper, ctrl+c to gange afslutter, <code>/usage</code> viser forbrug. <code>/clear</code> eller <code>/new</code> nulstiller kontekst. <a href="https://anthropic.com/pricing">Priser</a>: Plans til personlig brug, API-nøgler til produkter.</p>
 <hr>
-<p>Hvis du allerede har Claude Code (eller ligende) installeret og kørende, kan du springe til <a href="#">Indlæg 1</a>.</p>
+<p>Har du allerede Claude Code (eller lignende) kørende, kan du springe til <a href="#">Indlæg 1</a>.</p>
 <h1>0. Opsæt en agent</h1>
-<p>En kode agent er en AI, der ikke bare besvarer spørgsmål — den udfører handlinger i din kodebase. Den læser filer, skriver kode, kører kommandoer og itererer, indtil opgaven er løst. Tænk på det mindre som en chatbot og mere som en junior praktikant, der sidder ved din terminal.</p>
-<p>I praksis er det en LLM-model (AI) + et harness (almindelig kode), der hjælper med at opdele opgaver og udføre handlinger ved hjælp af LLM&#39;ernes &quot;tænke&quot;-evne.</p>
-<p>Denne serie fokuserer på Claude Code, Anthropics CLI-agent. Der findes andre muligheder (Cursor, Copilot, Opencode, Aider), men Claude Code er det, vi bruger gennem hele serien.</p>
-<h2>Hent Claude Code</h2>
-<p>Ikke fortrolig med CLI? Download <a href="https://claude.com/download">Claude Code desktop-appen</a> — det er den nemmeste måde at komme i gang på.</p>
+<p>En kodeagent er en AI, der ikke bare svarer på spørgsmål - den handler i din kodebase. Den læser filer, skriver kode, kører kommandoer og bliver ved, til opgaven er løst. Tænk på det som en junior praktikant ved din terminal snarere end en chatbot.</p>
+<p>I praksis er det en LLM-model (AI) koblet med et harness (almindelig kode), der hjælper med at opdele opgaver og omsætte LLM&#39;ens regnekraft til konkrete handlinger.</p>
+<p>Serien her bruger Claude Code, Anthropics CLI-agent. Andre muligheder findes (Cursor, Copilot, Opencode, Aider), men Claude Code er det, vi holder os til.</p>
+<details class="blog-spoiler" open>
+<summary>Analogi - Agent</summary>
+<p><img src="../../../assets/img/0_harness_horse.svg" alt="En hest med seletøj som illustration af LLM vs. agent"></p>
+<ul>
+<li>AI (LLM&#39;er) er som en hest - rå, utæmmet kraft.</li>
+<li>En agent er som et seletøj - det lader os styre den kraften og bruge den til noget nyttigt.</li>
+<li>I praksis er AI&#39;en en stor maskinlæringsmodel trænret på data med tilfældighed indlejret, og seletøjet er almindelig deterministisk kode, der styrer modellen.</li>
+</ul></details><h2>Priser</h2>
+<p>Priserne ændrer sig - tjek <a href="https://anthropic.com/pricing">Anthropics prisside</a> for aktuelle tal.</p>
+<p>Der er to måder at betale på: Plans og API-nøgler. Med Plans betaler du en fast månedlig pris og får et forbrug, der nulstilles periodisk. API-nøgler koster ingenting at have - du betaler kun for det, du bruger.</p>
+<p>Se dit aktuelle forbrug med <code>/usage</code>-kommandoen.</p>
+<p>Til privat brug eller som enkeltperson i en virksomhed vil jeg anbefale Plans - forudsigeligt forbrug og ingen overraskelser. API-nøgler giver mening i produkt- eller projektsammenhæng, hvor man vil styre omkostningerne præcist.</p>
+<details class="blog-spoiler" open>
+<summary>Analogi - priser</summary>
+<p><img src="../../../assets/img/0_plan_apikey.svg" alt="Plans vs. API-nøgler illustreret som biludlejningsanalogi"></p>
+<ul>
+<li>Plans: En ven låner dig en bil for 20 $/måneden. Den har et benzinkort med dag-, uge- og månedslofter. Du betaler selv i ferien, men du ved altid hvad det koster.</li>
+<li>API-nøgler: Vennen låner dig bilen gratis, men du betaler selv benzinen. Bruger du den ikke, koster den ingenting - men sætter du den på selvkørende tilstand og lader den løbe, kan det løbe op.</li>
+</ul></details><h2>Hent Claude Code</h2>
+<p>Ikke fortrolig med terminalen? Hent <a href="https://claude.com/download">Claude Code desktop-appen</a> - det er den nemmeste start.</p>
 <ol>
-<li>Opret en konto på <a href="https://claude.ai">claude.ai</a> — du skal have et betalt abonnement (Pro eller derover) for at bruge Claude Code meningsfuldt.</li>
+<li>Opret en konto på <a href="https://claude.ai">claude.ai</a> - du skal have et betalt abonnement (Pro eller derover) for at bruge Claude Code.</li>
 <li>Installér CLI&#39;en: <code>npm install -g @anthropic-ai/claude-code</code></li>
 <li>Åbn en terminal i din projektmappe og kør: <code>claude</code></li>
 </ol>
-<p>Det er indgangspunktet.</p>
-<p>Det minder om en chat, og du kan skrive enhver anmodning som &quot;skriv mig et haiku-digt om træer&quot; eller &quot;lav mig en Python-funktion til at konvertere Celsius til Fahrenheit&quot;</p>
+<p>Det er alt. Herfra fungerer det som en chat - skriv hvad du vil have lavet, fx &quot;skriv et haiku om træer&quot; eller &quot;lav en Python-funktion der konverterer Celsius til Fahrenheit&quot;.</p>
 <h2>Grundlæggende styring</h2>
-<p>Du styrer agenten. Den har læseadgang til det repo, du startede den i, men beder dig om godkendelse til alle ændringer, hvor den kører kommandoer.</p>
+<p>Du bestemmer. Agenten har læseadgang til dit repo, men beder om lov, hver gang den vil ændre noget.</p>
 <ul>
-<li>du kan stoppe eksekveringen midtvejs med ESC eller ctrl+c.</li>
-<li>du afslutter ved at trykke ctrl+c to gange.</li>
-<li>ved at trykke esc to gange kan du spole tilbage til et tidligere punkt i samtalen.</li>
-<li>/-kommandoer lader dig udføre kommandoer, som <code>/usage</code>, der viser dit aktuelle forbrug.</li>
-<li><code>/clear</code> eller <code>/new</code> for at nulstille kontekstvinduet.</li>
+<li>ESC eller ctrl+c stopper eksekveringen midtvejs.</li>
+<li>ctrl+c to gange afslutter Claude Code.</li>
+<li>To gange ESC spoler tilbage til et tidligere punkt i samtalen.</li>
+<li><code>/usage</code> viser dit aktuelle forbrug.</li>
+<li><code>/clear</code> eller <code>/new</code> nulstiller kontekstvinduet.</li>
 </ul>
-<h2>Priser</h2>
-<p>Priserne ændrer sig — tjek <a href="https://anthropic.com/pricing">Anthropics prisside</a> for aktuelle tal.</p>
-<p>Bemærk, at der er to faktureringsmetoder. Plans og api-nøgler. Plans giver grænser, der nulstilles periodisk. Du betaler en månedlig pris — også selvom du aldrig bruger det. api-nøgler betaler baseret på token-forbrug.</p>
-<p>Se dit forbrug ved at køre <code>/usage</code>-kommandoen eller besøg x-siden.</p>
-<p>Til privat eller virksomhedsmæssig individuel brug vil jeg anbefale Plans med forudsigelige udgifter, og kun bruge api-nøgler i produkt- eller projektsammenhæng.</p>
-<h2>Hvad du kan gøre herfra</h2>
-<p>Næste indlæg dækker den grundlæggende arbejdsgang: hvordan man refererer til filer, skriver prompts som filer og får output som filer. Det er der, produktivitetsspringet sker.</p>
+<h2>Hvad nu</h2>
+<p>Næste indlæg handler om den grundlæggende arbejdsgang: filer som input, filer som output, og prompts der gemmes i stedet for at gå tabt. Det er der, det rigtige produktivitetsspring sker.</p>
+<hr>
+<h2>Appendiks - installation af VS Code og npm</h2>
+<h3>VS Code</h3>
+<p>Hent installationsprogrammet fra den <a href="https://code.visualstudio.com/download">officielle VS Code-side</a> og kør det. Vælg dit OS (Windows, macOS eller Linux) - det er en helt normal installation.</p>
+<p><strong>Terminalvinduet i VS Code</strong></p>
+<p>Claude Code kører i en terminal. VS Code har en indbygget:</p>
+<ul>
+<li>Tryk <code>Ctrl+`</code> for at slå den til og fra</li>
+<li>Eller gå til <strong>Terminal -&gt; Ny terminal</strong> i menulinjen</li>
+</ul>
+<p>Terminalen åbnes nederst i editoren, allerede rettet mod din projektmappe. Det er her du kører <code>claude</code>.</p>
+<hr>
+<h3>npm</h3>
+<p>npm følger med Node.js - installér Node, og du har npm.</p>
+<p>Hent LTS-versionen fra <a href="https://nodejs.org/en/download">nodejs.org/en/download</a>, kør installationsprogrammet, og tjek bagefter i terminalen:</p>
+<pre><code>node -v
+npm -v
+</code></pre>
+<p>Begge skal vise et versionsnummer. Så er du klar til <code>npm install -g @anthropic-ai/claude-code</code>.</p>
 

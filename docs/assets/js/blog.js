@@ -124,7 +124,13 @@ function _renderSidebar(sidebar, lang, activeSlug) {
     return;
   }
 
-  sidebar.innerHTML = Object.entries(sections).map(([section, posts]) => {
+  const SECTION_ORDER = ['hands_on', 'concepts', 'beliefs'];
+  const sortedSections = Object.entries(sections).sort(([a], [b]) => {
+    const ai = SECTION_ORDER.indexOf(a), bi = SECTION_ORDER.indexOf(b);
+    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+  });
+
+  sidebar.innerHTML = sortedSections.map(([section, posts]) => {
     const label = _typeLabel(section, map);
     const hasActive = posts.some(p => p.slug === activeSlug);
     const items = posts.map(post => {

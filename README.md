@@ -32,6 +32,11 @@ The git pre-commit hook runs this automatically — install it once with:
 npm run setup
 ```
 
+# How to run test server
+```sh
+npx serve docs
+```
+
 ## GitHub Pages Setup
 
 1. Push to `main`

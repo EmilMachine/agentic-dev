@@ -4,19 +4,37 @@ type: hands_on
 title_en: 0. Setup Claude
 title_da: 0. Setup Claude
 created: 2026-06-01
-last_updated: 2026-06-18
+last_updated: 2026-06-21
 langs: en, da
---><p><strong>TL;DR</strong> — <code>npm install -g @anthropic/claude-code</code> → <code>claude login</code> → <code>claude</code>. ESC to stop, ctrl+c twice to exit, <code>/usage</code> to check spend. <code>/clear</code> or <code>/new</code> to clear context. <a href="https://anthropic.com/pricing">Pricing</a>: use Plans for personal use, API keys for products.</p>
+--><p><strong>TL;DR</strong> - <code>npm install -g @anthropic/claude-code</code> → <code>claude login</code> → <code>claude</code>. ESC to stop, ctrl+c twice to exit, <code>/usage</code> to check spend. <code>/clear</code> or <code>/new</code> to clear context. <a href="https://anthropic.com/pricing">Pricing</a>: use Plans for personal use, API keys for products.</p>
 <hr>
 <p>If you already have Claude Code (or similar) installed and running, you can skip to <a href="#">Post 1</a>.</p>
 <h1>0. Setup an agent</h1>
-<p>A coding agent is an AI that doesn&#39;t just answer questions — it takes actions in your codebase. It reads files, writes code, runs commands, and iterates until a task is done. Think of it less like a chatbot and more like a junior intern sitting at your terminal.</p>
+<p>A coding agent is an AI that doesn&#39;t just answer questions - it takes actions in your codebase. It reads files, writes code, runs commands, and iterates until a task is done. Think of it less like a chatbot and more like a junior intern sitting at your terminal.</p>
 <p>In practice it is an LLM model (AI) + a harness (regular code) to help split tasks, take actions into the &quot;thinking&quot; power of LLMs.</p>
 <p>This series focuses on Claude Code, Anthropic&#39;s CLI agent. Other options exist (Cursor, Copilot, Opencode, Aider), but Claude Code is what we&#39;ll use throughout.</p>
-<h2>Getting Claude Code</h2>
-<p>Not familiar with the CLI? Download the <a href="https://claude.com/download">Claude Code desktop app</a> — it&#39;s the easiest way to get started.</p>
+<details class="blog-spoiler" open>
+<summary>Analogy - Agent</summary>
+<p><img src="../../../assets/img/0_harness_horse.svg" alt="A horse with a harness illustrating LLM vs agent"></p>
+<ul>
+<li>AI (LLMs) are like a horse - raw untamed power.</li>
+<li>An Agent is like a harness allowing us to better steer models and do useful work for humans.</li>
+<li>In actual terms the AI (LLM) is a big machine learning model trained on data and baked in randomness, and the harness is traditional deterministic code built to steer the AI models.</li>
+</ul></details><h2>Pricing</h2>
+<p>Pricing changes - check the <a href="https://anthropic.com/pricing">Anthropic pricing page</a> for current numbers. </p>
+<p>Note there are two billing methods. Plans and api-keys. Plans get limits that reset periodically. You pay a monthly fee - even if you never use it. api-keys pays based on token usage.</p>
+<p>See usage by running the <code>/usage</code> command or visit x page.</p>
+<p>For private or corporate individual use I would recommend plans with predictable spend, and only use api-keys in product or project setting.</p>
+<details class="blog-spoiler" open>
+<summary>Analogy - pricing</summary>
+<p><img src="../../../assets/img/0_plan_apikey.svg" alt="Plans vs API keys illustrated as car rental analogy"></p>
+<ul>
+<li>Plans: A friend borrow you a car for 20$/month. It comes with a gas credit card that spending limits mohthly, weekly and daily. You pay even when you are on vaction, but mohtly spend is predictable.</li>
+<li>API-keys: A friend borrow your a car for free, but you have to pay all gas as you go. It also has selfdriving mode, so might guzzle a lot of gas if you just set it free. But if you don&#39;t use it, it does not cost you.</li>
+</ul></details><h2>Getting Claude Code</h2>
+<p>Not familiar with the CLI? Download the <a href="https://claude.com/download">Claude Code desktop app</a> - it&#39;s the easiest way to get started.</p>
 <ol>
-<li>Sign up at <a href="https://claude.ai">claude.ai</a> — you need a paid plan (Pro or above) to use Claude Code meaningfully.</li>
+<li>Sign up at <a href="https://claude.ai">claude.ai</a> - you need a paid plan (Pro or above) to use Claude Code meaningfully.</li>
 <li>Install the CLI: <code>npm install -g @anthropic-ai/claude-code</code></li>
 <li>Open a terminal in your project folder and run: <code>claude</code></li>
 </ol>
@@ -31,11 +49,25 @@ langs: en, da
 <li>/ commands allow you to execute commands, like <code>/usage</code> that will show you current usage.</li>
 <li><code>/clear</code> or <code>/new</code> to reset context window.</li>
 </ul>
-<h2>Pricing</h2>
-<p>Pricing changes — check the <a href="https://anthropic.com/pricing">Anthropic pricing page</a> for current numbers. </p>
-<p>Note there are two billing methods. Plans and api-keys. Plans get limits that reset periodically. You pay a monthly fee - even if you never use it. api-keys pays based on token usage.</p>
-<p>See usage by running the <code>/usage</code> command or visit x page.</p>
-<p>For private or corporate individual use I would recommend plans with predictable spend, and only use api-keys in product or project setting.</p>
 <h2>What you can do from here</h2>
 <p>Next post covers the core workflow: how to reference files, write prompts as files, and get output as files. That&#39;s where the productivity jump happens.</p>
+<hr>
+<h2>Appendix - Installing VS Code and npm</h2>
+<h3>VS Code</h3>
+<p>Download from the <a href="https://code.visualstudio.com/download">official VS Code page</a> - pick the installer for your OS (Windows, macOS, or Linux) and run it. It&#39;s a standard install, nothing unusual.</p>
+<p><strong>Getting the terminal open in VS Code</strong></p>
+<p>Claude Code runs in a terminal. VS Code has one built in:</p>
+<ul>
+<li>Press <code>Ctrl+`</code> (Windows/Linux) or <code>⌃`</code> (Mac) to toggle it</li>
+<li>Or go to <strong>Terminal → New Terminal</strong> from the menu bar</li>
+</ul>
+<p>The terminal opens at the bottom of the editor, already pointed at your project folder. That&#39;s where you run <code>claude</code>.</p>
+<hr>
+<h3>npm</h3>
+<p>npm comes bundled with Node.js - install Node and you get npm automatically.</p>
+<p>Download the LTS version from <a href="https://nodejs.org/en/download">nodejs.org/en/download</a>. Run the installer, then verify in your terminal:</p>
+<pre><code>node -v
+npm -v
+</code></pre>
+<p>Both should print a version number. After that, <code>npm install -g @anthropic-ai/claude-code</code> will work.</p>
 
