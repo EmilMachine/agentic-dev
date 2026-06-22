@@ -4,7 +4,7 @@
 
 ```
 skillhub (registry)
-└── dev-essentials (plugin, v1.7.1)
+└── dev-essentials (plugin, v1.7.5)
 │   ├── skillhub-update  (/skillhub-update)
 │   ├── gitstats         (/gitstats)
 │   ├── procon3          (/procon3)
@@ -78,7 +78,7 @@ When bumping a plugin version, four locations must all be updated consistently:
 1. `docs/assets/js/skills-data.js` → PLUGINS array entry for the plugin
 2. `docs/assets/js/skills-data.js` → every SKILLS_DATA entry for that plugin (each has its own `version` field)
 3. `docs/assets/js/skills.js` → every SKILLS entry for that plugin
-4. `AGENTS/skillhub.md` → the plugin hierarchy line (e.g. `└── dev-essentials (plugin, v1.7.1)`)
+4. `AGENTS/skillhub.md` → the plugin hierarchy line (e.g. `└── dev-essentials (plugin, v1.7.5)`)
 
 Run `python3 AGENTS/docupdate-skillhub/check_skillhub.py` as the authoritative sync check — exit code 0 means all versions and skill lists are consistent with GitHub.
 
