@@ -4,36 +4,30 @@ type: hands_on
 title_en: 4. md3step - research, plan, implement
 title_da: 4. md3step - undersøg, planlæg, implementer
 created: 2026-06-01
-last_updated: 2026-06-16
+last_updated: 2026-06-22
 langs: da
---><p><strong>TL;DR</strong> — Installér: <code>/plugin install md3step</code>. Skriv <code>0_context.md</code> → <code>/mdresearch 0_context.md</code> → rediger <code>1_research.md</code> → <code>/mdplan 1_research.md</code> → rediger <code>2_plan.md</code> → <code>/mdimplement 2_plan.md</code> → gennemgå <code>3_changelog.md</code>. Brug <code>/mdupdate &lt;fil&gt;</code> efter inline-redigeringer. Spring over til små opgaver.</p>
+--><p><strong>TL;DR</strong> - Installér: <code>/plugin install md3step</code>. Skriv <code>0_context.md</code> → <code>/mdresearch 0_context.md</code> → rediger <code>1_research.md</code> → <code>/mdplan 1_research.md</code> → rediger <code>2_plan.md</code> → <code>/mdimplement 2_plan.md</code> → gennemgå <code>3_changelog.md</code>. Brug <code>/mdupdate &lt;fil&gt;</code> efter inline-redigeringer. Spring over til små opgaver.</p>
 <hr>
 <h1>4. md3step</h1>
 <p><em>md3step-processen: Undersøg, Planlæg, Implementer</em></p>
-<p>Dette er mønsteret for avancerede brugere. I stedet for at løse en kompleks opgave på én gang, opdeler du den i tre afgrænsede trin — hvert trin producerer en fil som det næste trin bygger på. To centrale fordele.</p>
+<p>Dette er mønsteret for avancerede brugere. I stedet for at løse en kompleks opgave på én gang opdeler du den i tre afgrænsede trin - hvert trin producerer en fil, som det næste bygger på. Det giver to centrale fordele:</p>
 <ul>
-<li><ol>
-<li>Det giver dig mulighed for nemt at gennemgå, redigere og forfine planer.</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>Du kan afdække ukendte faktorer og manglende specifikationer i dit input.</li>
-</ol>
-</li>
+<li>Du kan nemt gennemgå, redigere og forfine planer undervejs.</li>
+<li>Du afdækker ukendte faktorer og manglende specifikationer i dit input.</li>
 </ul>
 <p>Installér via skillhub:</p>
 <pre><code>/plugin marketplace add https://github.com/EmilMachine/skillhub
 /plugin install md3step
 </code></pre>
 <h2>Hvorfor <code>md</code>-præfikset?</h2>
-<p>Skills hedder <code>/mdresearch</code>, <code>/mdplan</code>, <code>/mdimplement</code>, <code>/mdupdate</code> — ikke <code>/research</code>, <code>/plan</code> osv. Det er bevidst. Ord som <code>plan</code>, <code>research</code> og <code>implement</code> er tæt på reserverede eller systemniveau-nøgleord i forskellige agenter og værktøjer nu og i fremtiden. <code>md</code>-præfikset undgår stille kollisioner og refererer til arbejdet med md-filer.</p>
+<p>Skills hedder <code>/mdresearch</code>, <code>/mdplan</code>, <code>/mdimplement</code>, <code>/mdupdate</code> - ikke <code>/research</code>, <code>/plan</code> osv. Det er bevidst. Ord som <code>plan</code>, <code>research</code> og <code>implement</code> er tæt på reserverede nøgleord i mange agenter og værktøjer, nu og i fremtiden. <code>md</code>-præfikset undgår stille kollisioner og refererer til arbejdet med md-filer.</p>
 <h3>Hvorfor .md-filer?</h3>
 <ol>
-<li>Den vigtigste fordel er, at du kan REDIGERE tingene. I mange andre flows er det svært at fjerne, ændre eller tilføje ting i research eller planer, som du vil have ændret.</li>
-<li>Gemte trin. Når 1_research.md-filen er færdig, kan du lukke computeren og vende tilbage næste uge. Med en live-session er det sværere.</li>
-<li>Atomiske trin. Du kan rydde konteksten mellem trin, og vi kan stole på større implementeringsdele, fordi det er et klart detaljeret input — tvetydighed er afklaret.</li>
+<li>Den vigtigste fordel er, at du kan <strong>redigere</strong>. I mange andre flows er det svært at fjerne, tilføje eller ændre i research og planer.</li>
+<li>Gemte trin. Når <code>1_research.md</code> er skrevet, kan du lukke computeren og vende tilbage ugen efter. En live-session er sværere at genoptage.</li>
+<li>Atomiske trin. Du kan rydde konteksten mellem hvert trin og stole på implementeringen, fordi inputtet er klart og detaljeret - tvetydighed er afklaret.</li>
 </ol>
-<p>Bemærk at der er lidt overhead. Jeg bruger normalt dette til mellemstore og store trin. Mindre tilføjelser, fejlfinding eller justering gør jeg uden for dette framework.</p>
+<p>Der er lidt overhead ved dette. Jeg bruger det normalt til mellemstore og store opgaver. Småting, fejlfinding og justeringer klarer jeg uden for frameworket.</p>
 <h2>Arbejdsgangen</h2>
 <p>Processen kører over fire nummererede filer i en mappe du vælger:</p>
 <pre><code>0_context.md       ← du skriver denne
@@ -46,26 +40,26 @@ langs: da
 <h3>Trin 1: Research</h3>
 <pre><code>/mdresearch tasks/min-feature/0_context.md
 </code></pre>
-<p>Agenten læser kodebasen og skriver <code>1_research.md</code> i samme mappe — nuværende tilstand, mangler, relevante <code>fil:linje</code>-referencer. Åbne spørgsmål fremhæves øverst i filen. Læs den, besvar spørgsmålene inline, og kør <code>/mdupdate &lt;sti&gt;/1_research.md</code> for at folde dem ind i hoveddelen inden du fortsætter.
+<p>Agenten læser kodebasen og skriver <code>1_research.md</code> i samme mappe - nuværende tilstand, mangler, relevante <code>fil:linje</code>-referencer. Åbne spørgsmål fremhæves øverst i filen. Læs den, besvar spørgsmålene inline, og kør <code>/mdupdate &lt;sti&gt;/1_research.md</code> for at folde dem ind i hoveddelen inden du fortsætter.
 Bed om afklaring eller brug <code>/procon3</code> hvis du er usikker på hvordan du skal besvare noget.</p>
 <h3>Trin 2: Plan</h3>
 <pre><code>/mdplan tasks/min-feature/1_research.md
 </code></pre>
 <p>Producerer <code>2_plan.md</code>: nummererede, atomiske, testbare trin. Hvert trin har sektioner for Handlinger, Filer og Verifikation. Åbne spørgsmål fra research overføres; agenten forsøger at besvare dem fra konteksten inden den lister noget uløst.</p>
-<p><strong>Dette er trinnet du skal redigere.</strong> Tilføj begrænsninger, skær scope, omordner trin, besvar åbne spørgsmål inline. Agenten bestemte ikke planen — det gjorde du, med dens hjælp.
+<p><strong>Dette er trinnet du skal redigere.</strong> Tilføj begrænsninger, skær scope, omordner trin, besvar åbne spørgsmål inline. Agenten bestemte ikke planen - det gjorde du, med dens hjælp.
 <code>/mdupdate &lt;sti&gt;/1_research.md</code></p>
 <h3>Trin 0.5 (valgfrit): opdatér baseret på svar</h3>
 <p>Hvis du har tilføjet inline-svar eller redigeringer til <code>1_research.md</code> eller <code>2_plan.md</code>:</p>
 <pre><code>/mdupdate tasks/min-feature/2_plan.md
 </code></pre>
 <p>Dette integrerer dine redigeringer tilbage i planstrukturen og rydder løste spørgsmål. Spring dette over hvis du ikke har foretaget redigeringer. Det kan ofte fungere med bare svaret og uden mdupdate-trinnet, men kan misse nye spørgsmål der opstår fra svarene, og kan efterlade forkerte oplysninger i hoveddelen af .md-filen.</p>
-<p>Du kan også hacke dette ved at skrive dit eget spørgsmål + svar og køre /mdupdate, hvis du ser at der er noget systematisk forkert og du vil have det rettet overalt.</p>
+<p>Du kan også bruge dette til at rette systematiske fejl: skriv dit eget spørgsmål + svar og kør <code>/mdupdate</code>, så rettes det overalt.</p>
 <h3>Trin 3: Implementér</h3>
 <pre><code>/mdimplement tasks/min-feature/2_plan.md
 </code></pre>
-<p>Udfører hvert trin sekventielt, verificerer efter hvert, og skriver <code>3_changelog.md</code> med status per trin, ændrede filer (<code>sti:linje</code>), testresultater og en Gotchas-sektion hvis noget gik skævt. Ingen automatiske git commits — gennemgå diff&#39;et selv.</p>
+<p>Udfører hvert trin sekventielt, verificerer efter hvert, og skriver <code>3_changelog.md</code> med status per trin, ændrede filer (<code>sti:linje</code>), testresultater og en Gotchas-sektion hvis noget gik skævt. Ingen automatiske git commits - gennemgå diff&#39;et selv.</p>
 <h2>Hvornår man ikke skal bruge dette</h2>
-<p>md3step er overhead til små opgaver. Rette en fejl, omdøbe en funktion, tilføje et felt til en type — det gøres i én omgang. Brug processen til alt der rører mere end et par filer, er komplekst eller involverer arkitektoniske valg.</p>
+<p>md3step er overhead til små opgaver. Rette en fejl, omdøbe en funktion, tilføje et felt til en type - det gøres i én omgang. Brug processen til alt der rører mere end et par filer, er komplekst eller involverer arkitektoniske valg.</p>
 <h2>Inspirationskilder</h2>
 <ul>
 <li><a href="https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/18608dedb759256d86b1c0101de82ecef8a556ab/ace-fca.md">human layer: advanced-context-engineering-for-coding-agents</a></li>

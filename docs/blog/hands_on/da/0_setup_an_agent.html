@@ -4,15 +4,15 @@ type: hands_on
 title_en: 0. Setup Claude
 title_da: 0. Setup Claude
 created: 2026-06-01
-last_updated: 2026-06-21
+last_updated: 2026-06-22
 langs: da
---><p><strong>TL;DR</strong> - <code>npm install -g @anthropic/claude-code</code> -&gt; <code>claude login</code> -&gt; <code>claude</code>. ESC stopper, ctrl+c to gange afslutter, <code>/usage</code> viser forbrug. <code>/clear</code> eller <code>/new</code> nulstiller kontekst. <a href="https://anthropic.com/pricing">Priser</a>: Plans til personlig brug, API-nøgler til produkter.</p>
+--><p><strong>TL;DR</strong> - <code>npm install -g @anthropic/claude-code</code> -&gt; <code>claude login</code> -&gt; <code>claude</code>. ESC stopper, to tryk på ctrl+c afslutter, <code>/usage</code> viser forbrug. <code>/clear</code> eller <code>/new</code> nulstiller kontekst. <a href="https://anthropic.com/pricing">Priser</a>: Plans til personlig brug, API-nøgler til produkter.</p>
 <hr>
 <p>Har du allerede Claude Code (eller lignende) kørende, kan du springe til <a href="#">Indlæg 1</a>.</p>
 <h1>0. Opsæt en agent</h1>
-<p>En kodeagent er en AI, der ikke bare svarer på spørgsmål - den handler i din kodebase. Den læser filer, skriver kode, kører kommandoer og bliver ved, til opgaven er løst. Tænk på det som en junior praktikant ved din terminal snarere end en chatbot.</p>
-<p>I praksis er det en LLM-model (AI) koblet med et harness (almindelig kode), der hjælper med at opdele opgaver og omsætte LLM&#39;ens regnekraft til konkrete handlinger.</p>
-<p>Serien her bruger Claude Code, Anthropics CLI-agent. Andre muligheder findes (Cursor, Copilot, Opencode, Aider), men Claude Code er det, vi holder os til.</p>
+<p>En kodeagent er en AI, der ikke bare svarer på spørgsmål - den handler i din kodebase. Den læser filer, skriver kode, kører kommandoer og bliver ved, til opgaven er løst. Tænk på det som en junior praktikant med adgang til din terminal, frem for en chatbot.</p>
+<p>I praksis er det en AI-model koblet med et harness - almindelig kode der opdeler opgaver og omsætter modellens kapacitet til konkrete handlinger.</p>
+<p>Denne serie bruger Claude Code, Anthropics CLI-agent. Andre muligheder findes (Cursor, Copilot, Opencode, Aider), men Claude Code er det, vi holder os til.</p>
 <details class="blog-spoiler" open>
 <summary>Analogi - Agent</summary>
 <p><img src="../../../assets/img/0_harness_horse.svg" alt="En hest med seletøj som illustration af LLM vs. agent"></p>
@@ -24,7 +24,7 @@ langs: da
 <p>Priserne ændrer sig - tjek <a href="https://anthropic.com/pricing">Anthropics prisside</a> for aktuelle tal.</p>
 <p>Der er to måder at betale på: Plans og API-nøgler. Med Plans betaler du en fast månedlig pris og får et forbrug, der nulstilles periodisk. API-nøgler koster ingenting at have - du betaler kun for det, du bruger.</p>
 <p>Se dit aktuelle forbrug med <code>/usage</code>-kommandoen.</p>
-<p>Til privat brug eller som enkeltperson i en virksomhed vil jeg anbefale Plans - forudsigeligt forbrug og ingen overraskelser. API-nøgler giver mening i produkt- eller projektsammenhæng, hvor man vil styre omkostningerne præcist.</p>
+<p>Til privatbrug eller for enkeltpersoner i en virksomhed anbefaler jeg Plans - forudsigeligt forbrug og ingen overraskelser. API-nøgler giver mening i produkt- eller projektsammenhæng, hvor man vil styre omkostningerne præcist.</p>
 <details class="blog-spoiler" open>
 <summary>Analogi - priser</summary>
 <p><img src="../../../assets/img/0_plan_apikey.svg" alt="Plans vs. API-nøgler illustreret som biludlejningsanalogi"></p>
@@ -38,12 +38,12 @@ langs: da
 <li>Installér CLI&#39;en: <code>npm install -g @anthropic-ai/claude-code</code></li>
 <li>Åbn en terminal i din projektmappe og kør: <code>claude</code></li>
 </ol>
-<p>Det er alt. Herfra fungerer det som en chat - skriv hvad du vil have lavet, fx &quot;skriv et haiku om træer&quot; eller &quot;lav en Python-funktion der konverterer Celsius til Fahrenheit&quot;.</p>
+<p>Det er det hele. Herfra fungerer det som en chat - skriv hvad du vil have lavet, fx &quot;skriv et haiku om træer&quot; eller &quot;lav en Python-funktion der konverterer Celsius til Fahrenheit&quot;.</p>
 <h2>Grundlæggende styring</h2>
 <p>Du bestemmer. Agenten har læseadgang til dit repo, men beder om lov, hver gang den vil ændre noget.</p>
 <ul>
 <li>ESC eller ctrl+c stopper eksekveringen midtvejs.</li>
-<li>ctrl+c to gange afslutter Claude Code.</li>
+<li>To tryk på ctrl+c afslutter Claude Code.</li>
 <li>To gange ESC spoler tilbage til et tidligere punkt i samtalen.</li>
 <li><code>/usage</code> viser dit aktuelle forbrug.</li>
 <li><code>/clear</code> eller <code>/new</code> nulstiller kontekstvinduet.</li>

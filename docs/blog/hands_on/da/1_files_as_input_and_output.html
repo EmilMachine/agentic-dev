@@ -4,9 +4,9 @@ type: hands_on
 title_en: 1. Agents - use of files
 title_da: 1. Agenter - brug af filer
 created: 2026-06-01
-last_updated: 2026-06-16
+last_updated: 2026-06-22
 langs: da
---><p><strong>TL;DR</strong> — Referer til filer med <code>@filnavn</code>. Send prompts som filer: <code>follow @filnavn</code> eller uden at åbne CLI&#39;en <code>claude &lt; tasks/task.md</code>. Skriv output til filer: <code>analyze @src/ and write report to myreports/out.md</code>. Slå auto-redigering til og fra med shift+tab.</p>
+--><p><strong>TL;DR</strong> - Referer til filer med <code>@filnavn</code>. Send prompts som filer: <code>follow @filnavn</code> eller uden at åbne CLI&#39;en <code>claude &lt; tasks/task.md</code>. Skriv output til filer: <code>analyze @src/ and write report to myreports/out.md</code>. Slå auto-redigering til og fra med shift+tab.</p>
 <hr>
 <h1>Filer som input og output</h1>
 <p>De fleste bruger Claude Code som de bruger ChatGPT: skriv et spørgsmål, læs svaret. Det virker, men det misser pointen. Dette indlæg handler om de tre mønstre, der faktisk ændrer måden du arbejder på.</p>
@@ -16,7 +16,7 @@ langs: da
 <pre><code>add error handling to @src/api/fetch.ts
 </code></pre>
 <p><code>@filnavn</code>-syntaksen trækker filen ind i konteksten. Claude læser den, redigerer den og skriver resultatet tilbage. Du indsætter ikke, du kopierer ikke ud.</p>
-<p>(bemærk at claude også kan finde ud af det, hvis du udelader @)</p>
+<p>(Claude klarer det som regel også uden @)</p>
 <h2>Mønster 2: Prompt som en fil</h2>
 <p>For alt mere end én sætning, skriv din prompt i en <code>.md</code>-fil og send den:</p>
 <p><code>see @tasks/add-auth.md and implement it</code>.</p>
@@ -27,16 +27,15 @@ langs: da
 </code></pre>
 <p>Nu er outputtet i dit repo, ikke begravet i et chatvindue.</p>
 <h2>Sæt det hele sammen</h2>
-<p>En rigtig session ser sådan ud:
-(antag at du har mapperne <code>myprompts/task1</code>)</p>
+<p>En rigtig session ser sådan ud (forudsat du har mappen <code>myprompts/task1</code>):</p>
 <ol>
 <li>Skriv en opgavebeskrivelse i <code>myprompts/task1/0_context.md</code></li>
 <li>Kør <code>claude</code> og referer til den: <code>implement @myprompts/task1/0_context.md write a changelog to myprompts/task1/1_changelog.md</code></li>
 <li>Gennemgå diff&#39;et, commit det du vil have</li>
 </ol>
-<p>Hvis det ikke er tilladt, vil den bede dig om godkendelse for hver enkelt redigering.
-Du kan aktivere auto-redigering (ved at tillade ændringer for denne session) eller shift+tab.
-Det vil vises som &quot;⏵⏵ accept edits on&quot;. (shift+tab igen for at deaktivere).</p>
-<p>Du har stadig gode udviklerpraksisser at falde tilbage på med git-versionsstyring og <code>git diff</code>, men det er sjældent nødvendigt i min erfaring.</p>
-<p>Bemærk, at jeg normalt har en mappe /myprompts/ der indeholder en .gitignore *-fil, så de rodede noter ikke committes, og i stedet opdatere rigtige doc-artefakter som README.md efter behov.</p>
+<p>Hvis det ikke er tilladt, beder den om godkendelse for hver enkelt redigering.
+Du kan aktivere auto-redigering enten via &quot;tillad ændringer for denne session&quot; eller ved at trykke shift+tab.
+Det vises som &quot;⏵⏵ accept edits on&quot; - shift+tab igen for at deaktivere.</p>
+<p>Du har altid git-versionsstyring og <code>git diff</code> i ryggen - men i praksis er det sjældent nødvendigt.</p>
+<p>Jeg plejer at have en <code>myprompts/</code>-mappe med en <code>.gitignore *</code>-fil, så de rodede noter ikke committes. Vigtige ting destilleres til rigtige artefakter som README.md.</p>
 

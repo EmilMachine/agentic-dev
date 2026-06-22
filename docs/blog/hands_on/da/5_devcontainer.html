@@ -4,15 +4,15 @@ type: hands_on
 title_en: 5. Run Claude Code in a sandbox (devcontainer)
 title_da: 5. Kør Claude Code i en sandbox (devcontainer)
 created: 2026-06-16
-last_updated: 2026-06-16
+last_updated: 2026-06-22
 langs: da
---><p><strong>TL;DR</strong> — Installér devcontainer-cli: <code>npm -g install @devcontainers/cli@0.87.0</code>. Opret konfiguration: <code>/devcontainer</code>. Start op: <code>devcontainer up --workspace-folder .</code>. Start Claude inde i containeren: <code>devcontainer exec --workspace-folder . claude</code>. Stop: <code>docker stop $(docker ps -q --filter &quot;label=devcontainer.local_folder=$(pwd)&quot;)</code>.</p>
+--><p><strong>TL;DR</strong> - Installér devcontainer-cli: <code>npm -g install @devcontainers/cli@0.87.0</code>. Opret konfiguration: <code>/devcontainer</code>. Start op: <code>devcontainer up --workspace-folder .</code>. Start Claude inde i containeren: <code>devcontainer exec --workspace-folder . claude</code>. Stop: <code>docker stop $(docker ps -q --filter &quot;label=devcontainer.local_folder=$(pwd)&quot;)</code>.</p>
 <hr>
 <h1>5. Kør Claude Code i en sandbox</h1>
-<p>Claude Code kan læse filer, skrive kode og køre shell-kommandoer. Det er dens styrke — og dens risiko. Hvis den laver en fejl eller gør noget uventet, vil du have at det sker <em>inde i</em> en container, ikke på din maskine.</p>
-<p>En devcontainer kører dine værktøjer (Python, uv, Claude Code) inde i Docker. Din kode bor stadig på hosten og er monteret ind. Hvis containermiljøet går i stykker, <code>docker rm -f</code> og genbyg.</p>
+<p>Claude Code kan læse filer, skrive kode og køre shell-kommandoer. Det er dens styrke - og dens risiko. Hvis den laver en fejl eller gør noget uventet, vil du helst have at det sker <em>inde i</em> en container og ikke på din maskine.</p>
+<p>En devcontainer kører dine værktøjer (Python, uv, Claude Code) inde i Docker. Din kode bor stadig på hosten og er monteret ind i containeren. Hvis containermiljøet går i stykker, <code>docker rm -f</code> og genbyg.</p>
 <h2>Hvad er og ikke er beskyttet</h2>
-<p>Det er vigtigt at være ærlig her — en devcontainer er <strong>ikke</strong> en fuld sandbox for dine filer.</p>
+<p>Det er vigtigt at være ærlig her - en devcontainer er <strong>ikke</strong> en fuld sandbox for dine filer.</p>
 <p>Følgende er <strong>bind-monteret fra din host</strong>, hvilket betyder at ændringer (og sletninger) inde i containeren påvirker de rigtige filer:</p>
 <table>
 <thead>
@@ -38,16 +38,16 @@ langs: da
 <td><code>~/.cache/uv</code></td>
 </tr>
 </tbody></table>
-<p>En løbsk <code>rm -rf ~</code> inde i containeren <strong>ville slette disse på din host</strong>. Git er dit sikkerhedsnet for kode — commit ofte.</p>
-<p><strong>Bemærk om <code>~/.claude</code> i særdeleshed:</strong> vi monterer den, så Claude Code allerede er logget ind og har dine skills og konfiguration tilgængeligt inde i containeren. Afvejningen er, at et kompromitteret eller ondsindet projekt kunne korruptere din Claude-konfiguration — og den korruption ville vedvare på tværs af alle andre projekter du åbner, da de alle deler den samme <code>~/.claude</code> fra hosten. Det er en kendt risiko. Se hærdningsmuligheder til sidst.</p>
+<p>En løbsk <code>rm -rf ~</code> inde i containeren <strong>ville slette disse på din host</strong>. Git er dit sikkerhedsnet for kode - commit ofte.</p>
+<p><strong>Bemærk om <code>~/.claude</code> i særdeleshed:</strong> vi monterer den, så Claude Code allerede er logget ind og har dine skills og konfiguration tilgængeligt inde i containeren. Afvejningen er, at et kompromitteret eller ondsindet projekt kunne korruptere din Claude-konfiguration - og den korruption ville vedvare på tværs af alle andre projekter du åbner, da de alle deler den samme <code>~/.claude</code> fra hosten. Det er en kendt risiko. Se hærdningsmuligheder til sidst.</p>
 <p>Hvad <em>er</em> isoleret:</p>
 <ul>
 <li><strong>Værktøjsmiljø.</strong> Dårlige <code>pip install</code>, <code>npm install -g</code>- eller <code>apt</code>-installationer forbliver inde i containeren og forurener ikke din host.</li>
 <li><strong>Processer.</strong> Løbske processer, portkonflikter og baggrundsdæmoner er begrænset til containeren.</li>
-<li><strong>Rent udgangspunkt på forespørgsel.</strong> Ødelagt miljø? <code>docker rm -f</code> og genbyg — din kode og dine legitimationsoplysninger er urørte, da de bor på hosten.</li>
+<li><strong>Rent udgangspunkt på forespørgsel.</strong> Ødelagt miljø? <code>docker rm -f</code> og genbyg - din kode og dine legitimationsoplysninger er urørte, da de bor på hosten.</li>
 <li><strong>Reproducerbart miljø.</strong> Kolleger får de samme værktøjer uden &quot;virker på min maskine&quot;.</li>
 </ul>
-<p>Den primære beskyttelse er miljøisolation, ikke filsolisolation.</p>
+<p>Den primære beskyttelse er miljøisolation, ikke filisolation.</p>
 <h2>Forudsætninger</h2>
 <ul>
 <li>Docker installeret og kørende</li>
@@ -58,7 +58,7 @@ langs: da
 <p>Tilføj til <code>~/.bashrc</code> eller <code>~/.zshrc</code>:</p>
 <pre><code class="language-sh">export PATH=&quot;$HOME/node_modules/.bin:$PATH&quot;
 </code></pre>
-<p>Kildehent filen eller åbn en ny terminal.</p>
+<p>Kør <code>source ~/.bashrc</code> (eller <code>~/.zshrc</code>) eller åbn en ny terminal.</p>
 <h2>Trin 1: Opret konfigurationen</h2>
 <p>Installér skill&#39;en hvis du ikke allerede har gjort det:</p>
 <pre><code>/plugin marketplace add https://github.com/EmilMachine/skillhub
@@ -71,7 +71,7 @@ langs: da
 <h2>Trin 2: Start containeren</h2>
 <pre><code class="language-sh">devcontainer up --workspace-folder .
 </code></pre>
-<p>Første kørsel bygger imaget — tager et minut eller to. Efterfølgende starter er hurtige.</p>
+<p>Første kørsel bygger imaget - tager et minut eller to. Efterfølgende starter er hurtige.</p>
 <h2>Trin 3: Start Claude inde i containeren</h2>
 <pre><code class="language-sh">devcontainer exec --workspace-folder . claude
 </code></pre>
@@ -105,28 +105,28 @@ dev-down() {
 </code></pre>
 <p>Så er <code>dev-claude</code> fra en vilkårlig projektmappe alt du behøver.</p>
 <h2>VS Code</h2>
-<p>Kræver <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">Remote Development-udvidelsespakken</a> — installér den først.</p>
+<p>Kræver <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">Remote Development-udvidelsespakken</a> - installér den først.</p>
 <p>Åbn derefter projektet og kør:</p>
 <p><code>Cmd+Shift+P</code> → <strong>Dev Containers: Reopen in Container</strong></p>
 <p>Efter konfigurationsændringer: <code>Cmd+Shift+P</code> → <strong>Dev Containers: Rebuild Container</strong></p>
 <hr>
 <h2>Hærdningsmuligheder</h2>
 <p>Hvis du arbejder med upålidelige projekter, er der sikrere alternativer til at bind-montere Claude-mappen.</p>
-<p><strong>Mulighed A — Skrivebeskyttet montering</strong> (enklest, men kan bryde ting)</p>
+<p><strong>Mulighed A - Skrivebeskyttet montering</strong> (enklest, men kan bryde ting)</p>
 <p>Tilføj <code>,readonly</code> til monteringsposterne i <code>devcontainer.json</code>:</p>
 <pre><code class="language-jsonc">&quot;type=bind,source=${localEnv:HOME}/.claude.json,target=/home/devcontainer/.claude.json,readonly&quot;,
 &quot;type=bind,source=${localEnv:HOME}/.claude,target=/home/devcontainer/.claude,readonly&quot;
 </code></pre>
 <p>Forbehold: Claude Code skriver til <code>~/.claude</code> under kørsel (historik, indstillinger). Skrivebeskyttede monteringer vil sandsynligvis forårsage fejl eller stille miste tilstand.</p>
-<p><strong>Mulighed B — Kopiér ved opstart, ingen montering</strong> (sikreste)</p>
+<p><strong>Mulighed B - Kopiér ved opstart, ingen montering</strong> (sikreste)</p>
 <p>Fjern <code>~/.claude</code>-bind-monteringerne fra <code>devcontainer.json</code> og kopiér dem ind i stedet:</p>
 <pre><code class="language-jsonc">&quot;postCreateCommand&quot;: &quot;cp ~/.claude.json.host ~/.claude.json &amp;&amp; cp -r ~/.claude.host ~/.claude&quot;
 </code></pre>
-<p>Enklere med et shell-script — tilføj til <code>postCreateCommand</code>:</p>
+<p>Enklere med et shell-script - tilføj til <code>postCreateCommand</code>:</p>
 <pre><code class="language-sh">cp ${HOST_HOME}/.claude.json ~/.claude.json &amp;&amp; cp -r ${HOST_HOME}/.claude ~/.claude
 </code></pre>
-<p>Containeren får et snapshot af din konfiguration og autentificering ved opstart. Korruption forbliver inde og forsvinder når du kører <code>docker rm</code>. Ulempe: skills installeret eller auth-tokens opdateret <em>inde i</em> containeren propagerer ikke tilbage — genbyg for at synkronisere igen.</p>
-<p><strong>Mulighed C — Kopiér <code>~/.claude/</code>, montér <code>.claude.json</code> skrivebeskyttet</strong> (balanceret)</p>
+<p>Containeren får et snapshot af din konfiguration og autentificering ved opstart. Korruption forbliver inde og forsvinder når du kører <code>docker rm</code>. Ulempe: skills installeret eller auth-tokens opdateret <em>inde i</em> containeren propagerer ikke tilbage - genbyg for at synkronisere igen.</p>
+<p><strong>Mulighed C - Kopiér <code>~/.claude/</code>, montér <code>.claude.json</code> skrivebeskyttet</strong> (balanceret)</p>
 <p>Montér kun auth-tokenen som skrivebeskyttet (så autentificering virker og ikke kan korrupteres), kopiér skills/config-mappen ind som et snapshot:</p>
 <pre><code class="language-jsonc">&quot;mounts&quot;: [
   &quot;type=bind,source=${localEnv:HOME}/.claude.json,target=/home/devcontainer/.claude.json,readonly&quot;

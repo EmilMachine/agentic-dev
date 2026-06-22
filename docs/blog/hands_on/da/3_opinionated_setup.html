@@ -4,62 +4,36 @@ type: hands_on
 title_en: 3. Opinionated setup skillhub:dev-essentials
 title_da: 3. Opinionated opsætning skillhub:dev-essentials
 created: 2026-06-01
-last_updated: 2026-06-16
+last_updated: 2026-06-22
 langs: da
---><p><strong>TL;DR</strong> — Kør <code>/setup</code> for at bootstrappe. Struktur: <code>AGENTS.md</code> (indeks) + <code>AGENTS/{emne}.md</code> + <code>CLAUDE.md</code> → alle peger på <code>AGENTS.md</code>. Tilføj <code>myprompts/</code> og <code>myreports/</code> begge med <code>.gitignore *</code> til lokalt kladdearbejde.</p>
+--><p><strong>TL;DR</strong> - Kør <code>/setup</code> for at bootstrappe. Struktur: <code>AGENTS.md</code> (indeks) + <code>AGENTS/{emne}.md</code> + <code>CLAUDE.md</code> → alle peger på <code>AGENTS.md</code>. Tilføj <code>myprompts/</code> og <code>myreports/</code> begge med <code>.gitignore *</code> til lokalt kladdearbejde.</p>
 <hr>
 <h1>3. Opinionated opsætning</h1>
-<p>Jeg vil have en opsætning, der er
-A) Agent-framework-agnostisk
-B) fleksibel nok til at rumme de fleste projekter.</p>
+<p>Jeg vil have en opsætning, der er agnostisk over for agent-frameworks og fleksibel nok til at rumme de fleste projekter.</p>
 <h2>Overblik</h2>
-<p>A) Agent-agnostisk</p>
+<p><strong>Agent-agnostisk struktur</strong></p>
+<p>Kernen er tre filer/mapper:</p>
 <ul>
-<li>AGENTS.md - hovedindgangspunkt til agenter<ul>
-<li>referer til andre filer i stedet for at have den fulde kontekst selv, primært placeret i en AGENTS-mappe</li>
-<li>Bemærk at AGENTS.md læses ved HVER agent-opstart, så jeg vil have den kort, som et indeks over hvor man finder mere viden.</li>
+<li><strong><code>AGENTS.md</code></strong> - det primære indgangspunkt for agenter. Det peger videre til andre filer frem for at indeholde al kontekst selv. Vigtigt: <code>AGENTS.md</code> læses ved hver agent-opstart, så den skal være kort - et indeks over, hvor man finder mere.</li>
+<li><strong><code>AGENTS/{emne}.md</code></strong> - én fil per emne med relevant kontekst. En given agent kan nøjes med at læse de dele, den faktisk har brug for.</li>
+<li><strong>Agent-referencepunkter</strong> - fx <code>CLAUDE.md</code> og <code>opencode.json</code> peger begge på <code>AGENTS.md</code>. Det kunne teknisk set være symlinks, men rigtige filer er mere robuste.</li>
 </ul>
-</li>
-<li>AGENTS/{emne}.md<ul>
-<li>hver .md-fil indeholder relevant kontekst for et emne, så enhver given agent kun kan læse de relevante dele.</li>
-</ul>
-</li>
-<li>Code agent referencepunkter<ul>
-<li>peger på AGENTS.md (hoved-indeks / indgangspunkt)</li>
-<li>f.eks. CLAUDE.md, opencode.json peger på AGENTS.md (kunne måske være symlinks, men faktiske filer er mere robuste.)</li>
-</ul>
-</li>
-</ul>
-<p>B) Fleksible opsætninger.</p>
+<p><strong>Fleksible arbejdsmapper</strong></p>
+<p>To private mapper til lokalt kladdearbejde:</p>
 <ul>
-<li><p>mapper:</p>
-<ul>
-<li>myprompts</li>
-<li>myreports</li>
+<li><code>myprompts/</code> - til prompt-input og iteration</li>
+<li><code>myreports/</code> - til engangsfiler som code reviews og oprydningsforslag</li>
 </ul>
-</li>
-<li><p>Hver har en .gitignore *-fil</p>
-</li>
-<li><p>Prompts er primært til input / iteration i prompt-input.</p>
-</li>
-<li><p>myreports er til stort set enkelt-gangs analyse-.md-filer som codereview, oprydningsforslag</p>
-</li>
-<li><p>&quot;my..&quot;-mønsteret + .gitignore * er nemt at udvide til hvilken som helst mappe du har brug for.</p>
-<ul>
-<li>Det indikerer at det er rodede midtvejsartefakter, nyttige til lokalt arbejde.</li>
-<li>Vigtige ting bør destilleres og ende som rene artefakter i kode, AGENTS/-mappen, README.md, changelogs osv.</li>
-</ul>
-</li>
-</ul>
-<h3><code>/codereview &lt;branch&gt;</code> — Gennemgå en branch</h3>
+<p>Begge har en <code>.gitignore *</code>-fil, så de ikke committes. <code>my..</code>-mønsteret er nemt at udvide til andre mapper du har brug for - det signalerer, at indholdet er rodede mellemresultater. Det, der er værd at gemme, destilleres til rigtige artefakter: kode, <code>AGENTS/</code>-mappen, <code>README.md</code>, changelogs og lignende.</p>
+<h3><code>/codereview &lt;branch&gt;</code> - Gennemgå en branch</h3>
 <p>Henter diff&#39;et mellem en branch og main, og skriver derefter en kortfattet major/minor/nit-gennemgang til <code>myreports/</code>. God at bruge inden man åbner en PR, eller for at fremhæve hvor man skal kigge i en gennemgang.
 Forsøger at hente fra remote først og falder tilbage til lokal sammenligning.</p>
-<h3><code>/cleanup [sti]</code> — Find død kode</h3>
+<h3><code>/cleanup [sti]</code> - Find død kode</h3>
 <p>Scanner en sti for død kode, ubrugte tests, redundant logik og forældede docs. Skriver en rapport til <code>myreports/</code>. Standard er den aktuelle mappe.</p>
 <p>Bemærk at det ikke udfører oprydningen. Det skriver rapporten, der foreslår oprydningen.</p>
-<h3><code>/secure [sti]</code> — Sikkerhedsaudit</h3>
+<h3><code>/secure [sti]</code> - Sikkerhedsaudit</h3>
 <p>Kører OWASP Top 10-tjek, scanning for hemmeligheder og kontrol for dependency-CVE&#39;er. Skriver en alvorlighedsrangeret rapport til <code>myreports/</code>.</p>
 <p>Bemærk at dette er en slags hurtig løsning til hobbyprojekter. Jeg vil anbefale at rigtige projekter integrerer disse tjek mere struktureret som en del af CICD.</p>
-<h3><code>/setup [sti]</code> — Bootstrap agent-konfiguration</h3>
-<p>Opretter <code>AGENTS.md</code>, <code>CLAUDE.md</code>, AGENTS-mappen og private prompt-mapper i et projekt. Idempotent — sikkert at køre på et eksisterende projekt.</p>
+<h3><code>/setup [sti]</code> - Bootstrap agent-konfiguration</h3>
+<p>Opretter <code>AGENTS.md</code>, <code>CLAUDE.md</code>, AGENTS-mappen og private prompt-mapper i et projekt. Idempotent - sikkert at køre på et eksisterende projekt.</p>
 
