@@ -4,7 +4,7 @@ type: hands_on
 title_en: 2. Skills and skillhub:dev-essentials
 title_da: 2. Skills og skillhub:dev-essentials
 created: 2026-06-01
-last_updated: 2026-06-22
+last_updated: 2026-06-24
 langs: da
 --><p><strong>TL;DR</strong> - Installér: <code>/plugin marketplace add https://github.com/EmilMachine/skillhub</code> → <code>/plugin install dev-essentials</code>. Nøgleskills: <code>/pc3</code> (vælg mellem muligheder), <code>/issue</code> åbn issues eller anmodninger med skill i skillhub. Opdatér til de nyeste skills: <code>/skillhub-update</code>.</p>
 <hr>
@@ -13,7 +13,15 @@ langs: da
 <h2>Hvad er en skill?</h2>
 <p>En skill er en genanvendelig prompt, pakket som en slash-kommando. Det ligner at referere til en fil med promptteksten, men er lettere tilgængeligt og nemmere at dele.
 Når du skriver <code>/procon3</code>, kører Claude en struktureret beslutningsprompt. Du får i princippet en genvej til en prompt-skabelon - og ligesom en funktion kan den tage argumenter.</p>
-<p>Skills ligger i <code>.claude/skills/</code> i dit repo (eller globalt i <code>~/.claude/skills/</code>). De er bare markdown-filer - læsbare, redigerbare, versionsstyrede.</p>
+<details class="blog-spoiler" open>
+<summary>Analogi - Skills</summary>
+<p><img src="../../../assets/img/2_skills_like_stamps.svg" alt="Skills er som et laksegl eller stempel"></p>
+<ul>
+<li>En skill er som et laksegl eller stempel - en kopi-indsæt af en prompt du bruger igen og igen.</li>
+<li>Nem at bruge når du har brug for de samme instruktioner, uden at skrive dem forfra.</li>
+<li>I modsætning til et rigtigt segl kan en skill tage input - du sender argumenter efter slash-kommandoen, f.eks. <code>/pc3 zod vs yup</code>.</li>
+<li>Kender du programmering: det er i princippet en funktion, hvor kroppen er en prompt-skabelon.</li>
+</ul></details><p>Skills ligger i <code>.claude/skills/</code> i dit repo (eller globalt i <code>~/.claude/skills/</code>). De er bare markdown-filer - læsbare, redigerbare, versionsstyrede.</p>
 <h2>Installér dev-essentials</h2>
 <p>Inde i en Claude Code-session, tilføj skillhub-markedspladsen og installér plugin&#39;et:</p>
 <pre><code>/plugin marketplace add https://github.com/EmilMachine/skillhub

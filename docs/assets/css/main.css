@@ -1148,6 +1148,12 @@ footer {
   margin: 2rem 0;
 }
 
+.blog-post-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* Blog spoiler / expandable sections */
 .blog-post-body .blog-spoiler {
   border: 1px solid rgba(74,158,255,0.15);

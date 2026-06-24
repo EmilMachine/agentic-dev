@@ -4,14 +4,21 @@ type: hands_on
 title_en: 1. Agents - use of files
 title_da: 1. Agenter - brug af filer
 created: 2026-06-01
-last_updated: 2026-06-20
+last_updated: 2026-06-24
 langs: en, da
---><p><strong>TL;DR</strong> — Reference files with <code>@filename</code>. Pass prompts as files: <code>follow @filename</code> or without entering the CLI <code>claude &lt; tasks/task.md</code>. Write output to files: <code>analyze @src/ and write report to myreports/out.md</code>. Enable and disable auto-edit with shift+tab.</p>
+--><p><strong>TL;DR</strong> - Reference files with <code>@filename</code>. Pass prompts as files: <code>follow @filename</code> or without entering the CLI <code>claude &lt; tasks/task.md</code>. Write output to files: <code>analyze @src/ and write report to myreports/out.md</code>. Enable and disable auto-edit with shift+tab.</p>
 <hr>
 <h1>Files as input and output</h1>
 <p>Most people use Claude Code the way they use ChatGPT: type a question, read the answer. That works, but it misses the point. This post is about the three patterns that actually change how you work.</p>
 <p>Assumes you have Claude Code installed. If not, start with <a href="#">Post 0</a>.</p>
-<h2>Pattern 1: Reference files directly</h2>
+<details class="blog-spoiler" open>
+<summary>Analogy - Files</summary>
+<p><img src="../../../assets/img/1_file_input_output.svg" alt="Files as input and output"></p>
+<ul>
+<li>Chat is like a sticky note - quick to write, easy to lose. Close the tab and it&#39;s gone.</li>
+<li>Files are like a filing cabinet: you put something in, you can find it again later.</li>
+<li>Working through files means your prompts, context, and outputs are all there when you come back. Nothing buried in a chat window.</li>
+</ul></details><h2>Pattern 1: Reference files directly</h2>
 <p>Instead of copying code into the chat, point at it:</p>
 <pre><code>add error handling to @src/api/fetch.ts
 </code></pre>

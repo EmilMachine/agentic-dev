@@ -4,16 +4,24 @@ type: hands_on
 title_en: 2. Skills and skillhub:dev-essentials
 title_da: 2. Skills og skillhub:dev-essentials
 created: 2026-06-01
-last_updated: 2026-06-15
+last_updated: 2026-06-24
 langs: en, da
---><p><strong>TL;DR</strong> — Install: <code>/plugin marketplace add https://github.com/EmilMachine/skillhub</code> → <code>/plugin install dev-essentials</code>. Key skills: <code>/pc3</code> (pick between options), <code>/issue</code> open issues or requests for with skill in skillhub. Update to latest skills: <code>/skillhub-update</code>.</p>
+--><p><strong>TL;DR</strong> - Install: <code>/plugin marketplace add https://github.com/EmilMachine/skillhub</code> → <code>/plugin install dev-essentials</code>. Key skills: <code>/pc3</code> (pick between options), <code>/issue</code> open issues or requests for with skill in skillhub. Update to latest skills: <code>/skillhub-update</code>.</p>
 <hr>
 <h1>2. Skills and skillhub:dev-essentials</h1>
-<p>Claude Code has a skill system — slash commands that extend what the agent can do. This post shows what skills are and walks through three from the <code>dev-essentials</code> pack that I created.</p>
+<p>Claude Code has a skill system - slash commands that extend what the agent can do. This post shows what skills are and walks through three from the <code>dev-essentials</code> pack that I created.</p>
 <h2>What is a skill?</h2>
 <p>A skill is a reusable prompt, packaged as a slash command. It is similar to referencing a file with the prompt text, but more easily accessible and sharable. 
 When you type <code>/procon3</code>, Claude executes a structured decision-making prompt. You get a shortcut to call a prompt template. Like a function it can also take arguments, after the skill.</p>
-<p>Skills live in <code>.claude/skills/</code> in your repo (or globally in <code>~/.claude/skills/</code>). They&#39;re just markdown files — readable, editable, version-controllable.</p>
+<details class="blog-spoiler" open>
+<summary>Analogy - Skills</summary>
+<p><img src="../../../assets/img/2_skills_like_stamps.svg" alt="Skills are like a wax seal or stamp"></p>
+<ul>
+<li>A skill is like a seal or stamp - a copy-paste of a prompt you reach for repeatedly.</li>
+<li>Easy to apply whenever you need the same instructions, without retyping them.</li>
+<li>Unlike a real seal, a skill can take input - you pass arguments after the slash command, like <code>/pc3 zod vs yup</code>.</li>
+<li>If you know programming: it&#39;s basically a function where the body is a prompt template.</li>
+</ul></details><p>Skills live in <code>.claude/skills/</code> in your repo (or globally in <code>~/.claude/skills/</code>). They&#39;re just markdown files - readable, editable, version-controllable.</p>
 <h2>Installing dev-essentials</h2>
 <p>Inside a Claude Code session, add the skillhub marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add https://github.com/EmilMachine/skillhub
@@ -24,22 +32,22 @@ When you type <code>/procon3</code>, Claude executes a structured decision-makin
 <pre><code>/skillhub-update
 </code></pre>
 <h2>Skills worth knowing</h2>
-<h3><code>/procon3</code> (or <code>/pc3</code>) — Pick between options</h3>
+<h3><code>/procon3</code> (or <code>/pc3</code>) - Pick between options</h3>
 <p>Use it when you&#39;re choosing between two or more approaches and want structured reasoning:</p>
 <pre><code>/pc3 should we use zod or yup for schema validation in this project?
 </code></pre>
 <p>Returns 3 alternatives, each with pros and cons. It can also be used for troubleshooting 
 <code>/pc3</code> is a shortcut alias for <code>/procon3</code>.</p>
 <p>Can also work like a mini planning session. If you just ask what is the best ways to do X, claude can easily propose a solution and start implementing it without you approving. Outlining 3 gives a clear wait for user input signal, and also highlights the tradeoffs in making the decision.</p>
-<h3><code>/skillhub-update</code> — Keep plugins current</h3>
+<h3><code>/skillhub-update</code> - Keep plugins current</h3>
 <p>Detects installed plugins, diffs versions, and updates anything stale. Run it periodically or after pulling the repo.</p>
 <blockquote>
-<p>Note: Skill names and behaviors can change between versions. These reflect the current state — check the <a href="https://github.com/EmilMachine/skillhub">source</a> if something behaves differently.</p>
+<p>Note: Skill names and behaviors can change between versions. These reflect the current state - check the <a href="https://github.com/EmilMachine/skillhub">source</a> if something behaves differently.</p>
 </blockquote>
-<h3><code>/issue</code> — Report a problem with a Skillhub skill.</h3>
+<h3><code>/issue</code> - Report a problem with a Skillhub skill.</h3>
 <p>Describe a bug with a skillhub skill and create a github issue based on previous interactions. Can be used just as <code>/issue</code> or <code>/issue &lt;your summary of problem&gt;</code></p>
 <p>Note the skill uses the previous context to populate the issue and tries to avoid leaking project specifics or secrets like emails. </p>
 <p>It will try to automatically create the issue using the GitHub CLI</p>
 <h2>The point</h2>
-<p>Skills let you build a personal toolkit on top of the base agent. The next post covers setting up an opinionated environment — including which skills to install and why.</p>
+<p>Skills let you build a personal toolkit on top of the base agent. The next post covers setting up an opinionated environment - including which skills to install and why.</p>
 

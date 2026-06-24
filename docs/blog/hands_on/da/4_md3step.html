@@ -4,7 +4,7 @@ type: hands_on
 title_en: 4. md3step - research, plan, implement
 title_da: 4. md3step - undersøg, planlæg, implementer
 created: 2026-06-01
-last_updated: 2026-06-22
+last_updated: 2026-06-24
 langs: da
 --><p><strong>TL;DR</strong> - Installér: <code>/plugin install md3step</code>. Skriv <code>0_context.md</code> → <code>/mdresearch 0_context.md</code> → rediger <code>1_research.md</code> → <code>/mdplan 1_research.md</code> → rediger <code>2_plan.md</code> → <code>/mdimplement 2_plan.md</code> → gennemgå <code>3_changelog.md</code>. Brug <code>/mdupdate &lt;fil&gt;</code> efter inline-redigeringer. Spring over til små opgaver.</p>
 <hr>
@@ -15,7 +15,16 @@ langs: da
 <li>Du kan nemt gennemgå, redigere og forfine planer undervejs.</li>
 <li>Du afdækker ukendte faktorer og manglende specifikationer i dit input.</li>
 </ul>
-<p>Installér via skillhub:</p>
+<details class="blog-spoiler" open>
+<summary>Analogi - md3step</summary>
+<p><img src="../../../assets/img/4_md3step_like_doctor.svg" alt="md3step er som at gå til lægen"></p>
+<ul>
+<li>Du går ikke til lægen med mavesmerter og forventer at blive lagt direkte på operationsbordet.</li>
+<li>Først laver lægen en undersøgelse - samler information og forstår situationen (<code>/mdresearch</code>).</li>
+<li>Så laver de en behandlingsplan - hvad der skal gøres og i hvilken rækkefølge (<code>/mdplan</code>).</li>
+<li>Først derefter kommer selve behandlingen (<code>/mdimplement</code>).</li>
+<li>Det samme gælder her: at hoppe direkte til implementering med en vag prompt er som at springe undersøgelsen over.</li>
+</ul></details><p>Installér via skillhub:</p>
 <pre><code>/plugin marketplace add https://github.com/EmilMachine/skillhub
 /plugin install md3step
 </code></pre>
@@ -35,6 +44,8 @@ langs: da
 2_plan.md          ← /mdplan producerer denne
 3_changelog.md     ← /mdimplement producerer denne
 </code></pre>
+<p><img src="../../../assets/img/4_md3step.svg" alt="md3step-arbejdsgangen"></p>
+<p>Du skriver <code>0_context.md</code>. De tre skills producerer resten. Efter hvert trin kan du læse outputtet, besvare åbne spørgsmål inline og redigere inden du fortsætter - agenten venter på dig.</p>
 <h3>Trin 0: Skriv kontekst</h3>
 <p>Opret <code>myprompts/min-feature/0_context.md</code> og beskriv hvad du vil gøre, og relevant kontekst der er nødvendig for at få det gjort. Dette er dit input til flowet.</p>
 <h3>Trin 1: Research</h3>
@@ -52,8 +63,9 @@ Bed om afklaring eller brug <code>/procon3</code> hvis du er usikker på hvordan
 <p>Hvis du har tilføjet inline-svar eller redigeringer til <code>1_research.md</code> eller <code>2_plan.md</code>:</p>
 <pre><code>/mdupdate tasks/min-feature/2_plan.md
 </code></pre>
-<p>Dette integrerer dine redigeringer tilbage i planstrukturen og rydder løste spørgsmål. Spring dette over hvis du ikke har foretaget redigeringer. Det kan ofte fungere med bare svaret og uden mdupdate-trinnet, men kan misse nye spørgsmål der opstår fra svarene, og kan efterlade forkerte oplysninger i hoveddelen af .md-filen.</p>
-<p>Du kan også bruge dette til at rette systematiske fejl: skriv dit eget spørgsmål + svar og kør <code>/mdupdate</code>, så rettes det overalt.</p>
+<p><img src="../../../assets/img/4_mdupdate.svg" alt="/mdupdate-arbejdsgangen"></p>
+<p><code>/mdupdate</code> folder dine inline-svar ind i filens hoveddel, fjerner de løste spørgsmålsmarkører og rejser eventuelle nye spørgsmål der opstår fra svarene. Spring det over hvis du ikke har redigeret - det er ikke altid nødvendigt. Uden det kan agenten som regel arbejde videre fra dine rå svar, men kan misse opfølgningsspørgsmål og efterlade forældet tekst i filens hoveddel.</p>
+<p>Du kan også bruge det bevidst: skriv dit eget spørgsmål + svar og kør <code>/mdupdate</code>, så rettes en systematisk fejl overalt hvor den forekommer.</p>
 <h3>Trin 3: Implementér</h3>
 <pre><code>/mdimplement tasks/min-feature/2_plan.md
 </code></pre>

@@ -4,15 +4,15 @@ type: hands_on
 title_en: 5. Run Claude Code in a sandbox (devcontainer)
 title_da: 5. Kør Claude Code i en sandbox (devcontainer)
 created: 2026-06-16
-last_updated: 2026-06-16
+last_updated: 2026-06-24
 langs: en, da
---><p><strong>TL;DR</strong> — Install devcontainer-cli: <code>npm -g install @devcontainers/cli@0.87.0</code>. Scaffold config: <code>/devcontainer</code>. Spin up: <code>devcontainer up --workspace-folder .</code>. Launch Claude inside: <code>devcontainer exec --workspace-folder . claude</code>. Stop: <code>docker stop $(docker ps -q --filter &quot;label=devcontainer.local_folder=$(pwd)&quot;)</code>.</p>
+--><p><strong>TL;DR</strong> - Install devcontainer-cli: <code>npm -g install @devcontainers/cli@0.87.0</code>. Scaffold config: <code>/devcontainer</code>. Spin up: <code>devcontainer up --workspace-folder .</code>. Launch Claude inside: <code>devcontainer exec --workspace-folder . claude</code>. Stop: <code>docker stop $(docker ps -q --filter &quot;label=devcontainer.local_folder=$(pwd)&quot;)</code>.</p>
 <hr>
 <h1>5. Run Claude Code in a sandbox</h1>
-<p>Claude Code can read files, write code, and run shell commands. That&#39;s its power — and its risk. If it makes a mistake or does something unexpected, you want that to happen <em>inside</em> a container, not on your machine.</p>
+<p>Claude Code can read files, write code, and run shell commands. That&#39;s its power - and its risk. If it makes a mistake or does something unexpected, you want that to happen <em>inside</em> a container, not on your machine.</p>
 <p>A devcontainer runs your tools (Python, uv, Claude Code) inside Docker. Your code still lives on the host and is mounted in. If the container environment breaks, <code>docker rm -f</code> and rebuild.</p>
 <h2>What is and isn&#39;t protected</h2>
-<p>It&#39;s important to be honest here — a devcontainer is <strong>not</strong> a full sandbox for your files.</p>
+<p>It&#39;s important to be honest here - a devcontainer is <strong>not</strong> a full sandbox for your files.</p>
 <p>The following are <strong>bind-mounted from your host</strong>, meaning changes (and deletions) inside the container affect the real files:</p>
 <table>
 <thead>
@@ -38,13 +38,13 @@ langs: en, da
 <td><code>~/.cache/uv</code></td>
 </tr>
 </tbody></table>
-<p>A runaway <code>rm -rf ~</code> inside the container <strong>would delete these on your host</strong>. Git is your safety net for code — commit often.</p>
-<p><strong>Note on <code>~/.claude</code> in particular:</strong> we mount it so Claude Code is already logged in and has your skills and config available inside the container. The trade-off is that a compromised or malicious project could corrupt your Claude config — and that corruption would persist across every other project you open, since they all share the same <code>~/.claude</code> from the host. It&#39;s a known risk. See hardening options at the end.</p>
+<p>A runaway <code>rm -rf ~</code> inside the container <strong>would delete these on your host</strong>. Git is your safety net for code - commit often.</p>
+<p><strong>Note on <code>~/.claude</code> in particular:</strong> we mount it so Claude Code is already logged in and has your skills and config available inside the container. The trade-off is that a compromised or malicious project could corrupt your Claude config - and that corruption would persist across every other project you open, since they all share the same <code>~/.claude</code> from the host. It&#39;s a known risk. See hardening options at the end.</p>
 <p>What <em>is</em> isolated:</p>
 <ul>
 <li><strong>Tool environment.</strong> Bad <code>pip install</code>, <code>npm install -g</code>, or <code>apt</code> installs stay inside the container and don&#39;t pollute your host.</li>
 <li><strong>Processes.</strong> Runaway processes, port conflicts, and background daemons are scoped to the container.</li>
-<li><strong>Clean slate on demand.</strong> Broken environment? <code>docker rm -f</code> and rebuild — your code and credentials are untouched because they live on the host.</li>
+<li><strong>Clean slate on demand.</strong> Broken environment? <code>docker rm -f</code> and rebuild - your code and credentials are untouched because they live on the host.</li>
 <li><strong>Reproducible environment.</strong> Teammates get the same tools without &quot;works on my machine.&quot;</li>
 </ul>
 <p>The main protection is environment isolation, not file isolation.</p>
@@ -71,7 +71,7 @@ langs: en, da
 <h2>Step 2: Start the container</h2>
 <pre><code class="language-sh">devcontainer up --workspace-folder .
 </code></pre>
-<p>First run builds the image — takes a minute or two. Subsequent starts are fast.</p>
+<p>First run builds the image - takes a minute or two. Subsequent starts are fast.</p>
 <h2>Step 3: Launch Claude inside</h2>
 <pre><code class="language-sh">devcontainer exec --workspace-folder . claude
 </code></pre>
@@ -105,28 +105,28 @@ dev-down() {
 </code></pre>
 <p>Then <code>dev-claude</code> from any project folder is all you need.</p>
 <h2>VS Code</h2>
-<p>Requires the <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">Remote Development extension pack</a> — install it first.</p>
+<p>Requires the <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">Remote Development extension pack</a> - install it first.</p>
 <p>Then open the project and run:</p>
 <p><code>Cmd+Shift+P</code> → <strong>Dev Containers: Reopen in Container</strong></p>
 <p>After config changes: <code>Cmd+Shift+P</code> → <strong>Dev Containers: Rebuild Container</strong></p>
 <hr>
 <h2>Hardening options</h2>
 <p>If you&#39;re working with untrusted projects, there are safer alternatives to bind mount the Claude folder.</p>
-<p><strong>Option A — Read-only mount</strong> (simplest, but may break things)</p>
+<p><strong>Option A - Read-only mount</strong> (simplest, but may break things)</p>
 <p>Add <code>,readonly</code> to the mount entries in <code>devcontainer.json</code>:</p>
 <pre><code class="language-jsonc">&quot;type=bind,source=${localEnv:HOME}/.claude.json,target=/home/devcontainer/.claude.json,readonly&quot;,
 &quot;type=bind,source=${localEnv:HOME}/.claude,target=/home/devcontainer/.claude,readonly&quot;
 </code></pre>
 <p>Caveat: Claude Code writes to <code>~/.claude</code> at runtime (history, settings). Read-only mounts will likely cause errors or silently drop state.</p>
-<p><strong>Option B — Copy at startup, no mount</strong> (safest)</p>
+<p><strong>Option B - Copy at startup, no mount</strong> (safest)</p>
 <p>Remove the <code>~/.claude</code> bind mounts from <code>devcontainer.json</code> and copy them in instead:</p>
 <pre><code class="language-jsonc">&quot;postCreateCommand&quot;: &quot;cp ~/.claude.json.host ~/.claude.json &amp;&amp; cp -r ~/.claude.host ~/.claude&quot;
 </code></pre>
-<p>Simpler with a shell script — add to <code>postCreateCommand</code>:</p>
+<p>Simpler with a shell script - add to <code>postCreateCommand</code>:</p>
 <pre><code class="language-sh">cp ${HOST_HOME}/.claude.json ~/.claude.json &amp;&amp; cp -r ${HOST_HOME}/.claude ~/.claude
 </code></pre>
-<p>The container gets a snapshot of your config and auth at startup. Corruption stays inside and is gone when you <code>docker rm</code>. Downside: skills installed or auth tokens refreshed <em>inside</em> the container don&#39;t propagate back — rebuild to re-sync.</p>
-<p><strong>Option C — Copy <code>~/.claude/</code>, mount <code>.claude.json</code> read-only</strong> (balanced)</p>
+<p>The container gets a snapshot of your config and auth at startup. Corruption stays inside and is gone when you <code>docker rm</code>. Downside: skills installed or auth tokens refreshed <em>inside</em> the container don&#39;t propagate back - rebuild to re-sync.</p>
+<p><strong>Option C - Copy <code>~/.claude/</code>, mount <code>.claude.json</code> read-only</strong> (balanced)</p>
 <p>Mount only the auth token as read-only (so authentication works and can&#39;t be corrupted), copy the skills/config directory in as a snapshot:</p>
 <pre><code class="language-jsonc">&quot;mounts&quot;: [
   &quot;type=bind,source=${localEnv:HOME}/.claude.json,target=/home/devcontainer/.claude.json,readonly&quot;

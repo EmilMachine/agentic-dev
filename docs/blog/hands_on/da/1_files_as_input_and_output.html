@@ -4,14 +4,21 @@ type: hands_on
 title_en: 1. Agents - use of files
 title_da: 1. Agenter - brug af filer
 created: 2026-06-01
-last_updated: 2026-06-22
+last_updated: 2026-06-24
 langs: da
 --><p><strong>TL;DR</strong> - Referer til filer med <code>@filnavn</code>. Send prompts som filer: <code>follow @filnavn</code> eller uden at åbne CLI&#39;en <code>claude &lt; tasks/task.md</code>. Skriv output til filer: <code>analyze @src/ and write report to myreports/out.md</code>. Slå auto-redigering til og fra med shift+tab.</p>
 <hr>
 <h1>Filer som input og output</h1>
 <p>De fleste bruger Claude Code som de bruger ChatGPT: skriv et spørgsmål, læs svaret. Det virker, men det misser pointen. Dette indlæg handler om de tre mønstre, der faktisk ændrer måden du arbejder på.</p>
 <p>Forudsætter at du har Claude Code installeret. Hvis ikke, start med <a href="#">Indlæg 0</a>.</p>
-<h2>Mønster 1: Referer direkte til filer</h2>
+<details class="blog-spoiler" open>
+<summary>Analogi - Filer</summary>
+<p><img src="../../../assets/img/1_file_input_output.svg" alt="Filer som input og output"></p>
+<ul>
+<li>Chat er som en post-it lap - hurtig at skrive, nem at miste. Luk fanen og den er væk.</li>
+<li>Filer er som et arkivskab: du lægger noget ind, og du kan finde det igen senere.</li>
+<li>Når du arbejder via filer, er dine prompts, kontekst og output der stadig, når du vender tilbage. Intet begravet i et chatvindue.</li>
+</ul></details><h2>Mønster 1: Referer direkte til filer</h2>
 <p>I stedet for at kopiere kode ind i chatten, peg på den:</p>
 <pre><code>add error handling to @src/api/fetch.ts
 </code></pre>
