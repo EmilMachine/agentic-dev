@@ -1357,7 +1357,7 @@ footer { color: var(--footer-text); border-top-color: var(--footer-border); }
 .offer-body { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
 .offer-list { list-style: none; padding: 0; margin: 0; }
 .offer-list li { padding: 0.3rem 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
-.offer-list li::before { content: "— "; color: var(--accent); }
+.offer-list li::before { content: "• "; color: var(--accent); }
 .offer-section-label { font-weight: 600; font-size: 0.9rem; color: var(--text); }
 .offer-price { font-size: 1.4rem; font-weight: 700; color: var(--text); margin-top: auto; padding-top: 0.5rem; }
 .offer-price s { color: var(--text-muted); font-weight: 400; font-size: 1rem; margin-right: 0.25rem; }
