@@ -1,5 +1,9 @@
 # Misc
 
+## Standalone artifacts
+
+- `docs/misc/` is the directory for standalone HTML artifacts (games, demos, etc.) — place future one-off pages here
+
 ## Install tab syncing
 
 All `.install-tabs` groups on a page stay in sync. `nav.js` uses event delegation on `document` — clicking any agent tab (Claude Code / Codex / OpenCode) updates every `.install-tabs` group on the page simultaneously. This covers both the header install block and per-plugin install blocks on `skills.html`.

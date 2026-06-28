@@ -2,6 +2,7 @@ function autoDetectPage() {
   const path = window.location.pathname;
   if (path.includes('/blog/') || /\/blog(\.html)?$/.test(path)) return 'blog';
   if (/\/skillhub(\.html)?$/.test(path)) return 'skills';
+  if (path.includes('contact')) return 'contact';
   return 'index';
 }
 
@@ -9,7 +10,7 @@ function buildNav(activePage) {
   const isIndex = activePage === 'index';
   const logoHref = isIndex ? '#' : 'index.html';
   const aboutHref = isIndex ? '#about' : 'index.html#about';
-  const contactHref = isIndex ? '#contact' : 'index.html#contact';
+  const contactHref = 'contact.html';
   const cls = page => activePage === page ? ' class="nav-active"' : '';
   return `<nav>
   <a class="nav-logo" href="${logoHref}">EmilMachine</a>
@@ -17,7 +18,7 @@ function buildNav(activePage) {
     <li><a href="blog.html?post=0_beliefs"${cls('blog')} data-i18n="nav_blog">Blog</a></li>
     <li><a href="skillhub.html"${cls('skills')} data-i18n="nav_docs">Skillhub</a></li>
     <li><a href="${aboutHref}" data-i18n="nav_about">About</a></li>
-    <li><a href="${contactHref}" data-i18n="nav_contact">Contact</a></li>
+    <li><a href="${contactHref}"${cls('contact')} data-i18n="nav_contact">Contact</a></li>
     <li>
       <button id="lang-toggle" class="btn-lang" aria-label="Switch to Danish">🇩🇰</button>
     </li>

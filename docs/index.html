@@ -14,57 +14,19 @@
 <section id="hero">
   <div class="hero-inner">
     <div class="hero-tag">Claude Code · Skillhub</div>
-    <h1 data-i18n="hero_title">
-      &gt;_ Emil &ldquo;<span class="machine-wrap">Machine
-        <svg viewBox="0 0 200 8" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M2 6 Q25 2 50 6 Q75 10 100 6 Q125 2 150 6 Q175 10 198 6" stroke="#4a9eff" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </span>&rdquo;
-    </h1>
-    <p class="hero-sub" data-i18n="hero_sub">Staff-level agentic coding.<br>Built for teams that learn while shipping.</p>
-    <div class="install-tabs">
-      <div class="tab-buttons">
-        <button class="tab-btn active" data-tab="claude">Claude Code</button>
-        <button class="tab-btn" data-tab="codex">Codex</button>
-        <button class="tab-btn" data-tab="opencode">OpenCode</button>
-      </div>
-      <div class="tab-panel active" data-panel="claude">
-        <div class="install-block">
-          <span class="prompt">$</span>
-          <code>/plugin marketplace add https://github.com/EmilMachine/skillhub</code>
-        </div>
-        <div class="install-block">
-          <span class="prompt">$</span>
-          <code>/plugin install dev-essentials@skillhub</code>
-        </div>
-      </div>
-      <div class="tab-panel" data-panel="codex">
-        <div class="code-comment"># outside codex cli</div>
-        <div class="install-block">
-          <span class="prompt">$</span>
-          <code>codex plugin marketplace add EmilMachine/skillhub --ref main --sparse .agents/plugins</code>
-        </div>
-        <div class="code-comment"># outside codex cli</div>
-        <div class="install-block">
-          <span class="prompt">$</span>
-          <code>codex plugin add dev-essentials --marketplace skillhub</code>
-        </div>
-      </div>
-      <div class="tab-panel" data-panel="opencode">
-        <div class="install-block">
-          <span class="prompt">$</span>
-          <code>git clone https://github.com/EmilMachine/skillhub ~/.local/share/skillhub</code>
-        </div>
-        <div class="install-block">
-          <span class="prompt">$</span>
-          <code>for skill in ~/.local/share/skillhub/.opencode/skills/*; do ln -s "$skill" ~/.config/opencode/skills/; done</code>
-        </div>
-      </div>
+    <div class="hero-title-row">
+      <img class="hero-portrait" src="assets/img/portait.jpeg" alt="Emil Machine">
+      <h1 data-i18n="hero_title">
+        &gt;_ Emil &ldquo;<span class="machine-wrap">Machine
+          <svg viewBox="0 0 200 8" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 6 Q25 2 50 6 Q75 10 100 6 Q125 2 150 6 Q175 10 198 6" stroke="#4a9eff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>&rdquo;
+      </h1>
     </div>
-    <div class="hero-actions">
-      <a href="skillhub.html" class="btn-primary" data-i18n="hero_cta">Install skillhub</a>
-      <a href="https://github.com/EmilMachine/skillhub/blob/main/README.md" class="btn-secondary" target="_blank" rel="noopener">View on GitHub →</a>
-      <a href="mailto:sl.askmachine+agenticdev@gmail.com" class="btn-primary" data-i18n="contact_cta">Send a message</a>
+    <div class="hero-sub-row">
+      <p class="hero-sub" data-i18n="hero_sub">Staff-level agentic coding.<br>Built for teams that learn while shipping.</p>
+      <a href="https://www.linkedin.com/in/emilmachine" class="btn-primary hero-linkedin-btn" target="_blank" rel="noopener" data-i18n="hero_linkedin_cta">LinkedIn</a>
     </div>
   </div>
 </section>
@@ -90,18 +52,6 @@
   </div>
 </section>
 
-<!-- Contact -->
-<section id="contact">
-  <div class="container">
-    <div class="contact-inner">
-      <div class="section-label">Let's talk</div>
-      <h2 data-i18n="contact_heading">Get in touch</h2>
-      <div class="section-divider" style="margin: 0 auto 2rem;"></div>
-      <p class="contact-sub" data-i18n="contact_sub">Interested in workshops, consulting, or just want to talk agentic dev?</p>
-      <a href="mailto:sl.askmachine+agenticdev@gmail.com" class="btn-primary" data-i18n="contact_cta">Send a message</a>
-    </div>
-  </div>
-</section>
 
 <script src="assets/js/i18n.js"></script>
 <script src="assets/js/nav.js"></script>
