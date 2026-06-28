@@ -189,7 +189,7 @@ h1 {
 
 .hero-sub-row {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 1.5rem;
   flex-wrap: wrap;
   margin-bottom: 0;
@@ -204,7 +204,18 @@ h1 {
 
 .hero-linkedin-btn {
   flex-shrink: 0;
-  margin-bottom: 0.15rem;
+  align-self: flex-start;
+}
+
+.hero-sub-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hero-signup {
+  flex-shrink: 0;
+  min-width: 280px;
 }
 
 .install-block {
@@ -475,6 +486,66 @@ h2 {
   font-size: 1rem;
   color: var(--text-muted);
   line-height: 1.8;
+}
+
+/* Signup section */
+.signup-section {
+  max-width: var(--max-w);
+  margin: 2rem auto;
+  padding: 2rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+/* MailerLite form — site style overrides */
+.ml-form-embedContainer .ml-form-embedWrapper {
+  background-color: transparent !important;
+  border-radius: var(--radius) !important;
+  font-family: var(--font) !important;
+}
+.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody,
+.ml-form-embedContainer .ml-form-embedWrapper .ml-form-successBody {
+  padding: 0.75rem !important;
+}
+.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedContent h4,
+.ml-form-embedContainer .ml-form-embedWrapper .ml-form-successBody .ml-form-successContent h4 {
+  color: var(--text) !important;
+  font-family: var(--font) !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+}
+.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedContent p,
+.ml-form-embedContainer .ml-form-embedWrapper .ml-form-successBody .ml-form-successContent p {
+  color: var(--text-muted) !important;
+  font-family: var(--font) !important;
+  font-size: 0.9rem !important;
+}
+.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-fieldRow input {
+  background: var(--bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  color: var(--text) !important;
+  font-family: var(--font) !important;
+  font-size: 0.95rem !important;
+}
+.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-fieldRow input::placeholder {
+  color: var(--text-muted) !important;
+}
+.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.primary,
+.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-horizontalRow button {
+  background: var(--accent) !important;
+  border-radius: var(--radius) !important;
+  font-family: var(--font) !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  transition: background 0.2s, transform 0.15s !important;
+}
+.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.primary:hover,
+.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-horizontalRow button:hover {
+  background: #6ab3ff !important;
+  transform: translateY(-1px) !important;
 }
 
 /* Contact */
@@ -925,6 +996,22 @@ footer {
   padding: 3rem 2rem 1.5rem;
   max-width: 1440px;
   margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.blog-header-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.blog-header-signup {
+  flex-shrink: 0;
+  width: 320px;
+  margin-right: calc(200px + 4rem);
 }
 
 .blog-page-header h1 {
@@ -1115,6 +1202,7 @@ footer {
   font-weight: 700;
   letter-spacing: -0.01em;
   margin: 2rem 0 0.75rem;
+  scroll-margin-top: 80px;
 }
 
 .blog-post-body h1 { font-size: 1.75rem; }

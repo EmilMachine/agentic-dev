@@ -107,6 +107,9 @@ async function renderBlog(lang) {
   await _renderContent(content, slug, lang);
   const toc = document.getElementById('docs-toc-inner');
   _renderTOC(toc, content.querySelector('.blog-post-body'));
+  if (slug && window.innerWidth <= 1100) {
+    content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 function _renderSidebar(sidebar, lang, activeSlug) {
