@@ -11,7 +11,7 @@ const PLUGINS = [
     install: {
       claude:   '/plugin install dev-essentials@skillhub',
       codex:    { note: '# outside codex cli', cmd: 'codex plugin add dev-essentials --marketplace skillhub' },
-      opencode: 'for skill in ~/.local/share/skillhub/.opencode/skills/dev-essentials/*; do ln -s "$skill" ~/.config/opencode/skills/; done',
+      opencode: 'for skill in ~/.local/share/skillhub/plugins/dev-essentials/skills/*; do ln -s "$skill" ~/.opencode/skills/; done',
     },
   },
   {
@@ -20,7 +20,7 @@ const PLUGINS = [
     install: {
       claude:   '/plugin install md3step@skillhub',
       codex:    { note: '# outside codex cli', cmd: 'codex plugin add md3step --marketplace skillhub' },
-      opencode: 'for skill in ~/.local/share/skillhub/.opencode/skills/md3step/*; do ln -s "$skill" ~/.config/opencode/skills/; done',
+      opencode: 'for skill in ~/.local/share/skillhub/plugins/md3step/skills/*; do ln -s "$skill" ~/.opencode/skills/; done',
     },
   },
 ];
