@@ -1,0 +1,389 @@
+<!--
+slug: 5_sandbox
+type: hands_on
+title_en: 5. Sandbox for coding agents
+title_da: 5. Sandbox til kode-agenter
+created: 2026-06-16
+last_updated: 2026-08-24
+langs: en, da
+--><p><strong>TL;DR</strong></p>
+<ul>
+<li><strong>nono</strong> - <code>/nono</code> → <code>nono run --profile claude-mac --allow-cwd -- claude --dangerously-skip-permissions</code></li>
+<li><strong>devcontainer</strong> - <code>/devcontainer</code> → <code>devcontainer up --workspace-folder .</code> → <code>devcontainer exec --workspace-folder . claude</code></li>
+<li><strong>sbx</strong> - <code>brew install docker/tap/sbx</code> → <code>sbx secret set anthropic</code> → <code>sbx run claude ~/my-project</code></li>
+</ul>
+<hr>
+<h1>5. Sandbox for coding agents</h1>
+<p>Why put a coding agent in a sandbox? So you don&#39;t have to worry about it deleting files, reading your secrets, or reaching out across your network. With that safety, you can let the agent do more on its own - even with <code>--dangerously-skip-permissions</code>.</p>
+<p>This post covers three ways to build that boundary, each with a different blast radius. Not a strong preference but I recommend &quot;nono&quot; over &quot;devcontainer&quot; over &quot;sbx / OpenSandbox&quot;.</p>
+<p>nono is fast and uses global config profiles. Devcontainers and sbx need a per-project config file, but ship with tools pre-installed, easing org-wide rollout.</p>
+<p>Devcontainers and sbx both use Docker. sbx adds a hypervisor on top - an extra layer protecting you if the agent escapes, at the cost of a slower startup.</p>
+<h2>Three ways to draw the boundary</h2>
+<p>Think of Claude Code as a dog living in your house:</p>
+<ul>
+<li><strong>nono</strong> - Dog inside the house, but most interior doors are locked; locked doors are as good as walls. <em>Process-level sandbox (Landlock on Linux, Seatbelt on macOS) - same kernel, restricted syscalls.</em></li>
+<li><strong>devcontainer</strong> - Dog sealed inside a pod (a tipi) built within the house. Only what you put in the pod exists to the dog - but the pod shares the house&#39;s foundations, so a structural flaw can let it out. <em>An OCI container - isolated environment, shared host kernel.</em></li>
+<li><strong>sbx</strong> - Dog in a separate building on the same plot, with its own foundations. Even if it breaks out, it&#39;s still outside - it was never in the house. <em>A microVM - its own kernel.</em></li>
+</ul>
+<details class="blog-spoiler" open>
+<summary>See the dog metaphor drawn out</summary>
+<p><img src="../../../assets/img/5_dog_sandbox.svg" alt="The dog-in-the-house metaphor: nono as locked/open interior doors, devcontainer as a sealed pod (tipi) inside the house, sbx as a separate building (dog house) on the same plot"></p>
+
+</details><p><strong>Security caveat:</strong> a sandbox only isolates what runs <em>inside</em> it. Anything Claude can still reach is attack surface - a mounted volume, an MCP endpoint, a live credential in an env var. All three tools shrink the blast radius, but none make an untrusted repo safe by default.</p>
+<p><strong>Quick pick:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Pick</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows 11, individual, minimal setup</td>
+<td><strong>sbx</strong></td>
+</tr>
+<tr>
+<td>macOS / Linux, no MCP servers, low overhead</td>
+<td><strong>nono</strong></td>
+</tr>
+<tr>
+<td>macOS / Linux, with MCP servers or hooks</td>
+<td><strong>sbx</strong> or <strong>devcontainer</strong></td>
+</tr>
+<tr>
+<td>Team that wants the sandbox enforced in CI and local dev</td>
+<td><strong>devcontainer</strong></td>
+</tr>
+<tr>
+<td>Untrusted repo / max isolation</td>
+<td><strong>sbx</strong> (clone mode)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>nono</h2>
+<p>nono is a <strong>process-level sandbox</strong>: Landlock on Linux, Seatbelt on macOS. No Docker, no VM - it hooks the kernel directly, so it starts almost instantly. It restricts which filesystem paths and network domains the wrapped process can touch; everything else is walled off.</p>
+<p>The <code>/nono</code> skill scaffolds a <code>.nono</code> folder for you - no need to run it in every project.</p>
+<p><strong>Network policy:</strong> Claude Code only needs outbound access to <code>claude.ai</code> and <code>api.anthropic.com</code> - <code>WebSearch</code> also goes through them, but no package installs, no arbitrary <code>curl</code>. If a session needs real internet access, switch to the <code>-web</code> variant, which drops the network guardrail but keeps the filesystem/command restrictions. Default to the locked profile.</p>
+<details class="blog-spoiler">
+<summary>Install instructions</summary>
+<h3>Step 1 - Scaffold</h3>
+<p>Install the skill if you haven&#39;t:</p>
+<pre><code>/plugin marketplace add https://github.com/EmilMachine/skillhub
+/plugin install dev-essentials
+</code></pre>
+<p>Then run in your project:</p>
+<pre><code>/nono
+</code></pre>
+<p>This stamps a <code>.nono/</code> folder into your project with profile templates. Pass <code>-f</code> to overwrite an existing <code>.nono/</code>. Full setup/usage reference: <a href="https://github.com/EmilMachine/skillhub/blob/main/plugins/dev-essentials/skills/nono/.nono/README_nono.md"><code>README_nono.md</code></a>.</p>
+<h3>Step 2 - Install nono</h3>
+<pre><code class="language-sh"># macOS
+brew install nolabs-ai/tap/nono
+
+# Linux
+curl -fsSL https://nono.sh/install.sh | sh
+</code></pre>
+<h3>Step 3 - Install the profile</h3>
+<p>Profiles live in <code>~/.config/nono/profiles/</code>:</p>
+<pre><code class="language-sh">mkdir -p ~/.config/nono/profiles
+
+# macOS
+cp .nono/claude-mac.jsonc ~/.config/nono/profiles/claude-mac.jsonc
+
+# Linux
+cp .nono/claude-linux.jsonc ~/.config/nono/profiles/claude-linux.jsonc
+</code></pre>
+<h3>Step 4 - Run</h3>
+<pre><code class="language-sh"># macOS
+nono run --profile claude-mac --allow-cwd -- claude --dangerously-skip-permissions
+
+# Linux
+nono run --profile claude-linux --allow-cwd -- claude --dangerously-skip-permissions
+</code></pre>
+<p><strong>One-time login gotcha:</strong> the sandbox usually can&#39;t open the OAuth callback port. Log in <em>outside</em> nono first (plain <code>claude</code>, no wrapper), then relaunch sandboxed.</p>
+<p><strong>macOS note:</strong> login creds land in Keychain, which the sandbox can&#39;t read. The shell shortcut below extracts a token into <code>~/.claude/.credentials.json</code> before each run - Linux creds already land there, so no extra step is needed.</p>
+<h3>Shell shortcuts</h3>
+<p>Add to <code>~/.bashrc</code> / <code>~/.zshrc</code>:</p>
+<p><strong>macOS:</strong></p>
+<pre><code class="language-sh">nono-claude() {
+  security find-generic-password -a &quot;$USER&quot; -s &quot;Claude Code-credentials&quot; -w \
+    &gt; ~/.claude/.credentials.json &amp;&amp; chmod 600 ~/.claude/.credentials.json \
+    &amp;&amp; nono run --profile claude-mac --allow-cwd -- claude --dangerously-skip-permissions &quot;$@&quot;
+}
+</code></pre>
+<p><strong>Linux:</strong></p>
+<pre><code class="language-sh">nono-claude() {
+  nono run --profile claude-linux --allow-cwd -- claude --dangerously-skip-permissions &quot;$@&quot;
+}
+</code></pre>
+<p>For a <code>nonoweb-claude</code> variant, copy the function and swap the profile to <code>claude-mac-web</code> / <code>claude-linux-web</code>. Reload (<code>source ~/.zshrc</code>), then just run <code>nono-claude</code> from any project.</p>
+
+</details><h3>What IS and ISN&#39;T protected</h3>
+<table>
+<thead>
+<tr>
+<th>✅ Covered</th>
+<th>❌ Not covered</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Claude&#39;s own file tools</td>
+<td>MCP servers started outside the process tree (SSE/HTTP)</td>
+</tr>
+<tr>
+<td>Claude&#39;s own bash commands</td>
+<td>Hooks that call external APIs directly</td>
+</tr>
+<tr>
+<td>Claude&#39;s own network calls</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>nono sandboxes the <code>claude</code> process; anything it delegates to outside that process tree runs unrestricted.</p>
+<details class="blog-spoiler">
+<summary>Config file reference - mounts, network, extra tools</summary>
+<p>Profiles are <code>.jsonc</code> files in <code>~/.config/nono/profiles/</code>. For per-project tweaks without touching the shared profile, add <code>./.nono/local.jsonc</code> that extends it - this one <strong>(A)</strong> adds a mounted folder, <strong>(B)</strong> allows a network domain, and <strong>(C)</strong> installs a tool group:</p>
+<pre><code class="language-jsonc">{
+  &quot;extends&quot;: &quot;claude-mac&quot;,  // or &quot;claude-linux&quot;
+  &quot;filesystem&quot;: { &quot;allow&quot;: [&quot;$HOME/code/shared-lib&quot;] },       // A
+  &quot;network&quot;: { &quot;allow_domain&quot;: [&quot;internal-api.example.com&quot;] }, // B
+  &quot;groups&quot;: { &quot;include&quot;: [&quot;java_runtime&quot;] }                    // C
+}
+</code></pre>
+<p>Run it with:</p>
+<pre><code class="language-sh">nono run --profile ./.nono/local.jsonc --allow-cwd -- claude --dangerously-skip-permissions
+</code></pre>
+<p>Other runtime groups: <code>node_runtime</code>, <code>python_runtime</code>, <code>go_runtime</code>, <code>rust_runtime</code>, <code>nix_runtime</code>, <code>homebrew</code>, <code>user_tools</code> (a grab-bag for local CLIs). Run <code>nono search &lt;keyword&gt;</code> to find more.</p>
+
+</details><hr>
+<h2>devcontainer</h2>
+<p>A devcontainer runs your tools (Python, uv, Claude Code) inside Docker. Your code stays on the host and is mounted in. If the environment breaks, <code>docker rm -f</code> and rebuild.</p>
+<p><strong>Isolation model:</strong> a devcontainer shares the host kernel - a container (OCI), not a VM. Isolation is strong, but a kernel exploit could theoretically escape it - the trade-off against sbx below, which gives each session its own kernel.</p>
+<p><strong>Network policy:</strong> unlike nono, a devcontainer has <strong>no network restriction by default</strong> - <code>WebSearch</code>, <code>WebFetch</code>, and outbound calls all work out of the box. To lock it down, add <code>iptables</code> rules yourself; there&#39;s no built-in equivalent to nono&#39;s or sbx&#39;s allowlists.</p>
+<h3>What is and isn&#39;t protected</h3>
+<p>To be honest: a devcontainer is <strong>not</strong> a full sandbox for your files. The following are <strong>bind-mounted from your host</strong>, meaning changes (and deletions) inside the container hit the real files:</p>
+<table>
+<thead>
+<tr>
+<th>Path inside container</th>
+<th>Host path</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>workspace folder</td>
+<td>your project directory</td>
+</tr>
+<tr>
+<td><code>~/.claude.json</code></td>
+<td><code>~/.claude.json</code></td>
+</tr>
+<tr>
+<td><code>~/.claude/</code></td>
+<td><code>~/.claude/</code></td>
+</tr>
+<tr>
+<td><code>~/.cache/uv</code></td>
+<td><code>~/.cache/uv</code></td>
+</tr>
+</tbody></table>
+<p>A runaway <code>rm -rf ~</code> inside the container <strong>deletes these on your host</strong>. Git is your safety net - commit often.</p>
+<p><strong>Note on <code>~/.claude</code>:</strong> it&#39;s mounted so Claude Code is already logged in with your skills and config available. Trade-off: a malicious project could corrupt that config, and the corruption persists across every other project sharing the same host <code>~/.claude</code>. See hardening options at the end.</p>
+<p>What <em>is</em> isolated: the <strong>tool environment</strong> (a bad <code>pip install</code>, <code>npm install -g</code>, or <code>apt</code> install stays in the container), and <strong>processes</strong> (runaway processes, port conflicts, background daemons stay scoped to it). Teammates also get the same reproducible toolset, no &quot;works on my machine.&quot;</p>
+<p>The main protection is environment isolation, not file isolation.</p>
+<details class="blog-spoiler">
+<summary>Install instructions</summary>
+<h3>Prerequisites</h3>
+<ul>
+<li>Docker installed and running</li>
+<li>devcontainer-cli, pinned to guard against supply-chain issues:</li>
+</ul>
+<pre><code class="language-sh">npm -g install @devcontainers/cli@0.87.0
+</code></pre>
+<p>Add <code>export PATH=&quot;$HOME/node_modules/.bin:$PATH&quot;</code> to <code>~/.bashrc</code> or <code>~/.zshrc</code>, then source it or open a new terminal.</p>
+<h3>Step 1: Scaffold the config</h3>
+<p>Install the skill if you haven&#39;t:</p>
+<pre><code>/plugin marketplace add https://github.com/EmilMachine/skillhub
+/plugin install dev-essentials
+</code></pre>
+<p>Then run in your project:</p>
+<pre><code>/devcontainer
+</code></pre>
+<p>This writes a <code>.devcontainer/</code> folder with a <code>devcontainer.json</code> and a slim Dockerfile pre-configured for Claude Code.</p>
+<h3>Step 2: Start the container</h3>
+<pre><code class="language-sh">devcontainer up --workspace-folder .
+</code></pre>
+<p>First run builds the image - takes a minute or two. Subsequent starts are fast.</p>
+<h3>Step 3: Launch Claude inside</h3>
+<pre><code class="language-sh">devcontainer exec --workspace-folder . claude
+</code></pre>
+<p>Claude Code now runs inside the container, with your project files mounted and available.</p>
+<h3>Stopping, and shell shortcuts</h3>
+<p>Add these to <code>~/.bashrc</code> or <code>~/.zshrc</code>: <code>dev-claude</code> launches (steps 2+3 combined), <code>dev-stop</code> stops the container (keeps it for a fast restart), and <code>dev-down</code> stops and removes it (clean slate, rebuilds on next <code>up</code>):</p>
+<pre><code class="language-sh"># mac
+dev-claude() {
+    security find-generic-password -a &quot;$USER&quot; -s &quot;Claude Code-credentials&quot; -w \
+    &gt; ~/.claude/.credentials.json &amp;&amp; chmod 600 ~/.claude/.credentials.json &amp;&amp; \
+    devcontainer up --workspace-folder . &amp;&amp; \
+    devcontainer exec --workspace-folder . claude
+}
+
+# linux
+dev-claude() {
+    devcontainer up --workspace-folder . &amp;&amp; \
+    devcontainer exec --workspace-folder . claude
+}
+
+dev-stop() {
+    docker ps -q --filter &quot;label=devcontainer.local_folder=$(pwd)&quot; | xargs -r docker stop
+}
+
+dev-down() {
+    docker ps -aq --filter &quot;label=devcontainer.local_folder=$(pwd)&quot; | xargs -r docker rm -f
+}
+</code></pre>
+<p>Then <code>dev-claude</code> from any project folder is all you need.</p>
+<h3>VS Code</h3>
+<p>Install the <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">Remote Development extension pack</a>, open the project, then <code>Cmd+Shift+P</code> → <strong>Dev Containers: Reopen in Container</strong>. After config changes: <code>Cmd+Shift+P</code> → <strong>Dev Containers: Rebuild Container</strong>.</p>
+
+</details><details class="blog-spoiler">
+<summary>Config file reference - mounts, network, extra tools</summary>
+<p>All of this lives in <code>.devcontainer/devcontainer.json</code> (plus the Dockerfile next to it) that the <code>/devcontainer</code> skill scaffolded.</p>
+<p><strong>A) Mount more folders</strong> - add an entry to <code>mounts</code>, default to <code>readonly</code> (drop it only for a folder Claude genuinely needs to write to - same real-files caveat as the <code>~/.claude</code> mount above):</p>
+<pre><code class="language-jsonc">&quot;mounts&quot;: [
+  &quot;type=bind,source=${localEnv:HOME}/code/shared-lib,target=/workspaces/shared-lib,readonly&quot;
+]
+</code></pre>
+<p>Rebuild to pick it up: <code>dev-down &amp;&amp; dev-claude</code>, or <strong>Rebuild Container</strong> in VS Code.</p>
+<p><strong>B) Allow more network traffic</strong> - nothing to &quot;allow&quot; by default. If you added <code>iptables</code> rules in <code>postCreateCommand</code>, add another the same way. Note <code>iptables</code> matches IPs, not domains - resolve first (<code>dig +short example.com</code>) or refresh with <code>ipset</code> if it changes. More fragile than nono&#39;s or sbx&#39;s allowlists; a sidecar proxy is the robust option.</p>
+<p><strong>C) Install/allow more tools</strong> - prefer a <strong>Devcontainer Feature</strong> (versioned, no Dockerfile edits):</p>
+<pre><code class="language-jsonc">&quot;features&quot;: { &quot;ghcr.io/devcontainers/features/java:1&quot;: {} }
+</code></pre>
+<p>Or edit the scaffolded Dockerfile directly (<code>RUN apt-get install -y default-jdk</code>). Either way, rebuild afterwards.</p>
+
+</details><hr>
+<h3>Hardening options</h3>
+<p>If you&#39;re working with untrusted projects, there are safer alternatives to bind-mounting the Claude folder. (Skip read-only mounts: Claude Code writes to <code>~/.claude</code> at runtime - history, settings - so a read-only mount just breaks things.)</p>
+<p><strong>Option A - Copy at startup, no mount</strong> (safest): drop the <code>~/.claude</code> bind mounts and copy them in via <code>postCreateCommand</code> instead:</p>
+<pre><code class="language-sh">cp ${HOST_HOME}/.claude.json ~/.claude.json &amp;&amp; cp -r ${HOST_HOME}/.claude ~/.claude
+</code></pre>
+<p>The container gets a snapshot at startup; corruption stays inside and dies with <code>docker rm</code>. Downside: skills or tokens refreshed <em>inside</em> don&#39;t propagate back - rebuild to re-sync.</p>
+<p><strong>Option B - Copy <code>~/.claude/</code>, mount <code>.claude.json</code> read-only</strong> (balanced): mount only the auth token read-only, and copy the skills/config directory in as a snapshot:</p>
+<pre><code class="language-jsonc">&quot;mounts&quot;: [
+  &quot;type=bind,source=${localEnv:HOME}/.claude.json,target=/home/devcontainer/.claude.json,readonly&quot;
+],
+&quot;postCreateCommand&quot;: &quot;cp -r ${localEnv:HOME}/.claude /home/devcontainer/.claude&quot;
+</code></pre>
+<p>Auth is safe, skills are available, and runtime writes die with the container.</p>
+<hr>
+<h2>sbx (Docker Sandboxes)</h2>
+<p><code>sbx</code> runs Claude Code inside a <strong>microVM</strong> - each sandbox gets its own Linux kernel, Docker daemon, filesystem, and network. Nothing inside can reach your host OS, files outside the project, or other processes. It&#39;s the strongest isolation of the three, and the natural pick on Windows 11 or for untrusted repos.</p>
+<p>A regular <code>docker run</code> shares the host kernel - a container escape is possible. A microVM&#39;s kernel is its own, with nothing shared to escape to.</p>
+<h3>Platform support</h3>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Supported</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows 11 (x86_64)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>macOS (Apple Silicon)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Linux</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Windows 10</td>
+<td>❌</td>
+</tr>
+</tbody></table>
+<details class="blog-spoiler">
+<summary>Install instructions</summary>
+<h3>Install</h3>
+<p><strong>Windows 11</strong> - elevated PowerShell:</p>
+<pre><code class="language-powershell">Enable-WindowsOptionalFeature -Online -FeatureName HypervisorPlatform -All   # one-time, requires reboot
+winget install -h Docker.sbx
+sbx login
+</code></pre>
+<p><strong>macOS:</strong></p>
+<pre><code class="language-sh">brew install docker/tap/sbx
+sbx login
+</code></pre>
+<p><strong>Linux:</strong> see <a href="https://docs.docker.com/ai/sandboxes/install/">distro-specific install steps</a>, then <code>sbx login</code>.</p>
+<h3>Authenticate</h3>
+<p><strong>API key</strong> (stored in the host secret store, injected by the proxy - never lives inside the VM):</p>
+<pre><code class="language-sh">sbx secret set anthropic
+</code></pre>
+<p><strong>Claude subscription (OAuth):</strong> run <code>/login</code> inside Claude Code - the proxy forwards the flow to your host browser.</p>
+<h3>Run</h3>
+<pre><code class="language-sh">sbx run claude ~/my-project
+
+# Clone mode - sandbox gets a private copy; your working tree is untouched
+sbx run --clone claude ~/my-project -- &quot;Refactor the auth module&quot;
+</code></pre>
+
+</details><details class="blog-spoiler">
+<summary>Config file reference - mounts, network, extra tools</summary>
+<p><strong>A) Mount more folders</strong> - pass extra paths as positional args; append <code>:ro</code> for read-only:</p>
+<pre><code class="language-sh">sbx run claude ~/my-project ~/shared-lib:ro
+</code></pre>
+<p>sbx picks the mount target, so this suits read-only reference material better than folders needed at a specific path.</p>
+<p><strong>B) Allow more network domains</strong></p>
+<pre><code class="language-sh">sbx policy ls                                 # view current rules
+sbx policy allow network registry.npmjs.org   # allow a specific domain
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Preset</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Locked Down</strong></td>
+<td>Blocked unless explicitly allowed</td>
+</tr>
+<tr>
+<td><strong>Balanced</strong></td>
+<td>Default-deny + common dev sites - recommended</td>
+</tr>
+<tr>
+<td><strong>Open</strong></td>
+<td>All outbound traffic allowed</td>
+</tr>
+</tbody></table>
+<p><strong>C) Install/allow more tools</strong> - write a small kit YAML (a <code>commands.install</code> list of shell commands) and pass it with <code>--kit</code>:</p>
+<pre><code class="language-sh">sbx run --kit ./java-tools/ claude ~/my-project
+</code></pre>
+<p><code>--kit</code> accepts a local path, an OCI registry reference, or a <code>git+https://...</code> URL. Community examples: <a href="https://github.com/docker/sbx-kits-contrib">docker/sbx-kits-contrib</a>.</p>
+
+</details><h3>Known limitations</h3>
+<table>
+<thead>
+<tr>
+<th>Limitation</th>
+<th>Workaround</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>~/.claude</code> user config not visible inside VM</td>
+<td>Use project-level <code>.claude/settings.json</code> instead</td>
+</tr>
+<tr>
+<td>SSH agent commit signing doesn&#39;t work inside</td>
+<td>Sign / rebase commits on the host after the session</td>
+</tr>
+<tr>
+<td>MicroVM startup adds latency on cold start</td>
+<td>Keep sessions open; don&#39;t spin up and tear down repeatedly</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠️ <strong>Enterprise callout:</strong> sbx pricing is a bit confusing. Per <a href="https://forums.docker.com/t/docker-sandbox-pricing-unclear/151790/4">this source</a>, sbx itself is free, including commercial use. What&#39;s paid is Docker AI Governance: org-wide policy pushes via the Admin Console, plus audit logging.</p>
+<p>To self-host instead, <a href="https://github.com/opensandbox-group/OpenSandbox">OpenSandbox</a> - Apache-2.0, with Alibaba involvement - is free, but you&#39;d build that governance layer yourself.</p>
+</blockquote>

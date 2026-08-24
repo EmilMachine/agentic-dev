@@ -1,0 +1,389 @@
+<!--
+slug: 5_sandbox
+type: hands_on
+title_en: 5. Sandbox for coding agents
+title_da: 5. Sandbox til kode-agenter
+created: 2026-06-16
+last_updated: 2026-08-24
+langs: da
+--><p><strong>TL;DR</strong></p>
+<ul>
+<li><strong>nono</strong>: <code>/nono</code> → <code>nono run --profile claude-mac --allow-cwd -- claude --dangerously-skip-permissions</code></li>
+<li><strong>devcontainer</strong>: <code>/devcontainer</code> → <code>devcontainer up --workspace-folder .</code> → <code>devcontainer exec --workspace-folder . claude</code></li>
+<li><strong>sbx</strong>: <code>brew install docker/tap/sbx</code> → <code>sbx secret set anthropic</code> → <code>sbx run claude ~/my-project</code></li>
+</ul>
+<hr>
+<h1>5. Sandbox til kode-agenter</h1>
+<p>Hvorfor køre en kodeagent i en sandbox? Så du slipper for at bekymre dig om, at den sletter filer, læser dine hemmeligheder eller render amok på dit netværk. Med den tryghed i ryggen kan du lade agenten arbejde mere på egen hånd, også med <code>--dangerously-skip-permissions</code>.</p>
+<p>Indlægget her dækker tre måder at trække den grænse på, hver med sit eget skadesomfang. Har du ikke en stærk præference, er min anbefaling nono før devcontainer før sbx / OpenSandbox.</p>
+<p>nono er hurtig og arbejder ud fra globale konfigurationsprofiler. Devcontainer og sbx kræver en konfigurationsfil per projekt, men til gengæld bager de værktøjerne ind, så opsætningen er nemmere at rulle ud i en hel organisation.</p>
+<p>Devcontainer og sbx bygger begge på Docker. sbx lægger desuden en hypervisor ovenpå, altså et ekstra lag der dækker dig, hvis agenten slipper ud. Prisen er en langsommere opstart.</p>
+<h2>Tre måder at trække grænsen på</h2>
+<p>Tænk på din kodeagent som en hund, der bor i dit hus:</p>
+<ul>
+<li><strong>nono</strong>: Hunden er inde i huset, men de fleste indvendige døre er låst, og en låst dør er lige så god som en væg. <em>Sandbox på procesniveau (Landlock på Linux, Seatbelt på macOS): samme kerne, begrænsede syscalls.</em></li>
+<li><strong>devcontainer</strong>: Hunden er lukket inde i en tipi inde i huset. Kun det, du lægger i tipien, eksisterer for hunden. Til gengæld står tipien på husets fundament, så en strukturel fejl kan slippe hunden ud. <em>En OCI-container: isoleret miljø, delt host-kerne.</em></li>
+<li><strong>sbx</strong>: Hunden bor i en separat bygning på samme grund, med sit eget fundament. Bryder den ud, er den stadig udenfor huset. <em>En microVM med sin egen kerne.</em></li>
+</ul>
+<details class="blog-spoiler" open>
+<summary>Se hunde-metaforen tegnet ud</summary>
+<p><img src="../../../assets/img/5_dog_sandbox.svg" alt="Hunde-i-huset-metaforen: nono som låste/åbne indvendige døre, devcontainer som en lukket tipi inde i huset, sbx som en separat bygning (hundehus) på samme grund"></p>
+
+</details><p><strong>Sikkerhedsforbehold:</strong> en sandbox isolerer kun det, der kører <em>inde i</em> den. Alt, hvad Claude stadig kan nå, er angrebsflade: en monteret volume, et MCP-endpoint, en aktiv credential i en env-variabel. Alle tre værktøjer begrænser skadesomfanget, men ingen af dem gør et upålideligt repo sikkert som udgangspunkt.</p>
+<p><strong>Hurtigt valg:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Valg</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows 11, individuel, minimal opsætning</td>
+<td><strong>sbx</strong></td>
+</tr>
+<tr>
+<td>macOS / Linux, ingen MCP-servere, lav overhead</td>
+<td><strong>nono</strong></td>
+</tr>
+<tr>
+<td>macOS / Linux, med MCP-servere eller hooks</td>
+<td><strong>sbx</strong> eller <strong>devcontainer</strong></td>
+</tr>
+<tr>
+<td>Team der vil have sandboxen håndhævet i CI og lokal dev</td>
+<td><strong>devcontainer</strong></td>
+</tr>
+<tr>
+<td>Upålideligt repo / maksimal isolation</td>
+<td><strong>sbx</strong> (klon-tilstand)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>nono</h2>
+<p>nono er en <strong>sandbox på procesniveau</strong>: Landlock på Linux, Seatbelt på macOS. Ingen Docker og ingen VM. Den hooker direkte ind i kernen og starter derfor nærmest øjeblikkeligt. Den styrer, hvilke filsystemstier og netværksdomæner den indpakkede proces må røre. Alt andet er spærret af.</p>
+<p><code>/nono</code>-skill&#39;en opretter en <code>.nono</code>-mappe for dig. Profilerne er globale, så du behøver ikke køre den i hvert eneste projekt.</p>
+<p><strong>Netværkspolitik:</strong> Claude Code har kun brug for udgående adgang til <code>claude.ai</code> og <code>api.anthropic.com</code>. <code>WebSearch</code> går også igennem dem, mens pakkeinstallationer og vilkårlige <code>curl</code>-kald er lukket ude. Har en session brug for rigtig internetadgang, så skift til <code>-web</code>-varianten, der fjerner netværksbeskyttelsen og beholder begrænsningerne på filer og kommandoer. Ellers bør du holde dig til den låste profil.</p>
+<details class="blog-spoiler">
+<summary>Installationsvejledning</summary>
+<h3>Trin 1: Opret konfigurationen</h3>
+<p>Installér skill&#39;en, hvis du ikke allerede har gjort det:</p>
+<pre><code>/plugin marketplace add https://github.com/EmilMachine/skillhub
+/plugin install dev-essentials
+</code></pre>
+<p>Kør derefter i dit projekt:</p>
+<pre><code>/nono
+</code></pre>
+<p>Det lægger en <code>.nono/</code>-mappe med profilskabeloner ind i dit projekt. Brug <code>-f</code> for at overskrive en eksisterende <code>.nono/</code>. Fuld reference til opsætning og brug: <a href="https://github.com/EmilMachine/skillhub/blob/main/plugins/dev-essentials/skills/nono/.nono/README_nono.md"><code>README_nono.md</code></a>.</p>
+<h3>Trin 2: Installér nono</h3>
+<pre><code class="language-sh"># macOS
+brew install nolabs-ai/tap/nono
+
+# Linux
+curl -fsSL https://nono.sh/install.sh | sh
+</code></pre>
+<h3>Trin 3: Installér profilen</h3>
+<p>Profiler ligger i <code>~/.config/nono/profiles/</code>:</p>
+<pre><code class="language-sh">mkdir -p ~/.config/nono/profiles
+
+# macOS
+cp .nono/claude-mac.jsonc ~/.config/nono/profiles/claude-mac.jsonc
+
+# Linux
+cp .nono/claude-linux.jsonc ~/.config/nono/profiles/claude-linux.jsonc
+</code></pre>
+<h3>Trin 4: Kør</h3>
+<pre><code class="language-sh"># macOS
+nono run --profile claude-mac --allow-cwd -- claude --dangerously-skip-permissions
+
+# Linux
+nono run --profile claude-linux --allow-cwd -- claude --dangerously-skip-permissions
+</code></pre>
+<p><strong>Login-fælde (engangsbesvær):</strong> sandboxen kan sjældent åbne OAuth-callback-porten. Log ind <em>uden for</em> nono først (almindelig <code>claude</code> uden wrapper), og start så sandboxen op igen.</p>
+<p><strong>macOS-note:</strong> dine login-credentials havner i Keychain, som sandboxen ikke kan læse. Shell-genvejen nedenfor trækker en token ud til <code>~/.claude/.credentials.json</code> før hver kørsel. På Linux ligger credentials allerede der, så det trin kan du springe over.</p>
+<h3>Shell-genveje</h3>
+<p>Tilføj til <code>~/.bashrc</code> / <code>~/.zshrc</code>:</p>
+<p><strong>macOS:</strong></p>
+<pre><code class="language-sh">nono-claude() {
+  security find-generic-password -a &quot;$USER&quot; -s &quot;Claude Code-credentials&quot; -w \
+    &gt; ~/.claude/.credentials.json &amp;&amp; chmod 600 ~/.claude/.credentials.json \
+    &amp;&amp; nono run --profile claude-mac --allow-cwd -- claude --dangerously-skip-permissions &quot;$@&quot;
+}
+</code></pre>
+<p><strong>Linux:</strong></p>
+<pre><code class="language-sh">nono-claude() {
+  nono run --profile claude-linux --allow-cwd -- claude --dangerously-skip-permissions &quot;$@&quot;
+}
+</code></pre>
+<p>Vil du have en <code>nonoweb-claude</code>-variant, så kopiér funktionen og skift profilen til <code>claude-mac-web</code> / <code>claude-linux-web</code>. Genindlæs med <code>source ~/.zshrc</code>, og derefter kan du køre <code>nono-claude</code> fra et vilkårligt projekt.</p>
+
+</details><h3>Hvad er beskyttet, og hvad er ikke</h3>
+<table>
+<thead>
+<tr>
+<th>✅ Dækket</th>
+<th>❌ Ikke dækket</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Claudes egne filværktøjer</td>
+<td>MCP-servere startet uden for procestræet (SSE/HTTP)</td>
+</tr>
+<tr>
+<td>Claudes egne bash-kommandoer</td>
+<td>Hooks der kalder eksterne API&#39;er direkte</td>
+</tr>
+<tr>
+<td>Claudes egne netværkskald</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>nono sandboxer <code>claude</code>-processen. Alt, den delegerer videre uden for det procestræ, kører uden begrænsninger.</p>
+<details class="blog-spoiler">
+<summary>Konfigurationsfil-reference: mounts, netværk og ekstra værktøjer</summary>
+<p>Profiler er <code>.jsonc</code>-filer i <code>~/.config/nono/profiles/</code>. Vil du justere noget for et enkelt projekt uden at røre den delte profil, så tilføj en <code>./.nono/local.jsonc</code>, der udvider den. Eksemplet herunder <strong>(A)</strong> tilføjer en monteret mappe, <strong>(B)</strong> tillader et netværksdomæne og <strong>(C)</strong> installerer en værktøjsgruppe:</p>
+<pre><code class="language-jsonc">{
+  &quot;extends&quot;: &quot;claude-mac&quot;,  // eller &quot;claude-linux&quot;
+  &quot;filesystem&quot;: { &quot;allow&quot;: [&quot;$HOME/code/shared-lib&quot;] },       // A
+  &quot;network&quot;: { &quot;allow_domain&quot;: [&quot;internal-api.example.com&quot;] }, // B
+  &quot;groups&quot;: { &quot;include&quot;: [&quot;java_runtime&quot;] }                    // C
+}
+</code></pre>
+<p>Kør den med:</p>
+<pre><code class="language-sh">nono run --profile ./.nono/local.jsonc --allow-cwd -- claude --dangerously-skip-permissions
+</code></pre>
+<p>Andre runtime-grupper: <code>node_runtime</code>, <code>python_runtime</code>, <code>go_runtime</code>, <code>rust_runtime</code>, <code>nix_runtime</code>, <code>homebrew</code>, <code>user_tools</code> (en samlekasse til lokale CLI&#39;er). Kør <code>nono search &lt;keyword&gt;</code> for at finde flere.</p>
+
+</details><hr>
+<h2>devcontainer</h2>
+<p>En devcontainer kører dine værktøjer (Python, uv, Claude Code) inde i Docker. Koden bliver liggende på hosten og monteres ind. Går miljøet i stykker, kører du <code>docker rm -f</code> og bygger det op igen.</p>
+<p><strong>Isolationsmodel:</strong> en devcontainer er en OCI-container og deler derfor host-kernen. Isolationen er stærk, men et kernel-exploit kan i teorien bryde ud af den. Det er netop afvejningen i forhold til sbx længere nede, hvor hver session får sin egen kerne.</p>
+<p><strong>Netværkspolitik:</strong> modsat nono har en devcontainer <strong>ingen netværksbegrænsning som standard</strong>. <code>WebSearch</code>, <code>WebFetch</code> og udgående kald virker alle sammen fra start. Vil du låse det ned, skal du selv skrive <code>iptables</code>-regler. Der findes ikke et indbygget modstykke til allowlisterne i nono og sbx.</p>
+<h3>Hvad er beskyttet, og hvad er ikke</h3>
+<p>Helt ærligt: en devcontainer er <strong>ikke</strong> en fuld sandbox om dine filer. Følgende er <strong>bind-monteret fra din host</strong>, så ændringer og sletninger inde i containeren rammer de rigtige filer:</p>
+<table>
+<thead>
+<tr>
+<th>Sti inde i container</th>
+<th>Host-sti</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>workspace-mappe</td>
+<td>din projektmappe</td>
+</tr>
+<tr>
+<td><code>~/.claude.json</code></td>
+<td><code>~/.claude.json</code></td>
+</tr>
+<tr>
+<td><code>~/.claude/</code></td>
+<td><code>~/.claude/</code></td>
+</tr>
+<tr>
+<td><code>~/.cache/uv</code></td>
+<td><code>~/.cache/uv</code></td>
+</tr>
+</tbody></table>
+<p>En løbsk <code>rm -rf ~</code> inde i containeren <strong>sletter dem på din host</strong>. Git er dit sikkerhedsnet, så commit ofte.</p>
+<p><strong>Om <code>~/.claude</code>:</strong> mappen er monteret, så Claude Code er logget ind fra start og har dine skills og din konfiguration ved hånden. Afvejningen er, at et ondsindet projekt kan ødelægge den konfiguration, og skaden følger med over i alle andre projekter, der deler den samme host-<code>~/.claude</code>. Se afsnittet om hærdning til sidst.</p>
+<p>Det, der <em>er</em> isoleret, er <strong>værktøjsmiljøet</strong> (en uheldig <code>pip install</code>, <code>npm install -g</code> eller <code>apt</code>-installation bliver inde i containeren) og <strong>processerne</strong> (løbske processer, portkonflikter og baggrundsdæmoner holder sig indenfor). Oveni får hele teamet det samme reproducerbare værktøjssæt, så &quot;det virker på min maskine&quot; er ude af verden.</p>
+<p>Beskyttelsen ligger altså primært i miljøisolationen frem for i filisolationen.</p>
+<details class="blog-spoiler">
+<summary>Installationsvejledning</summary>
+<h3>Forudsætninger</h3>
+<ul>
+<li>Docker installeret og kørende</li>
+<li>devcontainer-cli, fastlåst til en version for at mindske risikoen for supply chain-angreb:</li>
+</ul>
+<pre><code class="language-sh">npm -g install @devcontainers/cli@0.87.0
+</code></pre>
+<p>Tilføj <code>export PATH=&quot;$HOME/node_modules/.bin:$PATH&quot;</code> til <code>~/.bashrc</code> eller <code>~/.zshrc</code>, og kør derefter <code>source</code> på den eller åbn en ny terminal.</p>
+<h3>Trin 1: Opret konfigurationen</h3>
+<p>Installér skill&#39;en, hvis du ikke allerede har gjort det:</p>
+<pre><code>/plugin marketplace add https://github.com/EmilMachine/skillhub
+/plugin install dev-essentials
+</code></pre>
+<p>Kør derefter i dit projekt:</p>
+<pre><code>/devcontainer
+</code></pre>
+<p>Det skriver en <code>.devcontainer/</code>-mappe med en <code>devcontainer.json</code> og en slank Dockerfile, der er sat op til Claude Code på forhånd.</p>
+<h3>Trin 2: Start containeren</h3>
+<pre><code class="language-sh">devcontainer up --workspace-folder .
+</code></pre>
+<p>Første kørsel bygger imaget og tager et minut eller to. Derefter går opstarten hurtigt.</p>
+<h3>Trin 3: Start Claude indeni</h3>
+<pre><code class="language-sh">devcontainer exec --workspace-folder . claude
+</code></pre>
+<p>Claude Code kører nu inde i containeren, med dine projektfiler monteret og tilgængelige.</p>
+<h3>Stop, og shell-genveje</h3>
+<p>Tilføj disse til <code>~/.bashrc</code> eller <code>~/.zshrc</code>. <code>dev-claude</code> starter op (trin 2 og 3 i ét), <code>dev-stop</code> stopper containeren og beholder den til en hurtig genstart, og <code>dev-down</code> stopper og fjerner den, så du får et rent udgangspunkt og en genbygning ved næste <code>up</code>:</p>
+<pre><code class="language-sh"># mac
+dev-claude() {
+    security find-generic-password -a &quot;$USER&quot; -s &quot;Claude Code-credentials&quot; -w \
+    &gt; ~/.claude/.credentials.json &amp;&amp; chmod 600 ~/.claude/.credentials.json &amp;&amp; \
+    devcontainer up --workspace-folder . &amp;&amp; \
+    devcontainer exec --workspace-folder . claude
+}
+
+# linux
+dev-claude() {
+    devcontainer up --workspace-folder . &amp;&amp; \
+    devcontainer exec --workspace-folder . claude
+}
+
+dev-stop() {
+    docker ps -q --filter &quot;label=devcontainer.local_folder=$(pwd)&quot; | xargs -r docker stop
+}
+
+dev-down() {
+    docker ps -aq --filter &quot;label=devcontainer.local_folder=$(pwd)&quot; | xargs -r docker rm -f
+}
+</code></pre>
+<p>Derefter er <code>dev-claude</code> fra en vilkårlig projektmappe alt, hvad du behøver.</p>
+<h3>VS Code</h3>
+<p>Installér <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">Remote Development-udvidelsespakken</a>, åbn projektet, og kør derefter <code>Cmd+Shift+P</code> → <strong>Dev Containers: Reopen in Container</strong>. Efter konfigurationsændringer: <code>Cmd+Shift+P</code> → <strong>Dev Containers: Rebuild Container</strong>.</p>
+
+</details><details class="blog-spoiler">
+<summary>Konfigurationsfil-reference: mounts, netværk og ekstra værktøjer</summary>
+<p>Det hele bor i <code>.devcontainer/devcontainer.json</code> og Dockerfilen ved siden af, som <code>/devcontainer</code>-skill&#39;en har oprettet.</p>
+<p><strong>A) Montér flere mapper.</strong> Tilføj en post til <code>mounts</code>, og sæt som udgangspunkt <code>readonly</code> på. Drop den kun for en mappe, Claude reelt skal skrive i, og husk samme forbehold om rigtige filer som ved <code>~/.claude</code>-monteringen ovenfor:</p>
+<pre><code class="language-jsonc">&quot;mounts&quot;: [
+  &quot;type=bind,source=${localEnv:HOME}/code/shared-lib,target=/workspaces/shared-lib,readonly&quot;
+]
+</code></pre>
+<p>Genbyg for at aktivere det: <code>dev-down &amp;&amp; dev-claude</code>, eller <strong>Rebuild Container</strong> i VS Code.</p>
+<p><strong>B) Tillad mere netværkstrafik.</strong> Som udgangspunkt er der ikke noget at &quot;tillade&quot;. Har du lagt <code>iptables</code>-regler i <code>postCreateCommand</code>, tilføjer du den næste på samme måde. Vær opmærksom på, at <code>iptables</code> matcher på IP&#39;er og ikke på domæner, så slå adressen op først (<code>dig +short example.com</code>), eller hold den opdateret med <code>ipset</code>, hvis den flytter sig. Det er mere skrøbeligt end allowlisterne i nono og sbx, og den robuste løsning er en sidecar-proxy.</p>
+<p><strong>C) Installér flere værktøjer.</strong> Vælg helst en <strong>Devcontainer Feature</strong>, som er versioneret og ikke kræver ændringer i Dockerfilen:</p>
+<pre><code class="language-jsonc">&quot;features&quot;: { &quot;ghcr.io/devcontainers/features/java:1&quot;: {} }
+</code></pre>
+<p>Alternativt redigerer du den genererede Dockerfile direkte (<code>RUN apt-get install -y default-jdk</code>). Uanset hvad skal du genbygge bagefter.</p>
+
+</details><hr>
+<h3>Hærdningsmuligheder</h3>
+<p>Arbejder du med upålidelige projekter, findes der sikrere alternativer til at bind-montere Claude-mappen. (Spring en skrivebeskyttet montering over: Claude Code skriver til <code>~/.claude</code> undervejs, blandt andet historik og indstillinger, så en skrivebeskyttet montering går bare i stykker.)</p>
+<p><strong>Mulighed A: kopiér ved opstart uden montering</strong> (sikrest). Drop <code>~/.claude</code>-bind-monteringerne, og kopiér i stedet indholdet ind via <code>postCreateCommand</code>:</p>
+<pre><code class="language-sh">cp ${HOST_HOME}/.claude.json ~/.claude.json &amp;&amp; cp -r ${HOST_HOME}/.claude ~/.claude
+</code></pre>
+<p>Containeren får et snapshot ved opstart, og eventuel skade bliver indeni og forsvinder med <code>docker rm</code>. Ulempen er, at skills eller tokens, der bliver opdateret <em>indeni</em>, ikke føres tilbage. Genbyg for at synkronisere igen.</p>
+<p><strong>Mulighed B: kopiér <code>~/.claude/</code>, og montér <code>.claude.json</code> skrivebeskyttet</strong> (balanceret). Kun auth-tokenen monteres, og den skrivebeskyttet, mens skills- og konfigurationsmappen kopieres ind som et snapshot:</p>
+<pre><code class="language-jsonc">&quot;mounts&quot;: [
+  &quot;type=bind,source=${localEnv:HOME}/.claude.json,target=/home/devcontainer/.claude.json,readonly&quot;
+],
+&quot;postCreateCommand&quot;: &quot;cp -r ${localEnv:HOME}/.claude /home/devcontainer/.claude&quot;
+</code></pre>
+<p>Login er sikret, skills er tilgængelige, og alt hvad der skrives undervejs, dør med containeren.</p>
+<hr>
+<h2>sbx (Docker Sandboxes)</h2>
+<p><code>sbx</code> kører Claude Code inde i en <strong>microVM</strong>, hvor hver sandbox får sin egen Linux-kerne, Docker-dæmon, filsystem og netværk. Intet indeni kan nå dit host-OS, filer uden for projektet eller andre processer. Det er den stærkeste isolation af de tre og det naturlige valg på Windows 11 og til upålidelige repos.</p>
+<p>En almindelig <code>docker run</code> deler host-kernen, og en container-escape er derfor mulig. En microVM har sin egen kerne, og der er ikke noget delt at slippe ud til.</p>
+<h3>Platformsunderstøttelse</h3>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Understøttet</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows 11 (x86_64)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>macOS (Apple Silicon)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Linux</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Windows 10</td>
+<td>❌</td>
+</tr>
+</tbody></table>
+<details class="blog-spoiler">
+<summary>Installationsvejledning</summary>
+<h3>Installér</h3>
+<p><strong>Windows 11</strong> (forhøjet PowerShell):</p>
+<pre><code class="language-powershell">Enable-WindowsOptionalFeature -Online -FeatureName HypervisorPlatform -All   # engangsopsætning, kræver genstart
+winget install -h Docker.sbx
+sbx login
+</code></pre>
+<p><strong>macOS:</strong></p>
+<pre><code class="language-sh">brew install docker/tap/sbx
+sbx login
+</code></pre>
+<p><strong>Linux:</strong> se <a href="https://docs.docker.com/ai/sandboxes/install/">distro-specifikke installationstrin</a>, og kør derefter <code>sbx login</code>.</p>
+<h3>Autentificér</h3>
+<p><strong>API-nøgle</strong> (gemt i hostens secret store og injiceret af proxyen, så den aldrig ligger inde i VM&#39;en):</p>
+<pre><code class="language-sh">sbx secret set anthropic
+</code></pre>
+<p><strong>Claude-abonnement (OAuth):</strong> kør <code>/login</code> inde i Claude Code, så videresender proxyen flowet til browseren på din host.</p>
+<h3>Kør</h3>
+<pre><code class="language-sh">sbx run claude ~/my-project
+
+# Klon-tilstand: sandboxen får en privat kopi, og dit working tree er urørt
+sbx run --clone claude ~/my-project -- &quot;Refactor the auth module&quot;
+</code></pre>
+
+</details><details class="blog-spoiler">
+<summary>Konfigurationsfil-reference: mounts, netværk og ekstra værktøjer</summary>
+<p><strong>A) Montér flere mapper.</strong> Send ekstra stier med som positionelle argumenter, og tilføj <code>:ro</code> for skrivebeskyttet adgang:</p>
+<pre><code class="language-sh">sbx run claude ~/my-project ~/shared-lib:ro
+</code></pre>
+<p>sbx bestemmer selv, hvor mappen lander, så det passer bedre til skrivebeskyttet referencemateriale end til mapper, der skal ligge på en bestemt sti.</p>
+<p><strong>B) Tillad flere netværksdomæner.</strong></p>
+<pre><code class="language-sh">sbx policy ls                                 # se nuværende regler
+sbx policy allow network registry.npmjs.org   # tillad et specifikt domæne
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Preset</th>
+<th>Adfærd</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Locked Down</strong></td>
+<td>Blokeret medmindre eksplicit tilladt</td>
+</tr>
+<tr>
+<td><strong>Balanced</strong></td>
+<td>Default-deny plus almindelige dev-sites (anbefalet)</td>
+</tr>
+<tr>
+<td><strong>Open</strong></td>
+<td>Al udgående trafik tilladt</td>
+</tr>
+</tbody></table>
+<p><strong>C) Installér flere værktøjer.</strong> Skriv en lille kit-YAML (en <code>commands.install</code>-liste med shell-kommandoer), og send den med <code>--kit</code>:</p>
+<pre><code class="language-sh">sbx run --kit ./java-tools/ claude ~/my-project
+</code></pre>
+<p><code>--kit</code> accepterer en lokal sti, en OCI-registry-reference eller en <code>git+https://...</code>-URL. Community-eksempler: <a href="https://github.com/docker/sbx-kits-contrib">docker/sbx-kits-contrib</a>.</p>
+
+</details><h3>Kendte begrænsninger</h3>
+<table>
+<thead>
+<tr>
+<th>Begrænsning</th>
+<th>Workaround</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>~/.claude</code> brugerkonfiguration er ikke synlig inde i VM&#39;en</td>
+<td>Brug i stedet projekt-niveau <code>.claude/settings.json</code></td>
+</tr>
+<tr>
+<td>SSH-agent commit-signering virker ikke indeni</td>
+<td>Signér / rebase commits på hosten efter sessionen</td>
+</tr>
+<tr>
+<td>MicroVM-opstart tilføjer latency ved kold start</td>
+<td>Hold sessionen åben i stedet for at starte og lukke ned gentagne gange</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠️ <strong>Enterprise-bemærkning:</strong> prissætningen på sbx er lidt forvirrende. Ifølge <a href="https://forums.docker.com/t/docker-sandbox-pricing-unclear/151790/4">denne kilde</a> er sbx i sig selv gratis, også til kommerciel brug. Det, der koster penge, er Docker AI Governance: organisationsbrede policy-pushes via Admin Console og audit logging.</p>
+<p>Vil du hellere selv-hoste, er <a href="https://github.com/opensandbox-group/OpenSandbox">OpenSandbox</a> (Apache-2.0, med Alibaba involveret) gratis, men så skal du selv bygge governance-laget.</p>
+</blockquote>

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "dev": "npx serve docs --listen 5173",
     "build": "node scripts/generate-blog-data.js",
     "setup": "git config core.hooksPath .githooks && chmod +x .githooks/pre-commit && echo 'Git hooks installed.'"
   },
