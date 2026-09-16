@@ -15,7 +15,7 @@ function buildNav(activePage) {
   return `<nav>
   <a class="nav-logo" href="${logoHref}">EmilMachine</a>
   <ul class="nav-links">
-    <li><a href="blog.html?post=0_beliefs"${cls('blog')} data-i18n="nav_blog">Blog</a></li>
+    <li><a href="blog.html?post=3_opinionated_setup.md"${cls('blog')} data-i18n="nav_blog">Blog</a></li>
     <li><a href="skillhub.html"${cls('skills')} data-i18n="nav_docs">Skillhub</a></li>
     <li><a href="${aboutHref}" data-i18n="nav_about">About</a></li>
     <li><a href="${contactHref}"${cls('contact')} data-i18n="nav_contact">Contact</a></li>
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
       // Update href so blog.js SPA handler picks up the right slug+lang,
       // and so plain browser navigation (non-blog pages) carries the params too.
-      blogNavLink.setAttribute('href', `blog.html?post=0_beliefs&lang=${lang}`);
+      blogNavLink.setAttribute('href', `blog.html?post=3_opinionated_setup.md&lang=${lang}`);
     });
   }
 });
