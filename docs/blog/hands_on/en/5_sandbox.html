@@ -4,7 +4,7 @@ type: hands_on
 title_en: 5. Sandbox for coding agents
 title_da: 5. Sandbox til kode-agenter
 created: 2026-06-16
-last_updated: 2026-08-24
+last_updated: 2026-08-25
 langs: en, da
 --><p><strong>TL;DR</strong></p>
 <ul>
@@ -19,17 +19,14 @@ langs: en, da
 <p>nono is fast and uses global config profiles. Devcontainers and sbx need a per-project config file, but ship with tools pre-installed, easing org-wide rollout.</p>
 <p>Devcontainers and sbx both use Docker. sbx adds a hypervisor on top - an extra layer protecting you if the agent escapes, at the cost of a slower startup.</p>
 <h2>Three ways to draw the boundary</h2>
+<p><img src="../../../assets/img/5_dog_sandbox.svg" alt="The dog-in-the-house metaphor: nono as locked/open interior doors, devcontainer as a sealed pod (tipi) inside the house, sbx as a separate building (dog house) on the same plot"></p>
 <p>Think of Claude Code as a dog living in your house:</p>
 <ul>
 <li><strong>nono</strong> - Dog inside the house, but most interior doors are locked; locked doors are as good as walls. <em>Process-level sandbox (Landlock on Linux, Seatbelt on macOS) - same kernel, restricted syscalls.</em></li>
 <li><strong>devcontainer</strong> - Dog sealed inside a pod (a tipi) built within the house. Only what you put in the pod exists to the dog - but the pod shares the house&#39;s foundations, so a structural flaw can let it out. <em>An OCI container - isolated environment, shared host kernel.</em></li>
 <li><strong>sbx</strong> - Dog in a separate building on the same plot, with its own foundations. Even if it breaks out, it&#39;s still outside - it was never in the house. <em>A microVM - its own kernel.</em></li>
 </ul>
-<details class="blog-spoiler" open>
-<summary>See the dog metaphor drawn out</summary>
-<p><img src="../../../assets/img/5_dog_sandbox.svg" alt="The dog-in-the-house metaphor: nono as locked/open interior doors, devcontainer as a sealed pod (tipi) inside the house, sbx as a separate building (dog house) on the same plot"></p>
-
-</details><p><strong>Security caveat:</strong> a sandbox only isolates what runs <em>inside</em> it. Anything Claude can still reach is attack surface - a mounted volume, an MCP endpoint, a live credential in an env var. All three tools shrink the blast radius, but none make an untrusted repo safe by default.</p>
+<p><strong>Security caveat:</strong> a sandbox only isolates what runs <em>inside</em> it. Anything Claude can still reach is attack surface - a mounted volume, an MCP endpoint, a live credential in an env var. All three tools shrink the blast radius, but none make an untrusted repo safe by default.</p>
 <p><strong>Quick pick:</strong></p>
 <table>
 <thead>

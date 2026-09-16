@@ -4,7 +4,7 @@
 
 ```
 skillhub (registry)
-└── dev-essentials (plugin, v1.7.5)
+└── dev-essentials (plugin, v1.13.0)
 │   ├── skillhub-update  (/skillhub-update)
 │   ├── gitstats         (/gitstats)
 │   ├── procon3          (/procon3)
@@ -15,12 +15,21 @@ skillhub (registry)
 │   ├── setup            (/setup)
 │   ├── learn            (/learn)
 │   ├── devcontainer     (/devcontainer)
-│   └── issue            (/issue)
-└── md3step (plugin, v1.2.0)
-    ├── mdresearch       (/mdresearch)
-    ├── mdplan           (/mdplan)
-    ├── mdimplement      (/mdimplement)
-    └── mdupdate         (/mdupdate)
+│   ├── issue            (/issue)
+│   ├── changelog        (/changelog)
+│   ├── ding             (/ding)
+│   └── nono             (/nono)
+└── md3step (plugin, v1.2.2)
+│   ├── mdresearch       (/mdresearch)
+│   ├── mdplan           (/mdplan)
+│   ├── mdimplement      (/mdimplement)
+│   └── mdupdate         (/mdupdate)
+└── dev-py (plugin, v0.1.0)
+    ├── mypy             (/mypy)
+    ├── pydoc            (/pydoc)
+    ├── pyfix            (/pyfix)
+    ├── pysetup          (/pysetup)
+    └── ruff             (/ruff)
 ```
 
 Install — step 1 (add registry, once):
@@ -120,7 +129,7 @@ Direct links to a skill: `skills.html#gitstats`. The page opens the matching `<d
 
 | Purpose | File |
 |---|---|
-| Skill data (all 15 skills) | `docs/assets/js/skills-data.js` → `SKILLS_DATA` |
+| Skill data (all 23 skills) | `docs/assets/js/skills-data.js` → `SKILLS_DATA` |
 | Plugin install commands | `docs/assets/js/skills-data.js` → `PLUGINS` |
 | Marketplace add commands | `docs/assets/js/skills-data.js` → `INSTALL_SKILLHUB` |
 | Render + routing logic | `docs/assets/js/skills-docs.js` |

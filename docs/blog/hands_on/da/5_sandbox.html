@@ -4,7 +4,7 @@ type: hands_on
 title_en: 5. Sandbox for coding agents
 title_da: 5. Sandbox til kode-agenter
 created: 2026-06-16
-last_updated: 2026-08-24
+last_updated: 2026-08-25
 langs: da
 --><p><strong>TL;DR</strong></p>
 <ul>
@@ -19,17 +19,14 @@ langs: da
 <p>nono er hurtig og arbejder ud fra globale konfigurationsprofiler. Devcontainer og sbx kræver en konfigurationsfil per projekt, men til gengæld bager de værktøjerne ind, så opsætningen er nemmere at rulle ud i en hel organisation.</p>
 <p>Devcontainer og sbx bygger begge på Docker. sbx lægger desuden en hypervisor ovenpå, altså et ekstra lag der dækker dig, hvis agenten slipper ud. Prisen er en langsommere opstart.</p>
 <h2>Tre måder at trække grænsen på</h2>
+<p><img src="../../../assets/img/5_dog_sandbox.svg" alt="Hunde-i-huset-metaforen: nono som låste/åbne indvendige døre, devcontainer som en lukket tipi inde i huset, sbx som en separat bygning (hundehus) på samme grund"></p>
 <p>Tænk på din kodeagent som en hund, der bor i dit hus:</p>
 <ul>
 <li><strong>nono</strong>: Hunden er inde i huset, men de fleste indvendige døre er låst, og en låst dør er lige så god som en væg. <em>Sandbox på procesniveau (Landlock på Linux, Seatbelt på macOS): samme kerne, begrænsede syscalls.</em></li>
 <li><strong>devcontainer</strong>: Hunden er lukket inde i en tipi inde i huset. Kun det, du lægger i tipien, eksisterer for hunden. Til gengæld står tipien på husets fundament, så en strukturel fejl kan slippe hunden ud. <em>En OCI-container: isoleret miljø, delt host-kerne.</em></li>
 <li><strong>sbx</strong>: Hunden bor i en separat bygning på samme grund, med sit eget fundament. Bryder den ud, er den stadig udenfor huset. <em>En microVM med sin egen kerne.</em></li>
 </ul>
-<details class="blog-spoiler" open>
-<summary>Se hunde-metaforen tegnet ud</summary>
-<p><img src="../../../assets/img/5_dog_sandbox.svg" alt="Hunde-i-huset-metaforen: nono som låste/åbne indvendige døre, devcontainer som en lukket tipi inde i huset, sbx som en separat bygning (hundehus) på samme grund"></p>
-
-</details><p><strong>Sikkerhedsforbehold:</strong> en sandbox isolerer kun det, der kører <em>inde i</em> den. Alt, hvad Claude stadig kan nå, er angrebsflade: en monteret volume, et MCP-endpoint, en aktiv credential i en env-variabel. Alle tre værktøjer begrænser skadesomfanget, men ingen af dem gør et upålideligt repo sikkert som udgangspunkt.</p>
+<p><strong>Sikkerhedsforbehold:</strong> en sandbox isolerer kun det, der kører <em>inde i</em> den. Alt, hvad Claude stadig kan nå, er angrebsflade: en monteret volume, et MCP-endpoint, en aktiv credential i en env-variabel. Alle tre værktøjer begrænser skadesomfanget, men ingen af dem gør et upålideligt repo sikkert som udgangspunkt.</p>
 <p><strong>Hurtigt valg:</strong></p>
 <table>
 <thead>
