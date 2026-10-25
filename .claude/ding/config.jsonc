@@ -1,0 +1,7 @@
+// ding sound config — edit "sound" to one of: a = ding, b = gong, c = cardoor, d = doorbell, e = magic
+// to use a custom sound: get any short .wav file, save it in this folder as <name>-<label>.wav, then set "sound" to <name>
+{
+  "enabled": true,
+  "threshold": 0,
+  "sound": "d"
+}

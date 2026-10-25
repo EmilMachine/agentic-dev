@@ -3,6 +3,7 @@ function autoDetectPage() {
   if (path.includes('/blog/') || /\/blog(\.html)?$/.test(path)) return 'blog';
   if (/\/skillhub(\.html)?$/.test(path)) return 'skills';
   if (path.includes('contact')) return 'contact';
+  if (/\/ida(\.html)?$/.test(path)) return 'ida';
   return 'index';
 }
 

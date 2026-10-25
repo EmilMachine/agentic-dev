@@ -77,6 +77,10 @@ Minimal setup for a new top-level page — nothing else needed for consistent ch
 </body>
 ```
 
+## Ida Page
+
+`docs/ida.html` uses the standard chrome (`i18n.js` → `nav.js`); `autoDetectPage()` returns `'ida'` (no nav highlight, nav links resolve to `index.html#...`). Body content hardcoded Danish. PDF lives in `docs/assets/` (`myprompts/` is gitignored).
+
 ## Blog Fragment Pages
 
 `docs/blog/hands_on/en/*.html` are HTML content partials only — no `<html>/<head>/<body>`, no nav/footer. Loaded dynamically by `blog.js` into `#blog-root`. Treat as content, not standalone pages.
